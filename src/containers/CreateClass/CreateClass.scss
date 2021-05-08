@@ -1,0 +1,67 @@
+.createclass {
+  &__group-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 12px 20px;
+    width: 80%;
+    margin: 10px auto;
+  }
+  &__group-btn {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+  &__btn {
+    height: 35px;
+    width: 90px;
+  }
+  &__label {
+    font-size: 15px;
+    font-weight: bold;
+  }
+  &__input {
+    height: 38px;
+  }
+  &__dropdown {
+    .dropdown__header {
+      height: 38px;
+      border-width: 1px;
+    }
+  }
+  &__box-input {
+    span {
+      display: block;
+      font-size: 15px;
+      font-weight: bold;
+      &.margin-bottom {
+        margin-bottom: 7px;
+      }
+    }
+  }
+  &__dropdown-course {
+    .dropdown__header {
+      z-index: 8;
+    }
+    .dropdown__body {
+      z-index: 7;
+    }
+  }
+  &__dropdown-teacher {
+  }
+  &__dropdown-room {
+    .dropdown__header {
+      z-index: 6;
+    }
+    .dropdown__body {
+      z-index: 5;
+    }
+  }
+  &__dropdown-year {
+    .dropdown__header {
+      z-index: 4;
+    }
+    .dropdown__body {
+      z-index: 3;
+    }
+  }
+}

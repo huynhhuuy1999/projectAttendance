@@ -1,0 +1,23 @@
+.card-courses {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid #009999;
+  background: #eee;
+  padding: 25px 15px;
+  border-radius: 15px;
+  font-size: 16px;
+  text-align: center;
+  min-height: 171px;
+  &--bold {
+    font-weight: 600;
+  }
+  &--margin-top {
+    margin-top: 5px;
+  }
+  &__detail {
+    cursor: pointer;
+    color: #009999;
+  }
+}

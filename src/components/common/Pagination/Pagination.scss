@@ -1,0 +1,23 @@
+.pagination {
+  justify-content: center;
+  list-style: none;
+  display: flex;
+  &__item {
+    &:not(:first-child) {
+      margin-left: 10px;
+    }
+  }
+  &__link {
+    cursor: pointer;
+    font-size: 15px;
+    transition: color 0.25s;
+    &:hover {
+      font-size: 17px;
+      color: #009999;
+      border-bottom: 1px solid black;
+    }
+    &--selected {
+      color: #009999;
+    }
+  }
+}

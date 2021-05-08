@@ -1,0 +1,10 @@
+.blank-layout {
+  &__children {
+    padding: 40px 50px;
+  }
+  &__header {
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+  }
+}

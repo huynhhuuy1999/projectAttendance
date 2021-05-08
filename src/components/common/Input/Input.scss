@@ -1,0 +1,15 @@
+.input {
+  outline: none;
+  &:focus {
+    outline: none;
+  }
+  padding: 5px 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #009999;
+  width: 100%;
+}
+.label {
+  display: block;
+  margin-bottom: 7px;
+}

@@ -1,0 +1,24 @@
+.schedule-student-ctn {
+  &__schedule {
+    margin-top: 15px;
+  }
+  &__header {
+    margin-top: 20px;
+    display: flex;
+    align-items: flex-end;
+  }
+  &__year {
+    width: 200px;
+    margin-left: 20px;
+  }
+  &__semester {
+    width: 200px;
+  }
+  &__dropdown {
+    margin-top: 3px;
+  }
+  &__btn {
+    padding: 8px 15px;
+    margin-left: 10px;
+  }
+}

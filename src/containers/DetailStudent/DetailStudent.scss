@@ -1,0 +1,48 @@
+@import "../../assets/scss/variables.scss";
+.detailStudent {
+  &__content {
+    display: flex;
+    margin-top: 20px;
+  }
+
+  &__avatar {
+    width: 270px;
+    height: 350px;
+  }
+  &__infor-right {
+    flex-grow: 1;
+    border: 2px solid #009999;
+    border-radius: 10px;
+    margin-left: 20px;
+    padding: 20px 20px 10px 20px;
+  }
+  &__info {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr 1fr;
+    @include breakpoint(medium) {
+      grid-template-columns: 1fr 1fr;
+    }
+    grid-gap: 25px 15px;
+    font-size: 16px;
+  }
+  &__label {
+    font-weight: 600;
+  }
+  &__info-address {
+    grid-column-start: 2;
+    grid-column-end: 5;
+    @include breakpoint(medium) {
+      grid-column-start: 2;
+      grid-column-end: 3;
+    }
+  }
+  &__group-btn {
+    margin-top: 20px;
+    button {
+      padding: 10px 15px;
+    }
+  }
+  &__btn--margin-left {
+    margin-left: 10px;
+  }
+}

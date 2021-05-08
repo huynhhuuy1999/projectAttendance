@@ -1,0 +1,25 @@
+@import "../../assets/scss/variables.scss";
+.list-student {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    @include breakpoint(medium) {
+      flex-direction: column;
+    }
+  }
+  &__search {
+    // margin-top: 10px;
+  }
+  &__table {
+    margin-top: 20px;
+  }
+  &__pagination {
+    margin-top: 18px;
+  }
+  &__btn-add {
+    margin-top: 20px;
+    float: right;
+    margin-left: 10px;
+  }
+}

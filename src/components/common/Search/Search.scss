@@ -1,0 +1,12 @@
+.search {
+  .form {
+    display: flex;
+    &__btn {
+      margin-left: 10px;
+    }
+  }
+  &__input {
+    padding: 8px 10px;
+    width: 300px;
+  }
+}

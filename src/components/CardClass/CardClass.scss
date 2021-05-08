@@ -1,0 +1,22 @@
+.cardclass {
+  border: 1px solid #f63e62;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  padding: 25px 15px;
+  span {
+    text-align: center;
+    &:not(:first-child) {
+      margin-top: 5px;
+    }
+    &.bold {
+      font-weight: 700;
+    }
+    &.margin-top {
+      margin-top: 10px;
+    }
+  }
+}

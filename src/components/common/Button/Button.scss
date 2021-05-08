@@ -1,0 +1,27 @@
+.btn {
+  border: 1px solid #009999;
+  border-radius: 5px;
+  padding: 9px 15px;
+  font-weight: 500;
+  font-size: 14px;
+  font-family: "Lora";
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+  &__secondary {
+    background-color: #009999;
+    color: #fff;
+    padding: 9px 15px;
+  }
+  &__thir {
+    background-color: #08b04b;
+    color: #fff;
+    padding: 9px 15px;
+  }
+  &__order {
+    background-color: #ffaa00;
+    color: #fff;
+    padding: 9px 15px;
+  }
+}

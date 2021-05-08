@@ -1,0 +1,14 @@
+@import "../../assets/scss/variables.scss";
+.sidebar-layout {
+  &__children {
+    padding: 60px 230px;
+    @include breakpoint(medium) {
+      padding: 40px 100px;
+    }
+  }
+  &__header {
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+  }
+}
