@@ -1,0 +1,33 @@
+.image-upload-multi {
+  margin-top: 20px;
+  &__label {
+    background-color: #009999;
+    padding: 7px 12px;
+    color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  &__list-image {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    img {
+      width: 200px;
+      height: 230px;
+      border-radius: 10px;
+      object-fit: cover;
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+  }
+  &__img-empty {
+    width: 200px;
+    height: 230px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ccc;
+  }
+}

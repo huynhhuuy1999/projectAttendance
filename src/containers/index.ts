@@ -9,3 +9,8 @@ export * from './ListClass/ListClass';
 export * from './CreateCourse/CreateCourse';
 export * from './CreateClass/CreateClass';
 export * from './ListTeacher/ListTeacher';
+export * from './DetailTeacher/DetailTeacher';
+export * from './UpdateTeacher/UpdateTeacher';
+export * from './ListAttendance/ListAttendance';
+export * from './ListAttendance/ListAttendance';
+export * from './ListClassTeaching/ListClassTeaching'

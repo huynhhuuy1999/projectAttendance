@@ -5,24 +5,33 @@ export const Button: React.FC<IButton> = ({
   children,
   className,
   type,
-  isSecondaryBtn,
   onClick,
-  isThirBtn,
-  isOrderBtn,
+  width,
+  height,
+  marginLeft,
+  marginRight,
+  margin,
+  color,
+  textColor,
+  marginTop,
+  marginBottom,
 }) => {
   return (
     <button
-      className={`btn ${className}  ${
-        isSecondaryBtn
-          ? "btn__secondary"
-          : isThirBtn
-          ? "btn__thir"
-          : isOrderBtn
-          ? "btn__order"
-          : ""
-      } `}
+      className={`btn ${className}`}
       type={type}
       onClick={onClick}
+      style={{
+        width,
+        height,
+        margin,
+        marginLeft,
+        marginRight,
+        backgroundColor: color,
+        color: textColor,
+        marginTop,
+        marginBottom,
+      }}
     >
       {children}
     </button>

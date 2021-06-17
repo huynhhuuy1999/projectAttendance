@@ -1,0 +1,6 @@
+.list-attendance {
+  &__cover {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+}

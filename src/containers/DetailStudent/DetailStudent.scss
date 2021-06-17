@@ -8,6 +8,7 @@
   &__avatar {
     width: 270px;
     height: 350px;
+    // background-color: red;
   }
   &__infor-right {
     flex-grow: 1;
@@ -44,5 +45,36 @@
   }
   &__btn--margin-left {
     margin-left: 10px;
+  }
+
+  &__schedule {
+    margin-top: 15px;
+  }
+  &__header {
+    margin-top: 10px;
+    display: flex;
+    align-items: flex-end;
+  }
+  &__year {
+    width: 200px;
+    margin-left: 20px;
+  }
+  &__semester {
+    width: 200px;
+  }
+  &__dropdown {
+    margin-top: 3px;
+  }
+  &__btn {
+    padding: 8px 15px;
+    margin-left: 10px;
+  }
+  &__title-timetable {
+    text-align: center;
+    font-size: 25px;
+    color: #f63e62;
+    padding-bottom: 10px;
+    padding-top: 50px;
+    border-bottom: 1px solid #f63e62;
   }
 }

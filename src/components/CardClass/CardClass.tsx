@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router";
+import { EditSvg } from "../../constants/image";
 import "./CardClass.scss";
+import { AiTwotoneDelete } from "react-icons/ai";
+import { ROLE } from "../../constants";
 export const CardClass: React.FC<ICardClass> = ({
   endTime,
   idClass,
@@ -8,9 +12,32 @@ export const CardClass: React.FC<ICardClass> = ({
   room,
   startTime,
   nameTeacher,
+  role,
+  showModal,
 }) => {
+  const history = useHistory();
   return (
     <div className="cardclass">
+      {role === ROLE.ADMIN ? (
+        <>
+          <img
+            src={EditSvg}
+            alt=""
+            className="cardclass__icon"
+            onClick={() => history.push(`/createclass/${idClass}`)}
+          />
+          <AiTwotoneDelete
+            color="#dd1a35"
+            size={20}
+            className="cardclass__icon-trash"
+            // onClick={() => setIsShowModal(true)}
+            onClick={() => {
+              if (showModal) showModal(idClass);
+            }}
+          />
+        </>
+      ) : null}
+
       <span className="bold">{idClass}</span>
       <span>Sỉ số: {numberStudent}</span>
       <span>{nameClass}</span>

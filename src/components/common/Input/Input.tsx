@@ -14,6 +14,8 @@ export const Input: React.FC<IInput> = ({
   autoComplete,
   id,
   name,
+  error,
+  disable,
 }) => {
   return (
     <div>
@@ -33,7 +35,11 @@ export const Input: React.FC<IInput> = ({
         className={`input ${classNameInput}`}
         placeholder={placeholder}
         onChange={onChange}
+        disabled={disable}
+        // min={type === "date" ? "1997-01-01" : ""}
+        // max={type === "date" ? "2030-12-31" : ""}
       />
+      {error !== "" ? <span className="input__error">{error}</span> : null}
     </div>
   );
 };

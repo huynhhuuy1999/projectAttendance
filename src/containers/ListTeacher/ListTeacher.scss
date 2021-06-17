@@ -1,0 +1,33 @@
+@import "../../assets/scss/variables.scss";
+.list-teacher {
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  &__search {
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+  &__table {
+    margin-top: 20px;
+  }
+  &__pagination {
+    margin-top: 18px;
+  }
+  &__noti {
+    padding: 20px 30px;
+    p {
+      font-size: 18px;
+    }
+  }
+  &__group-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  &__idStudent {
+    font-weight: bold;
+  }
+}

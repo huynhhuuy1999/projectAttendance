@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./ImageUploadInput.scss";
+import { BsPersonBoundingBox } from "react-icons/bs";
 
 export const ImageUploadInput: React.FC<IImageUploadInput> = ({
   className,
@@ -22,15 +23,18 @@ export const ImageUploadInput: React.FC<IImageUploadInput> = ({
   };
   return (
     <div className={`image-upload-input ${className}`}>
-      {image ? (
+      {avatar ? (
         <img
           className="image-upload-input__image"
-          src={image}
-          alt="cover-image"
+          src={image ? image : avatar}
+          alt=""
         />
       ) : (
-        ""
+        <div className="image-upload-input__icon">
+          <BsPersonBoundingBox size={70} color="#222" />
+        </div>
       )}
+
       <label className="image-upload-input__btn-upload">
         <input
           className="image-upload-input__file-input"

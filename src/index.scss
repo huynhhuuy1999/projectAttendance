@@ -4,20 +4,20 @@ body {
   font-size: 14px;
   box-sizing: border-box;
 }
-button{
+button {
   outline: none;
-  &:focus{
+  &:focus {
     outline: none;
   }
 }
-input{
-  &:focus{
+input {
+  &:focus {
     outline: none;
   }
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 *,
@@ -36,4 +36,15 @@ p {
 }
 a {
   text-decoration: none;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #aaaaaa;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #ccc;
 }

@@ -2,14 +2,13 @@
 .list-student {
   &__header {
     display: flex;
-    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
     margin-top: 20px;
-    @include breakpoint(medium) {
-      flex-direction: column;
-    }
   }
   &__search {
-    // margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
   }
   &__table {
     margin-top: 20px;
@@ -17,9 +16,14 @@
   &__pagination {
     margin-top: 18px;
   }
-  &__btn-add {
-    margin-top: 20px;
-    float: right;
+  &__addTimeTable {
     margin-left: 10px;
+    border-radius: 5px;
+    padding: 9px 15px;
+    font-weight: 500;
+    font-size: 14px;
+    font-family: "Lora";
+    color: #fff;
+    cursor: pointer;
   }
 }

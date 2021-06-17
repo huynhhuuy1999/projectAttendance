@@ -7,6 +7,20 @@
   justify-content: center;
   min-height: 240px;
   padding: 25px 15px;
+  position: relative;
+  &__icon {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    cursor: pointer;
+    width: 20px;
+  }
+  &__icon-trash {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    cursor: pointer;
+  }
   span {
     text-align: center;
     &:not(:first-child) {

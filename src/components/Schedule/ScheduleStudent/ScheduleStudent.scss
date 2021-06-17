@@ -12,6 +12,16 @@
   }
   &__item {
     background-color: #fff;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    // justify-content: center;
+    span {
+      display: block;
+      &.bold {
+        font-weight: bold;
+      }
+    }
   }
 
   td,

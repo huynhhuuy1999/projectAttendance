@@ -8,7 +8,10 @@
     position: relative;
     background: #ccc;
     width: 100%;
-    // text-align: center;
+    height: 38px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     cursor: pointer;
     display: flex;
     justify-content: flex-start;
@@ -36,5 +39,9 @@
     justify-content: flex-start;
     cursor: pointer;
     padding: 5px 10px;
+  }
+  &__error {
+    // margin: 5px;
+    color: red;
   }
 }

@@ -1,5 +1,6 @@
 import { useFormik } from "formik";
 import React from "react";
+import { Color } from "../../../constants";
 import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
 import "./Search.scss";
@@ -24,7 +25,12 @@ export const Search: React.FC<ISearch> = ({ placeholder, className }) => {
           classNameInput="search__input"
           onChange={formik.handleChange}
         />
-        <Button isSecondaryBtn={true} type="Submit" className="form__btn">
+        <Button
+          color={Color.Blue}
+          textColor="#FFF"
+          type="Submit"
+          className="form__btn"
+        >
           Tìm kiếm
         </Button>
       </form>

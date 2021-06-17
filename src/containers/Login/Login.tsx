@@ -6,28 +6,18 @@ import { ImageLogin } from "../../constants/image";
 import { Button, Input } from "../../components/common";
 // import { useHistory } from "react-router";
 import axios from "axios";
+import { useHistory } from "react-router";
+import { useAppDispatch } from "../../redux/store";
+import { doGetCurrentUser } from "../../redux/action";
 export const Login = () => {
-  // const dispatch = useDispatch();
-  // const history = useHistory();
+  const dispatch = useAppDispatch();
+  const history = useHistory();
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
     onSubmit: (values) => {
-      // alert(values.username);
-      // dispatch(
-      //   doLogin({
-      //     username: values.username,
-      //     password: values.password,
-      //   })
-      // ).then(res=>{
-      //   setCookie(1, action.payload.token, "TOKEN");
-      // });
-
-      // setTimeout(() => {
-      //   history.push("/liststudent");
-      // }, 1000);
       axios
         .post("http://localhost:8080/api/auth", {
           username: values.username,
@@ -36,10 +26,13 @@ export const Login = () => {
         .then((res) => {
           // setCookie(1, res.data.token, "TOKEN");
           window.localStorage.setItem("TOKEN", res.data.token);
+          // dispatch(doGetCurrentUser());
           window.location.replace("/liststudent");
         })
         .then(() => {
+          // dispatch(doGetCurrentUser());
           // history.push("/liststudent");
+          // }).then(()=>{ window.location.replace("/liststudent");
         });
     },
   });
@@ -72,7 +65,9 @@ export const Login = () => {
                 />
               </div>
 
-              <i>Quên mật khẩu</i>
+              <i onClick={() => history.push("/listAttendance")}>
+                Quên mật khẩu
+              </i>
               <div className="form__group-btn">
                 <Button type="Submit" className="login__btn">
                   Đăng nhập

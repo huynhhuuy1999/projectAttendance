@@ -1,0 +1,71 @@
+@import "../../assets/scss/variables.scss";
+.detailTeacher {
+  &__content {
+    display: flex;
+    margin-top: 20px;
+  }
+
+  &__avatar {
+    width: 270px;
+    height: 350px;
+  }
+  &__infor-right {
+    flex-grow: 1;
+    border: 2px solid #009999;
+    border-radius: 10px;
+    margin-left: 20px;
+    padding: 20px 20px 10px 20px;
+  }
+  &__info {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    @include breakpoint(medium) {
+      grid-template-columns: 1fr 1fr;
+    }
+    grid-gap: 25px 15px;
+    font-size: 16px;
+  }
+  &__label {
+    font-weight: 600;
+  }
+  &__group-btn {
+    margin-top: 20px;
+    button {
+      padding: 10px 15px;
+    }
+  }
+  &__btn--margin-left {
+    margin-left: 10px;
+  }
+
+  &__schedule {
+    margin-top: 15px;
+  }
+  &__header {
+    margin-top: 10px;
+    display: flex;
+    align-items: flex-end;
+  }
+  &__year {
+    width: 200px;
+    margin-left: 20px;
+  }
+  &__semester {
+    width: 200px;
+  }
+  &__dropdown {
+    margin-top: 3px;
+  }
+  &__btn {
+    padding: 8px 15px;
+    margin-left: 10px;
+  }
+  &__title-timetable {
+    text-align: center;
+    font-size: 25px;
+    color: #f63e62;
+    padding-bottom: 10px;
+    padding-top: 50px;
+    border-bottom: 1px solid #f63e62;
+  }
+}

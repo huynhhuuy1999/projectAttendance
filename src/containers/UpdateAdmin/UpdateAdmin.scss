@@ -1,0 +1,37 @@
+@import "../../assets/scss/variables.scss";
+.updateAdmin {
+  .form {
+    &__cover {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 20px 30px;
+      width: 80%;
+      @include breakpoint(medium) {
+        width: 100%;
+      }
+      margin: 20px auto;
+    }
+    .input {
+      padding: 8px 8px;
+    }
+    &__item {
+      &--date {
+        padding: 6px 8px !important;
+      }
+    }
+    &__label {
+      font-weight: bold;
+      font-size: 15px;
+      margin-left: 5px;
+    }
+    &__btn {
+      margin: 0 auto;
+      width: 100px;
+      padding: 8px 10px;
+    }
+    &__group-btn {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

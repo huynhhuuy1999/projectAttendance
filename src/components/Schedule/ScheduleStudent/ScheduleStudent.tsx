@@ -1,4 +1,6 @@
+import moment from "moment";
 import React from "react";
+import { Color } from "../../../constants";
 import "./ScheduleStudent.scss";
 
 export const ScheduleStudent: React.FC<IScheduleStudent> = ({ data }) => {
@@ -13,9 +15,9 @@ export const ScheduleStudent: React.FC<IScheduleStudent> = ({ data }) => {
             <td className="schedule-student__lession">Tiết {lesson}</td>
           );
         } else {
-          data.map((item: any) => {
-            if (item.day === day) {
-              let y = [...item.content];
+          data?.map((item: IResponseTimetableStudent) => {
+            if (item.dayOfWeek === day) {
+              let y = [...item.timeTableCourses];
               y.map((itemm, indexx) => {
                 if (itemm.start < lesson && itemm.end >= lesson) flag = true;
                 if (itemm.start === lesson) {
@@ -26,12 +28,28 @@ export const ScheduleStudent: React.FC<IScheduleStudent> = ({ data }) => {
                       key={indexx}
                       className="schedule-student__item"
                     >
-                      {itemm.subject}
+                      <span className="bold">{itemm.clazz?.id}</span>
+                      <span>{itemm.clazz?.course?.name}</span>
+                      <span className="bold">
+                        {itemm.clazz?.teacher?.fullName}
+                      </span>
+                      <span>
+                        BĐ:{" "}
+                        {moment(itemm.clazz?.startDate).format("DD/MM/YYYY")}
+                      </span>
+                      <span>
+                        KT: {moment(itemm.clazz?.endDate).format("DD/MM/YYYY")}
+                      </span>
+                      <span style={{ color: Color.Blue }}>
+                        Xem lịch sử điểm danh
+                      </span>
                     </td>
                   );
                 }
+                return 0;
               });
             }
+            return 0;
           });
           if (!flag) {
             contentRow.push(<td></td>);

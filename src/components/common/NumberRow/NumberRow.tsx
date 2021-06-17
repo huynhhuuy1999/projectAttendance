@@ -48,7 +48,7 @@ export const NumberRow: React.FC<INumberRow> = ({ changeNumber }) => {
           </div>
         </div>
       </div>
-      <span>Show</span>
+      {/* <span>Show</span> */}
     </div>
   );
 };

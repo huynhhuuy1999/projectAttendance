@@ -11,10 +11,6 @@
     display: flex;
     justify-content: center;
   }
-  &__btn {
-    height: 35px;
-    width: 90px;
-  }
   &__label {
     font-size: 15px;
     font-weight: bold;
@@ -25,6 +21,7 @@
   &__dropdown {
     .dropdown__header {
       height: 38px;
+      // min-height: 38px;
       border-width: 1px;
     }
   }
@@ -32,7 +29,9 @@
     span {
       display: block;
       font-size: 15px;
-      font-weight: bold;
+      &.bold {
+        font-weight: bold;
+      }
       &.margin-bottom {
         margin-bottom: 7px;
       }
@@ -44,6 +43,8 @@
     }
     .dropdown__body {
       z-index: 7;
+      max-height: 300px;
+      overflow-y: auto;
     }
   }
   &__dropdown-teacher {

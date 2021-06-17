@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
 import testAvartar from "../../../assets/images/b20d01adf2eb02b55bfa.jpg";
 import "./Header.scss";
@@ -6,12 +6,12 @@ import React from "react";
 import { Avatar } from "../Avatar/Avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/rootReducer";
-import { spawn } from "node:child_process";
 import { logout } from "../../../helper";
 export const Header: React.FC<IHeader> = ({ sidebar, openSideBar, isOpen }) => {
   const handleShowSideBar = () => {
     openSideBar();
   };
+  const history = useHistory();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   return (
     <div className="header">
@@ -33,7 +33,7 @@ export const Header: React.FC<IHeader> = ({ sidebar, openSideBar, isOpen }) => {
 
       <div className="header__avatar">
         <div className="header__avatar-div">
-          <Avatar image={testAvartar} />
+          <Avatar image="https://picsum.photos/200/300" />
           {currentUser.fullName ? (
             <span>{currentUser.fullName}</span>
           ) : (
@@ -42,7 +42,12 @@ export const Header: React.FC<IHeader> = ({ sidebar, openSideBar, isOpen }) => {
         </div>
         <div className="header__avatar-content">
           <div className="header__avatar-option">
-            <a href="#">Thông tin</a>
+            <a
+              onClick={() => history.push("/updateadmin")}
+              style={{ cursor: "pointer" }}
+            >
+              Thông tin
+            </a>
           </div>
           <div className="header__avatar-option header__avatar-option--radius">
             <a href="" onClick={() => logout()}>

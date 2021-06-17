@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { Route } from "react-router-dom";
 import { logout } from "../helper";
 import { BlankLayout, SibarLayout } from "../layouts";
-import { doGetCurrentUser } from "../redux/slice";
+import { doGetCurrentUser } from "../redux/action";
+import { useAppDispatch } from "../redux/store";
 export const PrivateRouter: React.FC<IPrivateRouter> = ({
   component,
   exact,
   path,
   isHasSideBar,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const tokenLogin = window.localStorage.getItem("TOKEN");
   useEffect(() => {
     dispatch(doGetCurrentUser());

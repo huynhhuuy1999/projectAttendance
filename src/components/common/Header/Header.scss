@@ -11,9 +11,9 @@
   background-size: cover;
   color: #fff;
   padding: 0 1rem;
-  @include breakpoint(medium) {
-    height: 50px;
-  }
+  // @include breakpoint(medium) {
+  //   height: 50px;
+  // }
   &__avatar {
     position: relative;
     margin-right: 30px;

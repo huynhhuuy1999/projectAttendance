@@ -5,14 +5,15 @@ export const Dropdown: React.FC<IDropdown> = ({
   data,
   className,
   onChange,
+  placeholder,
+  error,
+  value,
 }) => {
   const [isShow, setIsShow] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(data[0].value);
-  const [selectedLabel, setSelectedLabel] = useState(data[0].label);
+  const [selectedLabel, setSelectedLabel] = useState(placeholder);
   const ref = useRef<HTMLDivElement>(null);
   const handleSelectItem = (value: any) => {
-    setSelectedValue(value.value);
-    setSelectedLabel(value.label);
+    setSelectedLabel(value.name);
     setIsShow(false);
     return onChange(value);
   };
@@ -29,11 +30,21 @@ export const Dropdown: React.FC<IDropdown> = ({
       };
     }
   }, [ref, isShow]);
+  useEffect(() => {
+    function handleSetLabel(value?: string) {
+      setSelectedLabel(value);
+    }
+    if (value) {
+      let selected = data.find((item) => item.id === value);
+      handleSetLabel(selected?.name);
+    }
+  }, [value]);
   return (
     <div className={`dropdown ${className}`}>
       <div className="dropdown__header" onClick={() => setIsShow(!isShow)}>
         {selectedLabel}
       </div>
+      {error !== "" ? <span className="dropdown__error">{error}</span> : null}
       <div
         className={`dropdown__body ${isShow ? "" : "dropdown__body--hidden"}`}
         ref={ref}
@@ -45,7 +56,7 @@ export const Dropdown: React.FC<IDropdown> = ({
               onClick={() => handleSelectItem(item)}
               key={index}
             >
-              {item.label}
+              {item.name}
             </div>
           );
         })}

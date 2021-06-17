@@ -3,6 +3,7 @@
   padding: 50px;
   &__btn {
     transition: color 0.25s, border 0.25s;
+    border: 1px solid #009999;
     &:hover {
       color: #055252;
       border: 1px solid #055252;

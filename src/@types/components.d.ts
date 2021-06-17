@@ -1,3 +1,17 @@
+interface IStyle {
+    width?: number,
+    height?: number,
+    padding?: number,
+    paddingLeft?: number,
+    paddingRight?: number,
+    margin?: number,
+    marginLeft?: number,
+    marginRight?: number,
+    textAlign?: string,
+    borderRadius?: number,
+    marginTop?: number,
+    marginBottom?: number
+}
 interface IAvatar {
     image?: string;
     className?: string;
@@ -5,18 +19,23 @@ interface IAvatar {
 interface IBanner {
     title?: string;
 }
-interface IButton {
+interface IButton extends IStyle {
     className?: string;
     type?: any;
     isSecondaryBtn?: boolean;
     isThirBtn?: boolean;
     isOrderBtn?: boolean;
+    color?: string;
+    textColor?: string;
     onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined;
 }
 interface IDropdown {
-    data: Array<{ value: number, label: string }>;
+    error?: string;
+    data: Array<{ id?: string | number, name?: string }>;
     className?: string;
     onChange: (event: React.FormEvent<HTMLDivElement>) => void;
+    placeholder?: string;
+    value?: string | number;
 }
 interface IHeader {
     sidebar?: boolean;
@@ -36,11 +55,15 @@ interface IInput {
     autoComplete?: string;
     id?: string;
     name?: string;
+    error?: string;
+    disable?: boolean;
 }
 interface ICardCourses {
     idCourse?: string | number;
     nameCourse?: string;
     numberClass?: number | string;
+    handleEdit?: any;
+    role?: number;
 }
 interface ICardClass {
     nameTeacher?: string;
@@ -50,15 +73,17 @@ interface ICardClass {
     startTime?: string;
     endTime?: string;
     room?: string;
+    role?: number;
+    showModal?: (idClass: any) => void;
 }
 interface INumberRow {
     changeNumber: any;
 }
 interface IPagination {
-    postPerPage: any;
+    postPerPage?: any;
     totalPost: number;
-    changePage: any;
-    currentPage: number;
+    changePage?: any;
+    currentPage?: number;
 }
 interface ISearch {
     placeholder?: string;
@@ -74,7 +99,14 @@ interface IImageUploadInput {
     avatar?: any;
 }
 interface ITableStudent {
-    data: any;
+    data: Array<IResponseStudent>;
+    showModal: (id: string) => void;
+    isAttendance?: boolean;
+    idClass: string;
+}
+interface ITableTeacher {
+    data: Array<IResponseStudent>;
+    showModal: (id: string) => void;
 }
 interface IBlankLayout {
     children?: any;
@@ -83,7 +115,7 @@ interface ISibarLayout {
 
 }
 interface IScheduleStudent {
-    data?: any;
+    data?: Array<IResponseTimetableStudent>;
 }
 interface IPrivateRouter {
     component?: any;
@@ -95,4 +127,34 @@ interface IPublicRouter {
     component?: any;
     exact?: any;
     path?: string;
+}
+
+interface IModal {
+    isShow?: boolean;
+    className?: string;
+    setIsShow?: any;
+    backgroundColorOverlay?: string;
+}
+
+interface ISvg {
+    width?: number;
+    height?: number;
+    onClick?: () => void;
+}
+
+interface INotiSuccess {
+    isShow?: boolean;
+    setIsShow?: any;
+    message?: string;
+    onClick?: () => void;
+}
+
+interface INotiOption {
+    isShow?: boolean;
+    setIsShow?: any;
+    message?: string;
+    btnLeft?: string;
+    btnRight?: string;
+    onClickBtnLeft?: () => void;
+    onClickBtnRight?: () => void;
 }

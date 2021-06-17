@@ -1,39 +1,74 @@
-import React from "react";
-import { ImageUploadInput } from "../../components";
-import TestAvatar from "../../assets/images/cong-nghe-nhan-dien-khuon-mat-1.jpg";
+import React, { useEffect, useState } from "react";
+import { ImageUploadInput, ScheduleStudent } from "../../components";
+// import TestAvatar from "../../assets/images/cong-nghe-nhan-dien-khuon-mat-1.jpg";
 import "./DetailStudent.scss";
-import { Banner, Button } from "../../components/common";
-import { useHistory } from "react-router";
+import { Banner, Button, Dropdown } from "../../components/common";
+import { useHistory, useParams } from "react-router";
+import { useAppDispatch } from "../../redux/store";
+import { doGetOneStudent, doGetTimetableStudent } from "../../redux/action";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/rootReducer";
+import moment from "moment";
+import { Color } from "../../constants";
 
 export const DetailStudent = () => {
   const imageOnChange = (f: File) => {
     // formik.setFieldValue('groupCoverImage', f);
   };
+  const { idStudent } = useParams<{ idStudent: string }>();
+  const dispatch = useAppDispatch();
   const history = useHistory();
+  const oneStudent = useSelector(
+    (state: RootState) => state.student.oneStudent
+  );
+  const timetableStudent = useSelector(
+    (state: RootState) => state.student.timeTableStudent
+  );
+  const listSemester = [
+    { name: "Học kì 1", id: 1 },
+    { name: "Học kì 2", id: 2 },
+  ];
+  const listYear = [
+    { name: "2019-2020", id: 1 },
+    { name: "2020-2021", id: 2 },
+  ];
+  useEffect(() => {
+    dispatch(doGetOneStudent(idStudent));
+    dispatch(
+      doGetTimetableStudent({
+        userId: "17521224",
+        year: 2021,
+        semester: 1,
+      })
+    );
+  }, []);
   return (
     <div className="detailStudent">
       <Banner title="Chi tiết sinh viên" />
       <div className="detailStudent__content">
         <div className="detailStudent__avatar">
-          <ImageUploadInput avatar={TestAvatar} onChange={imageOnChange} />
+          <ImageUploadInput
+            avatar="https://picsum.photos/200/300"
+            onChange={imageOnChange}
+          />
         </div>
         <div className="detailStudent__infor-right">
           <div className="detailStudent__info">
             <span className="detailStudent__label">MSSV:</span>
-            <span>17521284</span>
+            <span>{oneStudent.id}</span>
             <span className="detailStudent__label">Họ tên:</span>
-            <span>Taylor Swift</span>
+            <span>{oneStudent.fullName}</span>
             <span className="detailStudent__label">Ngày sinh:</span>
-            <span>31/08/1999</span>
+            <span>{moment(oneStudent.birthday).format("DD/MM/YYYY")}</span>
             <span className="detailStudent__label">Số điện thoại:</span>
-            <span>0345790493</span>
+            <span>{oneStudent.phone}</span>
             <span className="detailStudent__label">Email:</span>
             <span className="detailStudent__info-address">
-              huynhhuuy1@gmail.com
+              {oneStudent.email}
             </span>
             <span className="detailStudent__label">Địa chỉ:</span>
             <span className="detailStudent__info-address">
-              25/250 Trường Chinh, phường 1, quận 5, thành phố Hồ Chí Minh
+              {oneStudent.address}
             </span>
             <span className="detailStudent__label">Số buổi vắng:</span>
             <span>2</span>
@@ -49,16 +84,53 @@ export const DetailStudent = () => {
             <span>888888888</span>
           </div>
           <div className="detailStudent__group-btn">
-            <Button isSecondaryBtn={true}>Liên hệ phụ huynh</Button>
+            <Button color={Color.Blue}>Liên hệ phụ huynh</Button>
             <Button
-              isSecondaryBtn={true}
+              color={Color.Blue}
               className="detailStudent__btn--margin-left"
-              onClick={() => history.push("/updatestudent")}
+              onClick={() => history.push(`/updatestudent/${idStudent}`)}
             >
               Cập nhật thông tin
             </Button>
+            <Button
+              color={Color.Blue}
+              className="detailStudent__btn--margin-left"
+              onClick={() => history.push(`/listImageAttendance/${idStudent}`)}
+            >
+              Ảnh nhận diện mặt
+            </Button>
           </div>
         </div>
+      </div>
+      <h3 className="detailStudent__title-timetable">Thời khóa biểu</h3>
+      {/* <hr style={{ color: "#f63e62" }} /> */}
+      <div className="detailStudent__timetable">
+        <div className="detailStudent__header">
+          <div className="detailStudent__semester">
+            <span>Học kì</span>
+            <Dropdown
+              placeholder="Chọn học kì"
+              data={listSemester}
+              className="detailStudent__dropdown"
+              onChange={(value: any) => console.log(value)}
+            />
+          </div>
+          <div className="detailStudent__year">
+            <span>Năm học</span>
+            <Dropdown
+              placeholder="Chọn năm học"
+              data={listYear}
+              className="detailStudent__dropdown"
+              onChange={(value: any) => console.log(value)}
+            />
+          </div>
+          <Button color={Color.Blue} className="detailStudent__btn">
+            Xem
+          </Button>
+        </div>
+      </div>
+      <div className="detailStudent__schedule">
+        <ScheduleStudent data={timetableStudent} />
       </div>
     </div>
   );

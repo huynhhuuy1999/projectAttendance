@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as AiIcons from "react-icons/ai";
 import { SidebarData } from "./sidebarData.js";
 import "./Sidebar.scss";
@@ -7,8 +7,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/rootReducer/index.js";
 export const SideBar: React.FC<ISideBar> = ({ isOpen, openSideBar }) => {
   const [categoryAccount, setCategoryAccount] = useState("");
-  const history = useHistory();
+  // const history = useHistory();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  // console.log("currentUser", currentUser);
   useEffect(() => {
     if (currentUser.roles) {
       setCategoryAccount(currentUser.roles[0].name);

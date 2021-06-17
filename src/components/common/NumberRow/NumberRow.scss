@@ -1,6 +1,7 @@
 .number-row {
   position: relative;
   display: flex;
+  margin-bottom: 10px;
   align-items: center;
   span {
     margin-left: 5px;
@@ -17,19 +18,22 @@
     }
   }
   &__header {
-    padding: 10px 15px;
+    padding: 0 15px;
     border-radius: 5px;
     border: 1px solid #009999;
     z-index: 2;
     position: relative;
     background: #ccc;
     width: 100px;
-    text-align: center;
+    height: 36.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
   }
   &__body {
     border: 1px solid #009999;
-    padding: 20px 5px 0px 5px;
+    padding: 12px 5px 0px 5px;
     position: absolute;
     top: 23px;
     width: 100px;

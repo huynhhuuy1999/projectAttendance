@@ -4,7 +4,10 @@ import {
   CreateClass,
   CreateCourse,
   DetailStudent,
+  DetailTeacher,
+  ListAttendance,
   ListClass,
+  ListClassTeaching,
   ListCourses,
   ListStudent,
   ListTeacher,
@@ -12,7 +15,9 @@ import {
   ScheduleStudentPage,
   UpdateAdmin,
   UpdateStudent,
+  UpdateTeacher,
 } from "../containers";
+import { ListImageAttendance } from "../containers/ListImageAttendance/ListImageAttendance";
 import { PrivateRouter } from "./PrivateRouter";
 import { PublicRouter } from "./PublicRouter";
 export * from "./PrivateRouter";
@@ -23,15 +28,15 @@ export const Routers = () => {
       <Switch>
         <PublicRouter component={<Login />} exact={true} path="/" />
         <PrivateRouter
-          component={<p>hello</p>}
+          component={<DetailStudent />}
           exact={true}
-          path="/user"
+          path="/detailstudent/:idStudent"
           isHasSideBar={true}
         />
         <PrivateRouter
-          component={<DetailStudent />}
+          component={<DetailTeacher />}
           exact={true}
-          path="/detailstudent"
+          path="/detailteacher/:idTeacher"
           isHasSideBar={true}
         />
         <PrivateRouter
@@ -49,7 +54,13 @@ export const Routers = () => {
         <PrivateRouter
           component={<UpdateStudent />}
           exact={true}
-          path="/updatestudent"
+          path="/updatestudent/:idStudent?"
+          isHasSideBar={true}
+        />
+        <PrivateRouter
+          component={<UpdateTeacher />}
+          exact={true}
+          path="/updateteacher/:idTeacher?"
           isHasSideBar={true}
         />
         <PrivateRouter
@@ -73,7 +84,7 @@ export const Routers = () => {
         <PrivateRouter
           component={<CreateClass />}
           exact={true}
-          path="/createclass"
+          path="/createclass/:idClass?"
           isHasSideBar={true}
         />
         <PrivateRouter
@@ -86,6 +97,24 @@ export const Routers = () => {
           component={<ListTeacher />}
           exact={true}
           path="/listteacher"
+          isHasSideBar={true}
+        />
+        <PrivateRouter
+          component={<ListAttendance />}
+          exact={true}
+          path="/listAttendance"
+          isHasSideBar={true}
+        />
+        <PrivateRouter
+          component={<ListImageAttendance />}
+          exact={true}
+          path="/listImageAttendance/:id"
+          isHasSideBar={true}
+        />
+        <PrivateRouter
+          component={<ListClassTeaching />}
+          exact={true}
+          path="/listclassteaching"
           isHasSideBar={true}
         />
       </Switch>

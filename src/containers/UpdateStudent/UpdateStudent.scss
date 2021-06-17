@@ -1,14 +1,20 @@
 @import "../../assets/scss/variables.scss";
 .update-user {
-  .form {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 20px 30px;
+  &__group-btn {
     width: 80%;
-    @include breakpoint(medium) {
-      width: 100%;
+    margin: 0 auto;
+  }
+  .formStudent {
+    &__cover {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 20px 30px;
+      width: 80%;
+      margin: 20px auto;
+      @include breakpoint(medium) {
+        width: 100%;
+      }
     }
-    margin: 20px auto;
     .input {
       padding: 8px 8px;
     }
@@ -25,6 +31,13 @@
     &__btn {
       width: 100px;
       padding: 8px 10px;
+    }
+    &__checkbox {
+      display: flex;
+      align-items: center;
+    }
+    &__label-checkbox {
+      margin-left: 10px;
     }
   }
 }

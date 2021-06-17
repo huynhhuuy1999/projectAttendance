@@ -2,7 +2,8 @@
   &__list {
     display: grid;
     margin-top: 15px;
-    grid-template-columns: repeat(6, 1fr);
+    // grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     grid-gap: 15px 15px;
   }
   &__item {
@@ -17,23 +18,32 @@
   }
   &__header {
     display: flex;
-    margin-top: 10px;
-    align-items: flex-end;
+    margin-top: 20px;
+    align-items: flex-start;
+    flex-wrap: wrap;
   }
   &__btn-add {
     background-color: #ffaa00;
     color: #fff;
     border: unset;
-    margin-left: 20px;
+    margin-left: 10px;
     padding: 9px 15px;
   }
-  &__btn-excel {
-    border: unset;
-    margin-left: 20px;
-    padding: 9px 15px;
+  &__search {
+    margin-bottom: 10px;
   }
   &__btn {
     padding: 8px 15px;
     margin-left: 10px;
+  }
+  &__excel {
+    margin-left: 10px;
+    border-radius: 5px;
+    padding: 9px 15px;
+    font-weight: 500;
+    font-size: 14px;
+    font-family: "Lora";
+    color: #fff;
+    cursor: pointer;
   }
 }

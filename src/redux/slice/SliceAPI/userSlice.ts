@@ -1,33 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import { setCookie } from "../../../helper";
-import { apiUser } from "../../../services/api";
-
-export const doLogin = createAsyncThunk("user@get/login", async (params: IParamLogin) => {
-  const result = await apiUser.postLogin(params);
-  return result.data;
-});
-
-export const doGetCurrentUser = createAsyncThunk(
-  "user@get/currentUser",
-  async () => {
-    const result = await apiUser.getCurrentUser();
-    return result.data;
-  }
-);
-
-export const doGetTimetableStudent = createAsyncThunk(
-  "user@get/timetableStudent",
-  async (params: IParamTimeTableStudent) => {
-    const result = await apiUser.getTimetableStudent(params);
-    console.log(result)
-    return result.data;
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
+import { doDeleteUser, doGetCurrentUser, doLogin } from "../../action";
 
 const initialState = {
   isLoading: false,
   currentUser: {},
-  timeTableStudent: {},
 } as ICurrentUserInitialState;
 
 const slice = createSlice({
@@ -56,16 +32,14 @@ const slice = createSlice({
     builder.addCase(doGetCurrentUser.rejected, (state, action) => {
       state.isLoading = false;
     });
-    //get timetable student
-    builder.addCase(doGetTimetableStudent.pending, (state, action) => {
+    //delete user
+    builder.addCase(doDeleteUser.pending, (state, action) => {
       state.isLoading = true;
     });
-    builder.addCase(doGetTimetableStudent.fulfilled, (state, action: PayloadAction<IResponseTimetableStudent>) => {
+    builder.addCase(doDeleteUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      console.log(action.payload);
-      state.timeTableStudent = action.payload;
     });
-    builder.addCase(doGetTimetableStudent.rejected, (state, action) => {
+    builder.addCase(doDeleteUser.rejected, (state, action) => {
       state.isLoading = false;
     });
   },

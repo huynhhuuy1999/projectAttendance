@@ -1,13 +1,17 @@
 .input {
   outline: none;
-  &:focus {
-    outline: none;
-  }
   padding: 5px 8px;
   font-size: 14px;
   border-radius: 5px;
   border: 1px solid #009999;
   width: 100%;
+  &:focus {
+    outline: none;
+  }
+  &__error {
+    margin: 5px;
+    color: red;
+  }
 }
 .label {
   display: block;
