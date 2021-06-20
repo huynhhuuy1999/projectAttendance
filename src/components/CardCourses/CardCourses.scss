@@ -28,6 +28,12 @@
     cursor: pointer;
     width: 20px;
   }
+  &__icon-trash {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    cursor: pointer;
+  }
   &__modal-content {
     display: flex;
     flex-direction: column;

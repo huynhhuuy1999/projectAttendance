@@ -1,27 +1,41 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { number, string } from "yup/lib/locale";
 import { ScheduleStudent } from "../../components";
 import { Banner, Button, Dropdown } from "../../components/common";
 import { Color } from "../../constants";
 import { doGetTimetableStudent } from "../../redux/action";
-import { RootState } from "../../redux/rootReducer";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import "./ScheduleStudentPage.scss";
 
 export const ScheduleStudentPage = () => {
-  const dispatch = useDispatch();
-  const timetableStudent = useSelector(
-    (state: RootState) => state.student.timeTableStudent
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.currentUser);
+  const timetableStudent = useAppSelector(
+    (state) => state.student.timeTableStudent
   );
-  // const [timeTable, setTimeTable] = useState([]);
+  const [year, setYear] = useState(2020);
+  const [semester, setSemester] = useState(2);
+  const handleViewListTimeTable = () => {
+    dispatch(
+      doGetTimetableStudent({
+        userId: user.id,
+        year: year,
+        semester: semester,
+      })
+    );
+  };
+
   useEffect(() => {
     dispatch(
       doGetTimetableStudent({
-        userId: "17521284",
-        year: 2020,
-        semester: 2,
+        userId: user.id,
+        year: year,
+        semester: semester,
       })
     );
-  }, []);
+  }, [user]);
+
   // console.log(timetableStudent);
   // useEffect(() => {
   //   if(timetableStudent){
@@ -61,8 +75,9 @@ export const ScheduleStudentPage = () => {
     { name: "Học kì 2", id: 2 },
   ];
   const listYear = [
-    { name: "2019-2020", id: 1 },
-    { name: "2020-2021", id: 2 },
+    { name: "2018-2019", id: 2018 },
+    { name: "2019-2020", id: 2019 },
+    { name: "2020-2021", id: 2020 },
   ];
   return (
     <div className="schedule-student-ctn">
@@ -74,7 +89,8 @@ export const ScheduleStudentPage = () => {
             placeholder="Chọn học kì"
             data={listSemester}
             className="schedule-student-ctn__dropdown"
-            onChange={(value: any) => console.log(value)}
+            onChange={(value: any) => setSemester(value.id)}
+            defaultValue={{ id: 1, name: "Học kì 1" }}
           />
         </div>
         <div className="schedule-student-ctn__year">
@@ -83,10 +99,15 @@ export const ScheduleStudentPage = () => {
             placeholder="Chọn năm học"
             data={listYear}
             className="schedule-student-ctn__dropdown"
-            onChange={(value: any) => console.log(value)}
+            onChange={(value: any) => setYear(value.id)}
+            defaultValue={{ id: 2020, name: "2020-2021" }}
           />
         </div>
-        <Button color={Color.Blue} className="schedule-student-ctn__btn">
+        <Button
+          color={Color.Blue}
+          className="schedule-student-ctn__btn"
+          onClick={() => handleViewListTimeTable()}
+        >
           Xem
         </Button>
       </div>

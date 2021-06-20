@@ -8,6 +8,7 @@ export const Dropdown: React.FC<IDropdown> = ({
   placeholder,
   error,
   value,
+  defaultValue,
 }) => {
   const [isShow, setIsShow] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState(placeholder);
@@ -17,6 +18,11 @@ export const Dropdown: React.FC<IDropdown> = ({
     setIsShow(false);
     return onChange(value);
   };
+  useEffect(() => {
+    if (defaultValue) {
+      setSelectedLabel(defaultValue.name);
+    }
+  }, []);
   useEffect(() => {
     if (isShow) {
       const handleClickOutside = (event: any) => {

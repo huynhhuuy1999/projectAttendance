@@ -1,9 +1,12 @@
 import moment from "moment";
 import React from "react";
-import { Color } from "../../../constants";
+import { Color, ROLE } from "../../../constants";
 import "./ScheduleStudent.scss";
+import { IoClose } from "react-icons/io5";
+import { useAppSelector } from "../../../redux/store";
 
 export const ScheduleStudent: React.FC<IScheduleStudent> = ({ data }) => {
+  const user = useAppSelector((state) => state.user.currentUser);
   const listRender = () => {
     let contentTable = [];
     for (let lesson = 1; lesson <= 10; lesson++) {
@@ -25,9 +28,16 @@ export const ScheduleStudent: React.FC<IScheduleStudent> = ({ data }) => {
                   contentRow.push(
                     <td
                       rowSpan={itemm.end - itemm.start + 1}
-                      key={indexx}
                       className="schedule-student__item"
                     >
+                      {user.roles[0].id === ROLE.ADMIN ? (
+                        <IoClose
+                          cursor="pointer"
+                          fontSize={15}
+                          color="red"
+                          className="schedule-student__icon-close"
+                        />
+                      ) : null}
                       <span className="bold">{itemm.clazz?.id}</span>
                       <span>{itemm.clazz?.course?.name}</span>
                       <span className="bold">

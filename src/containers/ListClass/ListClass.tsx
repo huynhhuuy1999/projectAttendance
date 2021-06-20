@@ -3,6 +3,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { useParams } from "react-router-dom";
 import { CardClass } from "../../components";
 import {
   Banner,
@@ -13,9 +14,14 @@ import {
   NotiOption,
 } from "../../components/common";
 import { Color, ROLE } from "../../constants";
-import { doDeleteClass, doGetListClass } from "../../redux/action";
+import {
+  doAddClassExcel,
+  doDeleteClass,
+  doGetListClass,
+  doGetListClassByCourse,
+} from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import "./ListClass.scss";
 export const ListClass = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
@@ -27,6 +33,9 @@ export const ListClass = () => {
   const [isShowModalOption, setIsShowModalOption] = useState(false);
   const [reload, setReload] = useState(false);
   const [idClass, setIdClass] = useState("");
+  const { idCourse } = useParams<{ idCourse: string }>();
+  const [showModalAddExcel, setShowModalAddExcel] = useState(false);
+  // console.log("listClassByCourse", listClassByCourse);
   // const listYear = [
   //   { label: "2019-2020", value: 1 },
   //   { label: "2020-2021", value: 2 },
@@ -37,26 +46,36 @@ export const ListClass = () => {
       setReload(!reload);
     });
   };
+
   const handleAddExcelClass = (e: any) => {
     const formData = new FormData();
-    const token = localStorage.getItem("TOKEN");
+    // const token = localStorage.getItem("TOKEN");
     formData.append("file", e.target.files[0], e.target.files[0].name);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    axios
-      .post("http://localhost:8080/api/excel/classes", formData, config)
-      .then(() => {
-        // console.log("ok");
-      })
-      .catch((err) => console.log(err));
+    // const config = {
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // };
+    // axios
+    //   .post("http://localhost:8080/api/excel/classes", formData, config)
+    //   .then(() => {
+    //     // console.log("ok");
+    //   })
+    //   .catch((err) => console.log(err));
+    dispatch(doAddClassExcel(formData)).then(() => {
+      setShowModalAddExcel(true);
+      setReload(!reload);
+    });
   };
   useEffect(() => {
-    dispatch(doGetListClass());
+    if (idCourse) {
+      dispatch(doGetListClassByCourse(idCourse));
+    } else {
+      dispatch(doGetListClass());
+    }
   }, [reload]);
+
   useEffect(() => {
     if (currentUser.roles) {
       setRole(currentUser.roles[0].id);
@@ -143,6 +162,12 @@ export const ListClass = () => {
         onClick={() => {
           setIsShowModalSucces(false);
         }}
+      />
+      <NotiSuccess
+        message="Thêm danh sách thành công"
+        isShow={showModalAddExcel}
+        setIsShow={setShowModalAddExcel}
+        onClick={() => setShowModalAddExcel(false)}
       />
     </div>
   );

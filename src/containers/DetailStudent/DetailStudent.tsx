@@ -4,10 +4,8 @@ import { ImageUploadInput, ScheduleStudent } from "../../components";
 import "./DetailStudent.scss";
 import { Banner, Button, Dropdown } from "../../components/common";
 import { useHistory, useParams } from "react-router";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { doGetOneStudent, doGetTimetableStudent } from "../../redux/action";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/rootReducer";
 import moment from "moment";
 import { Color } from "../../constants";
 
@@ -16,28 +14,38 @@ export const DetailStudent = () => {
     // formik.setFieldValue('groupCoverImage', f);
   };
   const { idStudent } = useParams<{ idStudent: string }>();
+  const [year, setYear] = useState(2020);
+  const [semester, setSemester] = useState(1);
   const dispatch = useAppDispatch();
   const history = useHistory();
-  const oneStudent = useSelector(
-    (state: RootState) => state.student.oneStudent
-  );
-  const timetableStudent = useSelector(
-    (state: RootState) => state.student.timeTableStudent
+  const oneStudent = useAppSelector((state) => state.student.oneStudent);
+  const timetableStudent = useAppSelector(
+    (state) => state.student.timeTableStudent
   );
   const listSemester = [
     { name: "Học kì 1", id: 1 },
     { name: "Học kì 2", id: 2 },
   ];
   const listYear = [
-    { name: "2019-2020", id: 1 },
-    { name: "2020-2021", id: 2 },
+    { name: "2018-2019", id: 2018 },
+    { name: "2019-2020", id: 2019 },
+    { name: "2020-2021", id: 2020 },
   ];
+  const handleViewListTimeTable = () => {
+    dispatch(
+      doGetTimetableStudent({
+        userId: idStudent,
+        year: year,
+        semester: semester,
+      })
+    );
+  };
   useEffect(() => {
     dispatch(doGetOneStudent(idStudent));
     dispatch(
       doGetTimetableStudent({
-        userId: "17521224",
-        year: 2021,
+        userId: idStudent,
+        year: 2020,
         semester: 1,
       })
     );
@@ -103,7 +111,6 @@ export const DetailStudent = () => {
         </div>
       </div>
       <h3 className="detailStudent__title-timetable">Thời khóa biểu</h3>
-      {/* <hr style={{ color: "#f63e62" }} /> */}
       <div className="detailStudent__timetable">
         <div className="detailStudent__header">
           <div className="detailStudent__semester">
@@ -112,7 +119,8 @@ export const DetailStudent = () => {
               placeholder="Chọn học kì"
               data={listSemester}
               className="detailStudent__dropdown"
-              onChange={(value: any) => console.log(value)}
+              onChange={(value: any) => setSemester(value.id)}
+              defaultValue={{ id: 1, name: "Học kì 1" }}
             />
           </div>
           <div className="detailStudent__year">
@@ -121,10 +129,15 @@ export const DetailStudent = () => {
               placeholder="Chọn năm học"
               data={listYear}
               className="detailStudent__dropdown"
-              onChange={(value: any) => console.log(value)}
+              onChange={(value: any) => setYear(value.id)}
+              defaultValue={{ id: 2020, name: "2020-2021" }}
             />
           </div>
-          <Button color={Color.Blue} className="detailStudent__btn">
+          <Button
+            color={Color.Blue}
+            className="detailStudent__btn"
+            onClick={() => handleViewListTimeTable()}
+          >
             Xem
           </Button>
         </div>

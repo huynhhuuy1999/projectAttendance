@@ -12,5 +12,5 @@ export * from './ListTeacher/ListTeacher';
 export * from './DetailTeacher/DetailTeacher';
 export * from './UpdateTeacher/UpdateTeacher';
 export * from './ListAttendance/ListAttendance';
-export * from './ListAttendance/ListAttendance';
-export * from './ListClassTeaching/ListClassTeaching'
+export * from './ListImageAttendance/ListImageAttendance';
+export * from './ListClassTeaching/ListClassTeaching';

@@ -13,7 +13,6 @@ export const ListClassTeaching = () => {
   const listClass = useSelector(
     (state: RootState) => state.clazz.listClassByTeacher
   );
-  console.log("listClass", listClass);
   const history = useHistory();
   const dispatch = useAppDispatch();
   const [isShowModalSuccess, setIsShowModalSucces] = useState(false);
@@ -24,13 +23,12 @@ export const ListClassTeaching = () => {
   // ];
   useEffect(() => {
     if (currentUser) {
-      console.log("currentUser", currentUser);
       dispatch(doGetListClassByTeacher(currentUser.id));
     }
   }, [reload]);
   return (
     <div className="listclassteaching">
-      <Banner title="Danh sách lớp học" />
+      <Banner title="Danh sách lớp học đang dạy" />
       <div className="listclassteaching__header">
         <Search
           placeholder="Nhập khóa học"

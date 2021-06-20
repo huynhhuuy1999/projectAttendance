@@ -8,7 +8,7 @@ import {
   Input,
   NotiSuccess,
 } from "../../components/common";
-import { Color } from "../../constants";
+import { Color, ROLE } from "../../constants";
 import {
   doAddClass,
   doGetListCourse,
@@ -40,6 +40,7 @@ export const CreateClass = () => {
       name: item.fullName,
     };
   });
+  const user = useSelector((state: RootState) => state.user.currentUser);
   const validationSchema = Yup.object({
     idClazz: Yup.string().required("Vui lòng nhập mã lớp học"),
     startdate: Yup.string().required("Vui lòng chọn ngày bắt đầu"),
@@ -170,7 +171,7 @@ export const CreateClass = () => {
               value={idClass ? oneClass?.teacher?.id : undefined}
             />
           </div>
-          <div className="createclass__box-input">
+          {/* <div className="createclass__box-input">
             <span className="margin-bottom bold">Phòng học</span>
             <Dropdown
               placeholder="Chọn phòng học"
@@ -178,7 +179,7 @@ export const CreateClass = () => {
               className="createclass__dropdown createclass__dropdown-room"
               onChange={(value: any) => console.log(value)}
             />
-          </div>
+          </div> */}
           <Input
             isLabel={true}
             value={formik.values.numberStudent}
@@ -227,6 +228,11 @@ export const CreateClass = () => {
           <Button color={Color.Blue}>
             {idClass ? "Cập nhật" : "Thêm lớp học"}
           </Button>
+          {user.roles[0].id === ROLE.ADMIN && idClass ? (
+            <Button marginLeft={10} color={Color.Green}>
+              Thêm sinh viên
+            </Button>
+          ) : null}
         </div>
       </form>
       <NotiSuccess

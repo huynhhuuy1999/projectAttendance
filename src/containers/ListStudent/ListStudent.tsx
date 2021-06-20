@@ -57,21 +57,23 @@ export const ListStudent = () => {
   };
   const handleAddTimetable = (e: any) => {
     const formData = new FormData();
-    const token = localStorage.getItem("TOKEN");
     formData.append("file", e.target.files[0], e.target.files[0].name);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-        // "content-type": "application/json",
-      },
-    };
-    axios
-      .post("http://localhost:8080/api/excel/timetables", formData, config)
-      .then(() => {
-        console.log("ok");
-      })
-      .catch((err) => console.log(err));
+    // const config = {
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //     Authorization: `Bearer ${token}`,
+    //     // "content-type": "application/json",
+    //   },
+    // };
+    // axios
+    //   .post("http://localhost:8080/api/excel/timetables", formData, config)
+    //   .then(() => {
+    //     console.log("ok");
+    //   })
+    //   .catch((err) => console.log(err));
+    dispatch(doAddTimetable(formData)).then(() => {
+      console.log("ok");
+    });
   };
   useEffect(() => {
     dispatch(doGetListStudent());

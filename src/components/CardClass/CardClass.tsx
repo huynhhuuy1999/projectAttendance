@@ -30,7 +30,6 @@ export const CardClass: React.FC<ICardClass> = ({
             color="#dd1a35"
             size={20}
             className="cardclass__icon-trash"
-            // onClick={() => setIsShowModal(true)}
             onClick={() => {
               if (showModal) showModal(idClass);
             }}

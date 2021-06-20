@@ -9,6 +9,7 @@ import {
   ListClass,
   ListClassTeaching,
   ListCourses,
+  ListImageAttendance,
   ListStudent,
   ListTeacher,
   Login,
@@ -17,7 +18,6 @@ import {
   UpdateStudent,
   UpdateTeacher,
 } from "../containers";
-import { ListImageAttendance } from "../containers/ListImageAttendance/ListImageAttendance";
 import { PrivateRouter } from "./PrivateRouter";
 import { PublicRouter } from "./PublicRouter";
 export * from "./PrivateRouter";
@@ -78,7 +78,7 @@ export const Routers = () => {
         <PrivateRouter
           component={<ListClass />}
           exact={true}
-          path="/listclass"
+          path="/listclass/:idCourse?"
           isHasSideBar={true}
         />
         <PrivateRouter

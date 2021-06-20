@@ -5,14 +5,18 @@ import { Button, Input, Modal } from "../common";
 import * as Yup from "yup";
 import "./CardCourses.scss";
 import { Color, ROLE } from "../../constants";
+import { useHistory } from "react-router-dom";
+import { AiTwotoneDelete } from "react-icons/ai";
 
 export const CardCourses: React.FC<ICardCourses> = ({
   idCourse,
   nameCourse,
   numberClass,
   handleEdit,
+  showModal,
   role,
 }) => {
+  const history = useHistory();
   const validationSchema = Yup.object({
     id: Yup.string().required("Vui lòng nhập mã khóa học"),
     name: Yup.string().required("Vui lòng nhập tên khóa học"),
@@ -32,12 +36,22 @@ export const CardCourses: React.FC<ICardCourses> = ({
   return (
     <div className="card-courses">
       {role === ROLE.ADMIN ? (
-        <img
-          src={EditSvg}
-          alt=""
-          className="card-courses__icon"
-          onClick={() => setIsShowModal(true)}
-        />
+        <>
+          <img
+            src={EditSvg}
+            alt=""
+            className="card-courses__icon"
+            onClick={() => setIsShowModal(true)}
+          />
+          <AiTwotoneDelete
+            color="#dd1a35"
+            size={20}
+            className="card-courses__icon-trash"
+            onClick={() => {
+              if (showModal) showModal(idCourse);
+            }}
+          />
+        </>
       ) : null}
 
       <div className="card-courses__id card-courses--bold">({idCourse})</div>
@@ -47,8 +61,11 @@ export const CardCourses: React.FC<ICardCourses> = ({
       <div className="card-courses__number card-courses--margin-top card-courses--bold">
         Số lớp: {numberClass}
       </div>
-      <div className="card-courses__detail card-courses--margin-top">
-        Chi tiết
+      <div
+        className="card-courses__detail card-courses--margin-top"
+        onClick={() => history.push(`/listclass/${idCourse}`)}
+      >
+        Xem danh sách lớp
       </div>
       <Modal isShow={isShowModal} setIsShow={setIsShowModal}>
         <div className="card-courses__modal-content">

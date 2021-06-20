@@ -1,0 +1,18 @@
+.list-image-attendance {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  &__item {
+    width: 200px;
+    height: 230px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 10px;
+    &:not(:first-child) {
+      margin-left: 20px;
+    }
+  }
+}

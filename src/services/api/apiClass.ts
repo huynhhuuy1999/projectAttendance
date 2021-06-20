@@ -1,4 +1,5 @@
 import axiosClient from "./axiosClient";
+import axiosFile from "./axiosFile";
 export const apiClass = {
     getListClass: () => {
         const url = "/classes";
@@ -22,6 +23,14 @@ export const apiClass = {
     },
     getListClassByTeacher: (params: string | number) => {
         const url = `/classes/teacher/${params}`
+        return axiosClient.get(url);
+    },
+    postAddClassExcel: (params: any) => {
+        const url = `/excel/classes`;
+        return axiosFile.post(url, params);
+    },
+    getListClassByCourse: (params: string) => {
+        const url = `/classes/course/${params}`;
         return axiosClient.get(url);
     }
 }

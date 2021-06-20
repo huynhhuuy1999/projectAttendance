@@ -12,7 +12,8 @@ interface IClass {
     isLoading?: boolean,
     listClass?: Array,
     oneClass?: IResponseClass,
-    listClassByTeacher?: Array
+    listClassByTeacher?: Array,
+    listClassByCourse?: Array,
 }
 
 interface IStudent {
@@ -54,4 +55,5 @@ interface ITimetableStudent {
 interface IAttendance {
     isLoading?: boolean,
     error?: any;
+    listPhotoAttendance: Array<IResPhotoAttendance>;
 }

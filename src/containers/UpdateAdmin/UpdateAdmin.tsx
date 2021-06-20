@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Banner, Button, Input } from "../../components/common";
+import { Banner, Button, Input, NotiSuccess } from "../../components/common";
 import { Color, ROLE } from "../../constants";
 import * as Yup from "yup";
 import { RootState } from "../../redux/rootReducer";
@@ -8,18 +8,24 @@ import "./UpdateAdmin.scss";
 import { useFormik } from "formik";
 import { useAppDispatch } from "../../redux/store";
 import { doUpdateStudent } from "../../redux/action";
+import { regNumber } from "../../helper";
 
 export const UpdateAdmin = () => {
   const infoPerson = useSelector((state: RootState) => state.user.currentUser);
   const [role, setRole] = useState(0);
   const dispatch = useAppDispatch();
+  const [showModal, setShowModal] = useState(false);
   const validationSchema = Yup.object({
     id: Yup.string().required("Vui lòng nhập id"),
     username: Yup.string().required("Vui lòng nhập username"),
     fullname: Yup.string().required("Vui lòng nhập họ và tên"),
     birthday: Yup.string().required("Vui lòng chọn ngày sinh"),
-    phone: Yup.string().required("Vui lòng nhập số điện thoại"),
-    email: Yup.string().required("Vui lòng nhập email"),
+    phone: Yup.string()
+      .required("Vui lòng nhập số điện thoại")
+      .matches(regNumber, "Số điện thoại không hợp lệ"),
+    email: Yup.string()
+      .required("Vui lòng nhập email")
+      .email("Email không hợp lệ"),
     address: Yup.string().required("Vui lòng nhập địa chỉ"),
   });
   useEffect(() => {
@@ -63,7 +69,9 @@ export const UpdateAdmin = () => {
           password,
           phone,
         })
-      );
+      ).then(() => {
+        setShowModal(true);
+      });
     },
   });
   useEffect(() => {
@@ -140,7 +148,6 @@ export const UpdateAdmin = () => {
               name="email"
               id="email"
               HTMLFor="email"
-              type="email"
               classNameLabel="form__label"
               error={formik.errors.email}
               disable={role === ROLE.ADMIN ? false : true}
@@ -195,7 +202,6 @@ export const UpdateAdmin = () => {
             />
           </div>
         </div>
-
         {role === ROLE.ADMIN ? (
           <div className="form__group-btn">
             <Button color={Color.Blue} className="form__btn" type="submit">
@@ -204,6 +210,12 @@ export const UpdateAdmin = () => {
           </div>
         ) : null}
       </form>
+      <NotiSuccess
+        isShow={showModal}
+        setIsShow={setShowModal}
+        message="Cập nhật thành công"
+        onClick={() => setShowModal(false)}
+      />
     </div>
   );
 };

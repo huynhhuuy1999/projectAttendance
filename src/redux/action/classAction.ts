@@ -48,3 +48,19 @@ export const doGetListClassByTeacher = createAsyncThunk(
         return result.data;
     }
 );
+
+export const doAddClassExcel = createAsyncThunk(
+    "class@post/addClassExcel",
+    async (params: any) => {
+        const result = await apiClass.postAddClassExcel(params);
+        return result.data;
+    }
+);
+
+export const doGetListClassByCourse = createAsyncThunk(
+    "class@get/listClassByCourse",
+    async (params: string) => {
+        const result = await apiClass.getListClassByCourse(params);
+        return result.data;
+    }
+);

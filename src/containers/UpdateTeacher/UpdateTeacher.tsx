@@ -2,13 +2,7 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
-import {
-  Banner,
-  Button,
-  Input,
-  Modal,
-  NotiSuccess,
-} from "../../components/common";
+import { Banner, Button, Input, NotiSuccess } from "../../components/common";
 import { RootState } from "../../redux/rootReducer";
 import { useAppDispatch } from "../../redux/store";
 import * as Yup from "yup";
@@ -20,6 +14,7 @@ import {
 } from "../../redux/action";
 import { Color, ROLE } from "../../constants";
 import { HiCheckCircle } from "react-icons/hi";
+import { regNumber } from "../../helper";
 
 export const UpdateTeacher = () => {
   const { idTeacher } = useParams<{ idTeacher: string }>();
@@ -36,8 +31,12 @@ export const UpdateTeacher = () => {
     username: Yup.string().required("Vui lòng nhập username"),
     fullname: Yup.string().required("Vui lòng nhập họ và tên"),
     birthday: Yup.string().required("Vui lòng chọn ngày sinh"),
-    phone: Yup.string().required("Vui lòng nhập số điện thoại"),
-    email: Yup.string().required("Vui lòng nhập email"),
+    phone: Yup.string()
+      .required("Vui lòng nhập số điện thoại")
+      .matches(regNumber, "Số điện thoại không hợp lệ"),
+    email: Yup.string()
+      .required("Vui lòng nhập email")
+      .email("Email không hợp lệ"),
     address: Yup.string().required("Vui lòng nhập địa chỉ"),
     password: Yup.string().required("Vui lòng nhập mật khẩu"),
   });
@@ -184,7 +183,6 @@ export const UpdateTeacher = () => {
               name="email"
               id="email"
               HTMLFor="email"
-              type="email"
               classNameLabel="formTeacher__label"
               error={formik.errors.email}
             />

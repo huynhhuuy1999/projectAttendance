@@ -10,8 +10,8 @@ import {
   Pagination,
   Search,
   NotiSuccess,
+  NotiOption,
 } from "../../components/common";
-import { Modal } from "../../components/common/Modal/Modal";
 import { Color } from "../../constants";
 import { doDeleteUser, doGetListTeacher } from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
@@ -115,31 +115,17 @@ export const ListTeacher = () => {
           currentPage={currentPage}
         />
       </div>
-      <Modal isShow={showModal} setIsShow={setShowModal}>
-        <div className="list-teacher__noti">
-          <p>
-            Bạn có chắc chắn muốn xóa giảng viên{" "}
-            <span className="list-teacher__idStudent">{idTeacher}</span> không?
-          </p>
-          <div className="list-teacher__group-btn">
-            <Button
-              width={100}
-              color={Color.Red}
-              onClick={() => handleDeleteStudent()}
-            >
-              Xóa
-            </Button>
-            <Button
-              onClick={() => setShowModal(false)}
-              marginLeft={25}
-              width={100}
-              color={Color.Yellow}
-            >
-              Hủy
-            </Button>
-          </div>
-        </div>
-      </Modal>
+      <NotiOption
+        isShow={showModal}
+        setIsShow={setShowModal}
+        btnLeft="Xóa"
+        btnRight="Hủy"
+        onClickBtnLeft={() => {
+          handleDeleteStudent();
+        }}
+        onClickBtnRight={() => setShowModal(false)}
+        message={`Bạn có chắc chắn muốn xóa giảng viên ${idTeacher} không?`}
+      />
       <NotiSuccess
         isShow={isShowModalSuccess}
         setIsShow={setIsShowModalSuccess}

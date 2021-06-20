@@ -1,15 +1,24 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { CardCourses } from "../../components";
-import { Banner, Button, Search, NotiSuccess } from "../../components/common";
-import { doGetListCourse, doUpdateCourse } from "../../redux/action";
+import {
+  Banner,
+  Button,
+  Search,
+  NotiSuccess,
+  NotiOption,
+} from "../../components/common";
+import {
+  doAddCourseExcel,
+  doDeleteCourse,
+  doGetListCourse,
+  doUpdateCourse,
+} from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
 import { useAppDispatch } from "../../redux/store";
-import { HiCheckCircle } from "react-icons/hi";
 import "./ListCourses.scss";
 import { Color, ROLE } from "../../constants";
-import axios from "axios";
 
 export const ListCourses = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
@@ -19,10 +28,21 @@ export const ListCourses = () => {
   const [reload, setReload] = useState(false);
   const dispatch = useAppDispatch();
   const [isShowModal, setIsShowModal] = useState(false);
+  const [showModalAddExcel, setShowModalAddExcel] = useState(false);
+  const [isShowModalOption, setIsShowModalOption] = useState(false);
+  const [idCourse, setIdCourse] = useState("");
+  const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
   // const listYear = [
   //   { label: "2019-2020", value: 1 },
   //   { label: "2020-2021", value: 2 },
   // ];
+  const handleDeleteCourse = (id: string) => {
+    dispatch(doDeleteCourse({ id: id })).then(() => {
+      setIsShowModalSuccess(true);
+      setReload(!reload);
+    });
+  };
+
   const handleEdit = (id: number, name: string) => {
     setReload(!reload);
     dispatch(doUpdateCourse({ id: id, name: name }));
@@ -30,21 +50,29 @@ export const ListCourses = () => {
   };
   const handleAddExcelCourse = (e: any) => {
     const formData = new FormData();
-    const token = localStorage.getItem("TOKEN");
+    // const token = localStorage.getItem("TOKEN");
     formData.append("file", e.target.files[0], e.target.files[0].name);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    axios
-      .post("http://localhost:8080/api/excel/courses", formData, config)
-      .then(() => {
-        // console.log("ok");
-      })
-      .catch((err) => console.log(err));
+    // const config = {
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // };
+    // axios
+    //   .post("http://localhost:8080/api/excel/courses", formData, config)
+    //   .then(() => {
+    //     console.log("ok");
+    //   })
+    //   .catch((err) => console.log(err));
+    dispatch(doAddCourseExcel(formData)).then(() => {
+      setShowModalAddExcel(true);
+      setReload(!reload);
+    });
   };
+
+  useEffect(() => {
+    if (!showModalAddExcel) setReload(!reload);
+  }, [showModalAddExcel]);
 
   useEffect(() => {
     dispatch(doGetListCourse());
@@ -97,6 +125,10 @@ export const ListCourses = () => {
                 numberClass={3}
                 key={index}
                 handleEdit={(id: number, name: string) => handleEdit(id, name)}
+                showModal={(idCourse) => {
+                  setIsShowModalOption(true);
+                  setIdCourse(idCourse);
+                }}
               />
             </div>
           );
@@ -108,6 +140,32 @@ export const ListCourses = () => {
         message="Cập nhật thành công"
         onClick={() => {
           setIsShowModal(false);
+        }}
+      />
+      <NotiSuccess
+        message="Thêm danh sách thành công"
+        isShow={showModalAddExcel}
+        setIsShow={setShowModalAddExcel}
+        onClick={() => setShowModalAddExcel(false)}
+      />
+      <NotiOption
+        isShow={isShowModalOption}
+        setIsShow={setIsShowModalOption}
+        btnLeft="Xóa"
+        btnRight="Hủy"
+        onClickBtnLeft={() => {
+          handleDeleteCourse(idCourse);
+          setIsShowModalOption(false);
+        }}
+        onClickBtnRight={() => setIsShowModalOption(false)}
+        message={`Bạn chắc chắn muốn xóa khóa học ${idCourse}?`}
+      />
+      <NotiSuccess
+        isShow={isShowModalSuccess}
+        setIsShow={setIsShowModalSuccess}
+        message="Xóa khóa học thành công"
+        onClick={() => {
+          setIsShowModalSuccess(false);
         }}
       />
     </div>

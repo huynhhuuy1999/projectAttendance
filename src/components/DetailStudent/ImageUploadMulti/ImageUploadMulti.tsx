@@ -7,36 +7,34 @@ export const ImageUploadMulti: React.FC<IImageUploadInput> = ({
   onChange,
   avatar,
 }) => {
-  const [image, setImage]: any = useState([]);
+  // const [image, setImage]: any = useState([]);
   const [filesUpload, setFilesUpload]: any = useState([]);
-  const [flag, setFlag]: any = useState([]);
-  const setImageList = (value: any) => {
-    setFlag(value);
-  };
+  // const [flag, setFlag]: any = useState([]);
+  // const setImageList = (value: any) => {
+  //   setFlag(value);
+  // };
 
-  useEffect(() => {
-    if (flag.length > 0) {
-      setImage([...image, flag]);
-    }
-  }, [flag]);
+  // useEffect(() => {
+  //   if (flag.length > 0) {
+  //     setImage([...image, flag]);
+  //   }
+  // }, [flag]);
 
   useEffect(() => {
     onChange(filesUpload);
-    console.log("filesUpload", filesUpload);
   }, [filesUpload]);
 
   const handleChangeImage = (e: any) => {
     e.persist();
     e.preventDefault();
     const files = e.target.files;
-    // setFilesUpload([...filesUpload, files]);
     setFilesUpload(files);
     if (files && files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const reader = new FileReader();
         reader.onload = (event) => {
-          setImageList(event.target?.result);
+          // setImageList(event.target?.result);
         };
         reader.readAsDataURL(file);
       }
@@ -53,9 +51,9 @@ export const ImageUploadMulti: React.FC<IImageUploadInput> = ({
         style={{ display: "none" }}
       />
       <label className="image-upload-multi__label" htmlFor="uploadMulti">
-        Chọn ảnh train
+        Thêm ảnh train
       </label>
-      {image.length > 0 ? (
+      {/* {image.length > 0 ? (
         <div className="image-upload-multi__list-image">
           {image.map((item: any, index: number) => {
             return <img src={item} alt="" key={index} />;
@@ -67,7 +65,7 @@ export const ImageUploadMulti: React.FC<IImageUploadInput> = ({
             <BsPersonBoundingBox size={50} color="#555" />
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

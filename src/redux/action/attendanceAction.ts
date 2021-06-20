@@ -16,3 +16,11 @@ export const doUploadPhotoAttendance = createAsyncThunk(
         return result.data;
     },
 );
+
+export const doGetPhotoAttendance = createAsyncThunk(
+    "attendance@get/photoAttendance",
+    async (idStudent: string) => {
+        const result = await apiAttendance.getPhotoAttendance(idStudent);
+        return result.data;
+    },
+);

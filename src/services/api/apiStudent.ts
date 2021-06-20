@@ -1,4 +1,5 @@
 import axiosClient from "./axiosClient";
+import axiosFile from "./axiosFile";
 export const apiStudent = {
     getTimetableStudent: (params: IParamTimeTableStudent) => {
         const url = "/timetables/student/";
@@ -20,8 +21,8 @@ export const apiStudent = {
         const url = '/users';
         return axiosClient.post(url, params);
     },
-    postAddTimetable: (params: File) => {
+    postAddTimetable: (params: any) => {
         const url = '/excel/timetables';
-        return axiosClient.post(url, params);
-    }
+        return axiosFile.post(url, params);
+    },
 }

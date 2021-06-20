@@ -12,14 +12,16 @@
   }
   &__item {
     background-color: #fff;
-    // display: flex;
-    // flex-direction: column;
-    // align-items: center;
-    // justify-content: center;
+    position: relative;
     span {
       display: block;
       &.bold {
         font-weight: bold;
+      }
+    }
+    &:hover {
+      .schedule-student__icon-close {
+        display: block;
       }
     }
   }
@@ -35,5 +37,11 @@
   th {
     padding: 5px 0;
     font-size: 16px;
+  }
+  &__icon-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: none;
   }
 }
