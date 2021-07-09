@@ -17,7 +17,7 @@ export const Login = () => {
     },
     onSubmit: (values) => {
       axios
-        .post("http://localhost:8080/api/auth", {
+        .post(`${process.env.REACT_APP_URL_API}/api/auth`, {
           username: values.username,
           password: values.password,
         })
