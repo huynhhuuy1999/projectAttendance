@@ -12,6 +12,7 @@ import {
   Search,
   NotiSuccess,
   NotiOption,
+  Pagination,
 } from "../../components/common";
 import { Color, ROLE } from "../../constants";
 import {
@@ -21,25 +22,34 @@ import {
   doGetListClassByCourse,
 } from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
+import { doSearchListClass } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import "./ListClass.scss";
 export const ListClass = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const [role, setRole] = useState(0);
+  const [postPerPage, setPostPerPage] = useState(6);
+  const [currentPage, setCurrentPage] = useState(1);
   const history = useHistory();
   const dispatch = useAppDispatch();
   const listClass = useSelector((state: RootState) => state.clazz.listClass);
+  const listClassSearch = useSelector(
+    (state: RootState) => state.clazz.listClassSearch
+  );
   const [isShowModalSuccess, setIsShowModalSucces] = useState(false);
   const [isShowModalOption, setIsShowModalOption] = useState(false);
   const [reload, setReload] = useState(false);
   const [idClass, setIdClass] = useState("");
   const { idCourse } = useParams<{ idCourse: string }>();
   const [showModalAddExcel, setShowModalAddExcel] = useState(false);
-  // console.log("listClassByCourse", listClassByCourse);
-  // const listYear = [
-  //   { label: "2019-2020", value: 1 },
-  //   { label: "2020-2021", value: 2 },
-  // ];
+
+  const endOfIndexCurrentPage = postPerPage * currentPage;
+  const firstOfIndexCurrentPage = endOfIndexCurrentPage - postPerPage;
+  const currenPost = listClassSearch?.slice(
+    firstOfIndexCurrentPage,
+    endOfIndexCurrentPage
+  );
+
   const handleDeleteCourse = (id: string) => {
     dispatch(doDeleteClass({ id: id })).then(() => {
       setIsShowModalSucces(true);
@@ -49,25 +59,35 @@ export const ListClass = () => {
 
   const handleAddExcelClass = (e: any) => {
     const formData = new FormData();
-    // const token = localStorage.getItem("TOKEN");
     formData.append("file", e.target.files[0], e.target.files[0].name);
-    // const config = {
-    //   headers: {
-    //     "content-type": "multipart/form-data",
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // };
-    // axios
-    //   .post("http://localhost:8080/api/excel/classes", formData, config)
-    //   .then(() => {
-    //     // console.log("ok");
-    //   })
-    //   .catch((err) => console.log(err));
     dispatch(doAddClassExcel(formData)).then(() => {
       setShowModalAddExcel(true);
       setReload(!reload);
     });
   };
+
+  const handleSearch = (value: string) => {
+    // console.log("value", value);
+    if (value === "") {
+      dispatch(doGetListClass());
+      return;
+    } else {
+      let newListClass = listClass.filter((item: any) => {
+        return (
+          String(item.id)?.search(value) !== -1 ||
+          String(item.course.id).search(value) !== -1 ||
+          String(item.course.name).search(value) !== -1
+        );
+      });
+      dispatch(doSearchListClass(newListClass));
+      setCurrentPage(1);
+    }
+  };
+
+  const changePage = (number: number) => {
+    setCurrentPage(number);
+  };
+
   useEffect(() => {
     if (idCourse) {
       dispatch(doGetListClassByCourse(idCourse));
@@ -85,7 +105,11 @@ export const ListClass = () => {
     <div className="listclass">
       <Banner title="Danh sách lớp học" />
       <div className="listclass__header">
-        <Search placeholder="Nhập khóa học" className="listclass__search" />
+        <Search
+          placeholder="Nhập khóa học"
+          className="listclass__search"
+          search={(value) => handleSearch(value)}
+        />
         {role === ROLE.ADMIN ? (
           <>
             <Button
@@ -121,7 +145,7 @@ export const ListClass = () => {
         ) : null}
       </div>
       <div className="listclass__list">
-        {listClass.map((item: IResponseListClass, index: number) => {
+        {currenPost.map((item: IResponseListClass, index: number) => {
           return (
             <div className="listclass__item">
               <CardClass
@@ -142,6 +166,14 @@ export const ListClass = () => {
             </div>
           );
         })}
+      </div>
+      <div className="list-student__pagination">
+        <Pagination
+          postPerPage={postPerPage}
+          totalPost={listClassSearch.length}
+          changePage={changePage}
+          currentPage={currentPage}
+        />
       </div>
       <NotiOption
         isShow={isShowModalOption}

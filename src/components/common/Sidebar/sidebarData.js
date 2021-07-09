@@ -4,18 +4,14 @@
 export const SidebarData = {
   admin: [
     {
-      title: "Sinh viên",
-      path: "/liststudent",
+      title: "Khóa học",
+      path: "/listcourses",
       cName: "sidebar__item",
     },
+
     {
       title: "Giáo viên",
       path: "/listteacher",
-      cName: "sidebar__item",
-    },
-    {
-      title: "Khóa học",
-      path: "/listcourses",
       cName: "sidebar__item",
     },
     {
@@ -23,14 +19,14 @@ export const SidebarData = {
       path: "/listclass",
       cName: "sidebar__item",
     },
-    // {
-    //   title: "Phụ huynh",
-    //   path: "/listparent",
-    //   cName: "sidebar__item",
-    // },
     {
-      title: "Train",
-      path: "/user",
+      title: "Sinh viên",
+      path: "/liststudent",
+      cName: "sidebar__item",
+    },
+    {
+      title: "Phụ huynh",
+      path: "/listparent",
       cName: "sidebar__item",
     },
   ],
@@ -75,8 +71,8 @@ export const SidebarData = {
   ],
   parent: [
     {
-      title: "Học sinh",
-      path: "/product",
+      title: "Thời khóa biểu",
+      path: "/schedulestudent",
       cName: "sidebar__item",
     },
   ],

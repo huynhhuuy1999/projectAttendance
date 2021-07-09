@@ -5,12 +5,18 @@ import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
 import "./Search.scss";
 
-export const Search: React.FC<ISearch> = ({ placeholder, className }) => {
+export const Search: React.FC<ISearch> = ({
+  placeholder,
+  className,
+  search,
+}) => {
   const formik = useFormik({
     initialValues: {
       searchText: "",
     },
-    onSubmit: (value) => {},
+    onSubmit: (value) => {
+      if (search) search(value.searchText);
+    },
   });
   return (
     <div className={`search ${className}`}>

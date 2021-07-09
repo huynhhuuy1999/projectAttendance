@@ -75,6 +75,17 @@ interface IResponseStudent {
   password?: string;
 }
 
+interface IResponseParent {
+  id: string;
+  roles: Array<{ id: number; name: string }>;
+  username?: string;
+  email?: string;
+  phone?: string;
+  fullName?: string;
+  birthday?: string;
+  password?: string;
+}
+
 interface IResTeacher {
   id: string;
   roles: Array<{ id: number; name: string }>;

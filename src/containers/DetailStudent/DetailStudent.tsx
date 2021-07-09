@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { doGetOneStudent, doGetTimetableStudent } from "../../redux/action";
 import moment from "moment";
 import { Color } from "../../constants";
+import { AvatarY } from "../../constants/image";
 
 export const DetailStudent = () => {
   const imageOnChange = (f: File) => {
@@ -52,11 +53,12 @@ export const DetailStudent = () => {
   }, []);
   return (
     <div className="detailStudent">
-      <Banner title="Chi tiết sinh viên" />
+      <Banner title={`Chi tiết sinh viên ${idStudent}`} />
       <div className="detailStudent__content">
         <div className="detailStudent__avatar">
           <ImageUploadInput
-            avatar="https://picsum.photos/200/300"
+            // avatar="https://picsum.photos/200/300"
+            avatar={AvatarY}
             onChange={imageOnChange}
           />
         </div>
@@ -79,17 +81,17 @@ export const DetailStudent = () => {
               {oneStudent.address}
             </span>
             <span className="detailStudent__label">Số buổi vắng:</span>
-            <span>2</span>
-            <span className="detailStudent__label">Số buổi trễ:</span>
-            <span>5</span>
+            <span className="detailStudent__info-address">2</span>
+            {/* <span className="detailStudent__label">Số buổi trễ:</span>
+            <span>5</span> */}
             <span className="detailStudent__label">Họ tên bố</span>
-            <span>Taylor Swat</span>
-            <span className="detailStudent__label">Số điện thoại:</span>
-            <span>999999999</span>
+            <span>Huỳnh Bá Đương</span>
+            <span className="detailStudent__label">Số điện thoại bố:</span>
+            <span>0836142297</span>
             <span className="detailStudent__label">Họ tên mẹ:</span>
-            <span>Nguyễn Thị Swoft</span>
-            <span className="detailStudent__label">Số điện thoại:</span>
-            <span>888888888</span>
+            <span>Nguyễn Thị Hồng Nga</span>
+            <span className="detailStudent__label">Số điện thoại mẹ:</span>
+            <span>0967258543</span>
           </div>
           <div className="detailStudent__group-btn">
             <Button color={Color.Blue}>Liên hệ phụ huynh</Button>
@@ -143,7 +145,7 @@ export const DetailStudent = () => {
         </div>
       </div>
       <div className="detailStudent__schedule">
-        <ScheduleStudent data={timetableStudent} />
+        <ScheduleStudent data={timetableStudent} idStudent={idStudent} />
       </div>
     </div>
   );

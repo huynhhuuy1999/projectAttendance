@@ -1,0 +1,15 @@
+.noti-fail {
+  &__icon {
+    margin: 10px 0;
+  }
+  &__modal {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__noti-success {
+    font-weight: 500;
+    font-size: 16px;
+  }
+}

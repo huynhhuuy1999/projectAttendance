@@ -1,6 +1,9 @@
 @import "../../assets/scss/variables.scss";
 .login {
   padding: 50px;
+  &__error {
+    color: red;
+  }
   &__btn {
     transition: color 0.25s, border 0.25s;
     border: 1px solid #009999;

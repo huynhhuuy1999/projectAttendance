@@ -7,12 +7,14 @@ import { Avatar } from "../Avatar/Avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/rootReducer";
 import { logout } from "../../../helper";
+import { ImageAvatar } from "../../../constants/image";
 export const Header: React.FC<IHeader> = ({ sidebar, openSideBar, isOpen }) => {
   const handleShowSideBar = () => {
     openSideBar();
   };
   const history = useHistory();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  console.log("currentUser", currentUser);
   return (
     <div className="header">
       {sidebar === false ? (
@@ -33,7 +35,11 @@ export const Header: React.FC<IHeader> = ({ sidebar, openSideBar, isOpen }) => {
 
       <div className="header__avatar">
         <div className="header__avatar-div">
-          <Avatar image="https://picsum.photos/200/300" />
+          {currentUser.id ? (
+            // <Avatar image="https://picsum.photos/200/300" />
+            <Avatar image={ImageAvatar} />
+          ) : null}
+
           {currentUser.fullName ? (
             <span>{currentUser.fullName}</span>
           ) : (

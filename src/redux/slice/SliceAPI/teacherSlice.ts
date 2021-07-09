@@ -10,13 +10,18 @@ const initialState = {
   isLoading: false,
   timeTableTeacher: [],
   listTeacher: [],
+  listTeacherSearch: [],
   oneTeacher: { id: "", roles: [{ id: 0, name: "xxx" }] },
 } as ITeacher;
 
 const slice = createSlice({
   name: "teacher@",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    doSearchListTeacher(state, action) {
+      state.listTeacherSearch = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     //get list teacher
     builder.addCase(doGetListTeacher.pending, (state, action) => {
@@ -27,6 +32,7 @@ const slice = createSlice({
       (state, action: PayloadAction<Array<IResTeacher>>) => {
         state.isLoading = false;
         state.listTeacher = action.payload;
+        state.listTeacherSearch = action.payload;
       }
     );
     builder.addCase(doGetListTeacher.rejected, (state, action) => {
@@ -68,5 +74,6 @@ const slice = createSlice({
     });
   },
 });
-const { reducer: teacherReducer } = slice;
+const { reducer: teacherReducer, actions } = slice;
+export const { doSearchListTeacher } = actions;
 export default teacherReducer;

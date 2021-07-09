@@ -10,12 +10,17 @@ import {
 const initialState = {
   isLoading: false,
   listCourse: [],
+  listCourseSearch: [],
 } as ICourse;
 
 const slice = createSlice({
   name: "course@",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    doSearchListCourse(state, action) {
+      state.listCourseSearch = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     // get list course
     builder.addCase(doGetListCourse.pending, (state, action) => {
@@ -24,6 +29,7 @@ const slice = createSlice({
     builder.addCase(doGetListCourse.fulfilled, (state, action) => {
       state.isLoading = false;
       state.listCourse = action.payload;
+      state.listCourseSearch = action.payload;
     });
     builder.addCase(doGetListCourse.rejected, (state, action) => {
       state.isLoading = false;
@@ -70,5 +76,6 @@ const slice = createSlice({
     });
   },
 });
-const { reducer: courseReducer } = slice;
+const { reducer: courseReducer, actions } = slice;
+export const { doSearchListCourse } = actions;
 export default courseReducer;

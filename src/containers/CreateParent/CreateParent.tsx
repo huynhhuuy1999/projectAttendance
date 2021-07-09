@@ -3,42 +3,38 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { Banner, Button, Input, NotiSuccess } from "../../components/common";
+import {
+  doAddStudent,
+  doGetOneStudent,
+  doUpdateStudent,
+} from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
 import { useAppDispatch } from "../../redux/store";
 import * as Yup from "yup";
-import "./UpdateTeacher.scss";
-import {
-  doAddTeacher,
-  doGetOneTeacher,
-  doUpdateTeacher,
-} from "../../redux/action";
+import "./CreateParent.scss";
 import { Color, ROLE } from "../../constants";
 import { HiCheckCircle } from "react-icons/hi";
 import { regNumber } from "../../helper";
 
-export const UpdateTeacher = () => {
-  const { idTeacher } = useParams<{ idTeacher: string }>();
+export const CreateParent = () => {
+  const { idParent } = useParams<{ idParent: string }>();
   const dispatch = useAppDispatch();
-  const history = useHistory();
-  const [isShowModal, setIsShowModal] = useState(false);
-  const infoTeacher = useSelector(
-    (state: RootState) => state.teacher.oneTeacher
+  const infoParent = useSelector(
+    (state: RootState) => state.student.oneStudent
   );
   const [changePass, setChangePass] = useState(false);
+  const history = useHistory();
+  const [isShowModal, setIsShowModal] = useState(false);
 
   const validationSchema = Yup.object({
-    mssv: Yup.string().required("Vui lòng nhập mã giáo viên"),
+    mssv: Yup.string().required("Vui lòng nhập mã phụ huynh"),
     username: Yup.string().required("Vui lòng nhập username"),
     fullname: Yup.string().required("Vui lòng nhập họ và tên"),
-    birthday: Yup.string().required("Vui lòng chọn ngày sinh"),
-    phone: Yup.string()
-      .required("Vui lòng nhập số điện thoại")
-      .matches(regNumber, "Số điện thoại không hợp lệ"),
     email: Yup.string()
       .required("Vui lòng nhập email")
       .email("Email không hợp lệ"),
-    address: Yup.string().required("Vui lòng nhập địa chỉ"),
-    // password: Yup.string().required("Vui lòng nhập mật khẩu"),
+    phone: Yup.string().matches(regNumber, "Số điện thoại không hợp lệ"),
+    idStudent: Yup.string().required("Vui lòng nhập mssv"),
   });
   const formik = useFormik({
     initialValues: {
@@ -50,84 +46,91 @@ export const UpdateTeacher = () => {
       email: "",
       address: "",
       password: "",
+      idStudent: "",
     },
     validateOnChange: false,
     validateOnBlur: false,
     validationSchema,
     onSubmit: (values) => {
-      if (idTeacher !== undefined) {
-        dispatch(
-          doUpdateTeacher({
-            id: values.mssv,
-            username: values.username,
-            fullName: values.fullname,
-            birthday: values.birthday,
-            phone: values.phone,
-            email: values.email,
-            address: values.address,
-            password: values.password,
-            // roles: [{ id: 4, name: "ROLE_STUDENT" }],
-          })
-        ).then(() => setIsShowModal(true));
+      if (idParent !== undefined) {
+        // check changepass to call api
+        if (changePass) {
+        } else {
+        }
+
+        // dispatch(
+        //   doUpdateStudent({
+        //     id: values.mssv,
+        //     username: values.username,
+        //     fullName: values.fullname,
+        //     birthday: values.birthday,
+        //     phone: values.phone,
+        //     email: values.email,
+        //     address: values.address,
+        //     password: values.password,
+        //     // roles: [{ id: 4, name: "ROLE_STUDENT" }],
+        //   })
+        // ).then(() => setIsShowModal(true));
       } else {
-        dispatch(
-          doAddTeacher({
-            id: values.mssv,
-            username: values.username,
-            fullName: values.fullname,
-            birthday: values.birthday,
-            phone: values.phone,
-            email: values.email,
-            address: values.address,
-            password: values.password,
-            roles: [{ id: ROLE.TEACHER }],
-          })
-        ).then(() => setIsShowModal(true));
+        // dispatch(
+        //   doAddStudent({
+        //     id: values.mssv,
+        //     username: values.username,
+        //     fullName: values.fullname,
+        //     birthday: values.birthday,
+        //     phone: values.phone,
+        //     email: values.email,
+        //     address: values.address,
+        //     password: values.password,
+        //     roles: [{ id: ROLE.STUDENT }],
+        //   })
+        // ).then(() => setIsShowModal(true));
       }
     },
   });
 
   useEffect(() => {
-    if (idTeacher) dispatch(doGetOneTeacher(idTeacher));
-    else {
-      setChangePass(true);
-    }
+    // if (idStudent) {
+    //   dispatch(doGetOneStudent(idStudent));
+    // } else {
+    //   setChangePass(true);
+    // }
   }, []);
-  useEffect(() => {
-    if (infoTeacher && idTeacher) {
-      formik.setFieldValue("mssv", infoTeacher.id);
-      formik.setFieldValue("username", infoTeacher.username);
-      formik.setFieldValue("fullname", infoTeacher.fullName);
-      formik.setFieldValue("birthday", infoTeacher.birthday);
-      formik.setFieldValue("phone", infoTeacher.phone);
-      formik.setFieldValue("email", infoTeacher.email);
-      formik.setFieldValue("address", infoTeacher.address);
-    }
-  }, [infoTeacher]);
+  //   useEffect(() => {
+  //     if (infoStudent && idStudent) {
+  //       formik.setFieldValue("mssv", infoStudent.id);
+  //       formik.setFieldValue("username", infoStudent.username);
+  //       formik.setFieldValue("fullname", infoStudent.fullName);
+  //       formik.setFieldValue("birthday", infoStudent.birthday);
+  //       formik.setFieldValue("phone", infoStudent.phone);
+  //       formik.setFieldValue("email", infoStudent.email);
+  //       formik.setFieldValue("address", infoStudent.address);
+  //     }
+  //   }, [infoStudent]);
 
   return (
-    <div className="update-teacher">
+    <div className="update-user">
       <Banner
-        title={idTeacher ? "Cập nhật thông tin giáo viên" : "Thêm giáo viên"}
+        title={idParent ? "Cập nhật thông tin phụ huynh" : "Thêm phụ huynh"}
       />
-      <form className="formTeacher" onSubmit={formik.handleSubmit}>
-        <div className="formTeacher__cover">
-          <div className="formTeacher__item">
+      <form className="formParent" onSubmit={formik.handleSubmit}>
+        <div className="formParent__cover">
+          <div className="formParent__item">
             <Input
               isLabel={true}
-              label="Mã số giáo viên:"
-              placeholder="Mã giáo viên"
+              label="Mã số phụ huynh:"
+              placeholder="Mã số phụ huynh"
               onChange={formik.handleChange}
               value={formik.values.mssv}
               name="mssv"
               id="mssv"
               HTMLFor="mssv"
               type="text"
-              classNameLabel="formTeacher__label"
+              classNameLabel="formParent__label"
               error={formik.errors.mssv}
             />
           </div>
-          <div className="formTeacher__item">
+          <div className="formParent__item">
             <Input
               isLabel={true}
               label="Họ tên:"
@@ -138,11 +141,11 @@ export const UpdateTeacher = () => {
               id="fullname"
               HTMLFor="fullname"
               type="text"
-              classNameLabel="formTeacher__label"
+              classNameLabel="formParent__label"
               error={formik.errors.fullname}
             />
           </div>
-          <div className="formTeacher__item">
+          <div className="formParent__item">
             <Input
               isLabel={true}
               label="Username"
@@ -153,11 +156,11 @@ export const UpdateTeacher = () => {
               id="username"
               HTMLFor="username"
               type="text"
-              classNameLabel="formTeacher__label"
+              classNameLabel="formParent__label"
               error={formik.errors.username}
             />
           </div>
-          <div className="formTeacher__item">
+          <div className="formParent__item">
             <Input
               isLabel={true}
               label="Mật khẩu"
@@ -168,12 +171,27 @@ export const UpdateTeacher = () => {
               id="password"
               HTMLFor="password"
               type="password"
-              classNameLabel="formTeacher__label"
+              classNameLabel="formParent__label"
               error={formik.errors.password}
               disable={changePass ? false : true}
             />
           </div>
-          <div className="formTeacher__item">
+          <div className="formParent__item">
+            <Input
+              isLabel={true}
+              label="MSSV"
+              placeholder="Nhập mã số sinh viên"
+              onChange={formik.handleChange}
+              value={formik.values.idStudent}
+              name="idStudent"
+              id="idStudent"
+              HTMLFor="idStudent"
+              type="text"
+              classNameLabel="formParent__label"
+              error={formik.errors.idStudent}
+            />
+          </div>
+          <div className="formParent__item">
             <Input
               isLabel={true}
               label="Email"
@@ -183,12 +201,11 @@ export const UpdateTeacher = () => {
               name="email"
               id="email"
               HTMLFor="email"
-              classNameLabel="formTeacher__label"
+              classNameLabel="formParent__label"
               error={formik.errors.email}
-              autoComplete="off"
             />
           </div>
-          <div className="formTeacher__item">
+          <div className="formParent__item">
             <Input
               isLabel={true}
               label="Điện thoại"
@@ -199,11 +216,11 @@ export const UpdateTeacher = () => {
               id="phone"
               HTMLFor="phone"
               type="text"
-              classNameLabel="formTeacher__label"
+              classNameLabel="formParent__label"
               error={formik.errors.phone}
             />
           </div>
-          <div className="formTeacher__item">
+          <div className="formParent__item">
             <Input
               isLabel={true}
               label="Địa chỉ"
@@ -214,11 +231,11 @@ export const UpdateTeacher = () => {
               id="address"
               HTMLFor="address"
               type="text"
-              classNameLabel="formTeacher__label"
+              classNameLabel="formParent__label"
               error={formik.errors.address}
             />
           </div>
-          <div className="formTeacher__item">
+          <div className="formParent__item">
             <Input
               isLabel={true}
               label="Ngày sinh"
@@ -228,13 +245,14 @@ export const UpdateTeacher = () => {
               id="birthday"
               HTMLFor="birthday"
               type="date"
-              classNameInput="formTeacher__item--date"
-              classNameLabel="formTeacher__label"
+              classNameInput="formParent__item--date"
+              classNameLabel="formParent__label"
               error={formik.errors.birthday}
             />
           </div>
-          {idTeacher !== undefined ? (
-            <div className="formTeacher__item formTeacher__checkbox">
+
+          {idParent !== undefined ? (
+            <div className="formParent__item formParent__checkbox">
               <input
                 id="changepass"
                 type="checkbox"
@@ -245,28 +263,26 @@ export const UpdateTeacher = () => {
               />
               <label
                 htmlFor="changepass"
-                className="formTeacher__label-checkbox"
+                className="formParent__label-checkbox"
               >
                 Cập nhật mật khẩu
               </label>
             </div>
           ) : null}
         </div>
-        <div className="update-teacher__group-btn">
-          <Button color={Color.Blue} className="formTeacher__btn" type="submit">
-            {idTeacher ? "Cập nhật" : "Thêm"}
+        <div className="update-user__group-btn">
+          <Button color={Color.Blue} className="formParent__btn" type="submit">
+            {idParent ? "Cập nhật" : "Thêm"}
           </Button>
         </div>
       </form>
       <NotiSuccess
         isShow={isShowModal}
         setIsShow={setIsShowModal}
-        message={
-          idTeacher ? "Cập nhật thành công" : "Thêm giảng viên thành công"
-        }
+        message={idParent ? "Cập nhật thành công" : "Thêm phụ huynh thành công"}
         onClick={() => {
           setIsShowModal(false);
-          history.push("/listteacher");
+          history.push("/listparent");
         }}
       />
     </div>

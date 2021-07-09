@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { TableStudent } from "../../components";
+import { TableParent } from "../../components";
 import {
   Banner,
   Button,
@@ -12,60 +12,47 @@ import {
   Search,
   NotiOption,
 } from "../../components/common";
-import { Color, ROLE } from "../../constants";
-import {
-  doAddTimetable,
-  doDeleteUser,
-  doGetListStudent,
-} from "../../redux/action";
+import { Color } from "../../constants";
+import { doGetListParent } from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
-import { doSearchListStudent } from "../../redux/slice";
+import { doSearchListParent } from "../../redux/slice/SliceAPI/parentSlice";
 import { useAppDispatch } from "../../redux/store";
-import "./ListStudent.scss";
+import "./ListParent.scss";
 
-export const ListStudent = () => {
+export const ListParent = () => {
   const [postPerPage, setPostPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
-  const [idStudent, setIdStudent] = useState("");
+  const [idParent, setIdParent] = useState("");
   const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
   const [reload, setReload] = useState(false);
   const history = useHistory();
 
-  const listStudent = useSelector(
-    (state: RootState) => state.student.listStudent
-  );
-  const listStudentSearch = useSelector(
-    (state: RootState) => state.student.listStudentSearch
+  const listParent = useSelector((state: RootState) => state.parent.listParent);
+  const listParentSearch = useSelector(
+    (state: RootState) => state.parent.listParentSearch
   );
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const endOfIndexCurrentPage = postPerPage * currentPage;
   const firstOfIndexCurrentPage = endOfIndexCurrentPage - postPerPage;
-  const currenPost = listStudentSearch?.slice(
+  const currenPost = listParentSearch?.slice(
     firstOfIndexCurrentPage,
     endOfIndexCurrentPage
   );
   const [role, setRole] = useState(0);
   const dispatch = useAppDispatch();
 
-  const handleDeleteStudent = () => {
-    setShowModal(false);
-    dispatch(
-      doDeleteUser({
-        id: idStudent,
-      })
-    ).then(() => {
-      setReload(!reload);
-      setIsShowModalSuccess(true);
-    });
-  };
-  const handleAddTimetable = (e: any) => {
-    const formData = new FormData();
-    formData.append("file", e.target.files[0], e.target.files[0].name);
-    dispatch(doAddTimetable(formData)).then(() => {
-      // console.log("ok");
-    });
-  };
+  //   const handleDeleteStudent = () => {
+  //     setShowModal(false);
+  //     dispatch(
+  //       doDeleteUser({
+  //         id: idStudent,
+  //       })
+  //     ).then(() => {
+  //       setReload(!reload);
+  //       setIsShowModalSuccess(true);
+  //     });
+  //   };
 
   const changePage = (number: number) => {
     setCurrentPage(number);
@@ -77,20 +64,20 @@ export const ListStudent = () => {
 
   const handleSearch = (value: string) => {
     if (value === "") {
-      dispatch(doGetListStudent());
+      dispatch(doGetListParent());
       return;
     } else {
-      let newListStudent = listStudent.filter((item) => {
+      let newListStudent = listParent.filter((item) => {
         return (
           item.fullName?.search(value) !== -1 || item.id.search(value) !== -1
         );
       });
-      dispatch(doSearchListStudent(newListStudent));
+      dispatch(doSearchListParent(newListStudent));
     }
   };
 
   useEffect(() => {
-    dispatch(doGetListStudent());
+    dispatch(doGetListParent());
   }, [reload]);
   useEffect(() => {
     if (currentUser.roles) {
@@ -99,26 +86,26 @@ export const ListStudent = () => {
   }, [currentUser.roles]);
 
   return (
-    <div className="list-student">
-      <Banner title="Danh sách sinh viên" />
-      <div className="list-student__header">
-        <div className="list-student__number-row">
+    <div className="list-parent">
+      <Banner title="Danh sách phụ huynh" />
+      <div className="list-parent__header">
+        <div className="list-parent__number-row">
           <NumberRow changeNumber={changeNumber} />
         </div>
-        <div className="list-student__search">
+        <div className="list-parent__search">
           <Search
-            placeholder="Nhập họ tên, mã số sinh viên"
+            placeholder="Nhập họ tên, mã số phụ huynh"
             search={(value) => handleSearch(value)}
           />
         </div>
-        {role === ROLE.ADMIN ? (
+        {role === 1 ? (
           <>
             <Button
               color={Color.Yellow}
               marginLeft={10}
-              onClick={() => history.push("/updatestudent")}
+              onClick={() => history.push("/createparent")}
             >
-              Thêm sinh viên
+              Thêm phụ huynh
             </Button>
             <Button
               color={Color.Green}
@@ -127,43 +114,24 @@ export const ListStudent = () => {
             >
               Thêm Excel
             </Button>
-            <label
-              htmlFor="timetable"
-              className="list-student__addTimeTable"
-              style={{ backgroundColor: Color.Brown }}
-            >
-              Thêm thời khóa biểu
-            </label>
-
-            <input
-              type="file"
-              name="timetable"
-              id="timetable"
-              style={{ display: "none" }}
-              onChange={(e) => handleAddTimetable(e)}
-            />
           </>
         ) : (
           <></>
         )}
       </div>
-      <div className="list-student__table">
-        <TableStudent
+      <div className="list-parent__table">
+        <TableParent
           data={currenPost}
           showModal={(id) => {
             setShowModal(true);
-            setIdStudent(id);
+            setIdParent(id);
           }}
-          idClass="ACCT3603.L12"
-          isAttendance={
-            role === ROLE.ADMIN || role === ROLE.TEACHER ? true : false
-          }
         />
       </div>
-      <div className="list-student__pagination">
+      <div className="list-parent__pagination">
         <Pagination
           postPerPage={postPerPage}
-          totalPost={listStudentSearch.length}
+          totalPost={listParentSearch.length}
           changePage={changePage}
           currentPage={currentPage}
         />
@@ -174,17 +142,17 @@ export const ListStudent = () => {
         setIsShow={setShowModal}
         btnLeft="Xóa"
         btnRight="Hủy"
-        onClickBtnLeft={() => {
-          handleDeleteStudent();
-        }}
+        // onClickBtnLeft={() => {
+        //   handleDeleteStudent();
+        // }}
         onClickBtnRight={() => setShowModal(false)}
-        message={`Bạn có chắc chắn muốn xóa sinh viên ${idStudent} không?`}
+        message={`Bạn có chắc chắn muốn xóa phụ huynh ${idParent} không?`}
       />
 
       <NotiSuccess
         isShow={isShowModalSuccess}
         setIsShow={setIsShowModalSuccess}
-        message="Xóa sinh viên thành công"
+        message="Xóa phụ huynh thành công"
         onClick={() => setIsShowModalSuccess(false)}
       />
     </div>

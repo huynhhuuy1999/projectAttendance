@@ -8,6 +8,7 @@ export * from "./NumberRow/NumberRow";
 export * from "./Pagination/Pagination";
 export * from "./Banner/Banner";
 export * from "./Dropdown/Dropdown";
-export * from './Modal/Modal';
-export * from './NotiSuccess/NotiSuccess'
-export * from './NotiOption/NotiOption';
+export * from "./Modal/Modal";
+export * from "./NotiSuccess/NotiSuccess";
+export * from "./NotiOption/NotiOption";
+export * from "./NotiFail/NotiFail";

@@ -1,0 +1,15 @@
+.table-parent {
+  width: 100%;
+  border-collapse: collapse;
+  td,
+  th {
+    border: 2px solid #009999;
+  }
+  td {
+    padding: 5px 10px;
+    text-align: center;
+  }
+  th {
+    padding: 5px 0;
+  }
+}

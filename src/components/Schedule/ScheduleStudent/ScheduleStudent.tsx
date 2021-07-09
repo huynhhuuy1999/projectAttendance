@@ -4,9 +4,14 @@ import { Color, ROLE } from "../../../constants";
 import "./ScheduleStudent.scss";
 import { IoClose } from "react-icons/io5";
 import { useAppSelector } from "../../../redux/store";
+import { useHistory } from "react-router-dom";
 
-export const ScheduleStudent: React.FC<IScheduleStudent> = ({ data }) => {
+export const ScheduleStudent: React.FC<IScheduleStudent> = ({
+  data,
+  idStudent,
+}) => {
   const user = useAppSelector((state) => state.user.currentUser);
+  const history = useHistory();
   const listRender = () => {
     let contentTable = [];
     for (let lesson = 1; lesson <= 10; lesson++) {
@@ -50,7 +55,18 @@ export const ScheduleStudent: React.FC<IScheduleStudent> = ({ data }) => {
                       <span>
                         KT: {moment(itemm.clazz?.endDate).format("DD/MM/YYYY")}
                       </span>
-                      <span style={{ color: Color.Blue }}>
+                      <span
+                        style={{
+                          color: Color.Blue,
+                          cursor: "pointer",
+                          fontWeight: 500,
+                        }}
+                        onClick={() =>
+                          history.push(
+                            `/historyAttendance/${idStudent}/${itemm.clazz?.id}`
+                          )
+                        }
+                      >
                         Xem lịch sử điểm danh
                       </span>
                     </td>

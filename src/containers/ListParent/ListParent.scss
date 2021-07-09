@@ -1,0 +1,29 @@
+@import "../../assets/scss/variables.scss";
+.list-parent {
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  &__search {
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+  &__table {
+    margin-top: 20px;
+  }
+  &__pagination {
+    margin-top: 18px;
+  }
+  &__addTimeTable {
+    margin-left: 10px;
+    border-radius: 5px;
+    padding: 9px 15px;
+    font-weight: 500;
+    font-size: 14px;
+    font-family: "Lora";
+    color: #fff;
+    cursor: pointer;
+  }
+}

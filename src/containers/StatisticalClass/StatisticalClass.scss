@@ -1,0 +1,99 @@
+.StatisticalClass {
+  &__content {
+    margin-top: 30px;
+    display: flex;
+  }
+  &__chart {
+  }
+  &__table {
+    margin-left: 10%;
+    width: 100%;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    td {
+      padding: 5px 10px;
+      text-align: center;
+      border: 1.5px solid #009999;
+    }
+  }
+  &__piechart {
+    width: 200px;
+    height: 200px;
+  }
+  &__title-table {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  &__contain-percent {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  &__exportPDF {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  &__pdf {
+    padding: 0 5%;
+    min-height: 500px;
+    // overflow-y: scroll;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    td {
+      padding: 5px 10px;
+      text-align: center;
+      border: 1px solid #009999;
+    }
+  }
+  &__title-pdf {
+    display: flex;
+    justify-content: center;
+    h2 {
+      max-width: 50%;
+      text-align: center;
+    }
+  }
+  &__cover-info-time {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0;
+  }
+  &__info-time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  &__text-info-time {
+    font-size: 15px;
+  }
+  &__total {
+    display: flex;
+    margin-top: 20px;
+    flex-direction: column;
+    span {
+      font-size: 15px;
+      font-weight: bold;
+    }
+  }
+  &__text-sum {
+    font-weight: bold;
+  }
+  &__text--margintop {
+    margin-top: 10px;
+  }
+  &__modal {
+    max-height: 500px;
+    padding: 0;
+  }
+  &__pointer{
+    cursor: pointer;
+  }
+}

@@ -15,6 +15,7 @@ import {
 import { Color } from "../../constants";
 import { doDeleteUser, doGetListTeacher } from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
+import { doSearchListTeacher } from "../../redux/slice";
 import { useAppDispatch } from "../../redux/store";
 import "./ListTeacher.scss";
 
@@ -25,10 +26,13 @@ export const ListTeacher = () => {
   const listTeacher = useSelector(
     (state: RootState) => state.teacher.listTeacher
   );
+  const listTeacherSearch = useSelector(
+    (state: RootState) => state.teacher.listTeacherSearch
+  );
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const endOfIndexCurrentPage = postPerPage * currentPage;
   const firstOfIndexCurrentPage = endOfIndexCurrentPage - postPerPage;
-  const currenPost = listTeacher?.slice(
+  const currenPost = listTeacherSearch?.slice(
     firstOfIndexCurrentPage,
     endOfIndexCurrentPage
   );
@@ -66,6 +70,20 @@ export const ListTeacher = () => {
     });
   };
 
+  const handleSearch = (value: string) => {
+    if (value === "") {
+      dispatch(doGetListTeacher());
+      return;
+    } else {
+      let newListTeacher = listTeacher.filter((item) => {
+        return (
+          item.fullName?.search(value) !== -1 || item.id.search(value) !== -1
+        );
+      });
+      dispatch(doSearchListTeacher(newListTeacher));
+    }
+  };
+
   return (
     <div className="list-teacher">
       <Banner title="Danh sách giảng viên" />
@@ -75,7 +93,10 @@ export const ListTeacher = () => {
           <NumberRow changeNumber={changeNumber} />
         </div>
         <div className="list-teacher__search">
-          <Search placeholder="Nhập họ tên, mã số giảng viên" />
+          <Search
+            placeholder="Nhập họ tên, mã số giảng viên"
+            search={(value) => handleSearch(value)}
+          />
         </div>
         {role === 1 ? (
           <>
@@ -110,7 +131,7 @@ export const ListTeacher = () => {
       <div className="list-teacher__pagination">
         <Pagination
           postPerPage={postPerPage}
-          totalPost={listTeacher.length}
+          totalPost={listTeacherSearch.length}
           changePage={changePage}
           currentPage={currentPage}
         />

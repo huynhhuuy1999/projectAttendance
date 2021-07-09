@@ -51,7 +51,7 @@ export const CreateClass = () => {
   });
   const formik = useFormik({
     initialValues: {
-      idClazz: "qsdjhkj",
+      idClazz: "",
       idCourse: "",
       idTeacher: "",
       startdate: "",
@@ -128,7 +128,7 @@ export const CreateClass = () => {
   }, [oneClass]);
   return (
     <div className="createclass">
-      <Banner title="Tạo lớp học" />
+      <Banner title={idClass ? `Cập nhật lớp học ${idClass}` : "Tạo lớp học"} />
       <form onSubmit={formik.handleSubmit} className="createclass__form">
         <div className="createclass__group-form">
           <Input

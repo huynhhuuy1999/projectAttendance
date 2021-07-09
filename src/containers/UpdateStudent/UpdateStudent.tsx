@@ -38,7 +38,7 @@ export const UpdateStudent = () => {
       .required("Vui lòng nhập email")
       .email("Email không hợp lệ"),
     address: Yup.string().required("Vui lòng nhập địa chỉ"),
-    password: Yup.string().required("Vui lòng nhập mật khẩu"),
+    // password: Yup.string().required("Vui lòng nhập mật khẩu"),
   });
   const formik = useFormik({
     initialValues: {

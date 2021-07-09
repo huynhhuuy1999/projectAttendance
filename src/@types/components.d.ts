@@ -92,6 +92,7 @@ interface IPagination {
 interface ISearch {
   placeholder?: string;
   className?: string;
+  search?: (value: string) => void;
 }
 interface ISideBar {
   isOpen?: boolean;
@@ -108,6 +109,10 @@ interface ITableStudent {
   isAttendance?: boolean;
   idClass: string;
 }
+interface ITableParent {
+  data: Array<IResponseStudent>;
+  showModal: (id: string) => void;
+}
 interface ITableTeacher {
   data: Array<IResponseStudent>;
   showModal: (id: string) => void;
@@ -118,6 +123,7 @@ interface IBlankLayout {
 interface ISibarLayout {}
 interface IScheduleStudent {
   data?: Array<IResponseTimetableStudent>;
+  idStudent?: string;
 }
 interface IPrivateRouter {
   component?: any;
@@ -159,4 +165,10 @@ interface INotiOption {
   btnRight?: string;
   onClickBtnLeft?: () => void;
   onClickBtnRight?: () => void;
+}
+
+interface IPieChart {
+  data?: any;
+  className?: string;
+  title?: string;
 }

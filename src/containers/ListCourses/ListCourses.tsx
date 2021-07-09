@@ -8,6 +8,7 @@ import {
   Search,
   NotiSuccess,
   NotiOption,
+  Pagination,
 } from "../../components/common";
 import {
   doAddCourseExcel,
@@ -19,10 +20,16 @@ import { RootState } from "../../redux/rootReducer";
 import { useAppDispatch } from "../../redux/store";
 import "./ListCourses.scss";
 import { Color, ROLE } from "../../constants";
+import { doSearchListCourse } from "../../redux/slice";
 
 export const ListCourses = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const listCourse = useSelector((state: RootState) => state.course.listCourse);
+  const listCourseSearch = useSelector(
+    (state: RootState) => state.course.listCourseSearch
+  );
+  const [postPerPage, setPostPerPage] = useState(12);
+  const [currentPage, setCurrentPage] = useState(1);
   const [role, setRole] = useState(0);
   const history = useHistory();
   const [reload, setReload] = useState(false);
@@ -32,10 +39,14 @@ export const ListCourses = () => {
   const [isShowModalOption, setIsShowModalOption] = useState(false);
   const [idCourse, setIdCourse] = useState("");
   const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
-  // const listYear = [
-  //   { label: "2019-2020", value: 1 },
-  //   { label: "2020-2021", value: 2 },
-  // ];
+
+  const endOfIndexCurrentPage = postPerPage * currentPage;
+  const firstOfIndexCurrentPage = endOfIndexCurrentPage - postPerPage;
+  const currenPost = listCourseSearch?.slice(
+    firstOfIndexCurrentPage,
+    endOfIndexCurrentPage
+  );
+
   const handleDeleteCourse = (id: string) => {
     dispatch(doDeleteCourse({ id: id })).then(() => {
       setIsShowModalSuccess(true);
@@ -44,30 +55,38 @@ export const ListCourses = () => {
   };
 
   const handleEdit = (id: number, name: string) => {
-    setReload(!reload);
-    dispatch(doUpdateCourse({ id: id, name: name }));
+    dispatch(doUpdateCourse({ id: id, name: name })).then(() => {
+      setReload(!reload);
+    });
     setIsShowModal(true);
   };
   const handleAddExcelCourse = (e: any) => {
     const formData = new FormData();
-    // const token = localStorage.getItem("TOKEN");
     formData.append("file", e.target.files[0], e.target.files[0].name);
-    // const config = {
-    //   headers: {
-    //     "content-type": "multipart/form-data",
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // };
-    // axios
-    //   .post("http://localhost:8080/api/excel/courses", formData, config)
-    //   .then(() => {
-    //     console.log("ok");
-    //   })
-    //   .catch((err) => console.log(err));
     dispatch(doAddCourseExcel(formData)).then(() => {
       setShowModalAddExcel(true);
       setReload(!reload);
     });
+  };
+
+  const handleSearch = (value: string) => {
+    if (value === "") {
+      dispatch(doGetListCourse());
+      return;
+    } else {
+      let newListCourse = listCourse.filter((item) => {
+        return (
+          String(item.id)?.search(value) !== -1 ||
+          String(item.name).search(value) !== -1
+        );
+      });
+      dispatch(doSearchListCourse(newListCourse));
+      setCurrentPage(1);
+    }
+  };
+
+  const changePage = (number: number) => {
+    setCurrentPage(number);
   };
 
   useEffect(() => {
@@ -75,7 +94,8 @@ export const ListCourses = () => {
   }, [showModalAddExcel]);
 
   useEffect(() => {
-    dispatch(doGetListCourse());
+    console.log("ok");
+    dispatch(doGetListCourse()).then((res) => console.log(res.payload));
   }, [reload]);
   useEffect(() => {
     if (currentUser.roles) setRole(currentUser.roles[0].id);
@@ -84,7 +104,11 @@ export const ListCourses = () => {
     <div className="listcourses">
       <Banner title="Danh sách khóa học" />
       <div className="listcourses__header">
-        <Search placeholder="Nhập khóa học" className="listcourses__search" />
+        <Search
+          placeholder="Nhập khóa học"
+          className="listcourses__search"
+          search={(value) => handleSearch(value)}
+        />
         {role === ROLE.ADMIN ? (
           <>
             <Button
@@ -115,14 +139,14 @@ export const ListCourses = () => {
       </div>
 
       <div className="listcourses__list">
-        {listCourse.map((item, index: number) => {
+        {currenPost.map((item, index: number) => {
           return (
             <div className="listcourses__item">
               <CardCourses
                 role={role}
                 idCourse={item.id}
                 nameCourse={item.name}
-                numberClass={3}
+                // numberClass={3}
                 key={index}
                 handleEdit={(id: number, name: string) => handleEdit(id, name)}
                 showModal={(idCourse) => {
@@ -134,6 +158,16 @@ export const ListCourses = () => {
           );
         })}
       </div>
+
+      <div className="list-student__pagination">
+        <Pagination
+          postPerPage={postPerPage}
+          totalPost={listCourseSearch.length}
+          changePage={changePage}
+          currentPage={currentPage}
+        />
+      </div>
+
       <NotiSuccess
         isShow={isShowModal}
         setIsShow={setIsShowModal}

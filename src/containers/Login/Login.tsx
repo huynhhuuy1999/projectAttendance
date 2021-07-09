@@ -1,17 +1,15 @@
 import { useFormik } from "formik";
 import "./Login.scss";
 import { ImageLogin } from "../../constants/image";
-// import { useDispatch } from "react-redux";
-// import { doLogin } from "../../redux/slice";
 import { Button, Input } from "../../components/common";
-// import { useHistory } from "react-router";
 import axios from "axios";
 import { useHistory } from "react-router";
 import { useAppDispatch } from "../../redux/store";
-import { doGetCurrentUser } from "../../redux/action";
+import { useState } from "react";
 export const Login = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
+  const [message, setMessage] = useState("");
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -24,15 +22,11 @@ export const Login = () => {
           password: values.password,
         })
         .then((res) => {
-          // setCookie(1, res.data.token, "TOKEN");
           window.localStorage.setItem("TOKEN", res.data.token);
-          // dispatch(doGetCurrentUser());
-          window.location.replace("/liststudent");
+          window.location.replace("/listcourses");
         })
-        .then(() => {
-          // dispatch(doGetCurrentUser());
-          // history.push("/liststudent");
-          // }).then(()=>{ window.location.replace("/liststudent");
+        .catch((err) => {
+          setMessage("Tài khoản hoặc mật khẩu sai");
         });
     },
   });
@@ -60,14 +54,17 @@ export const Login = () => {
                   label="Mật khẩu"
                   HTMLFor="password"
                   id="password"
+                  type="password"
                   value={formik.values.password}
                   onChange={formik.handleChange}
                 />
               </div>
-
-              <i onClick={() => history.push("/listAttendance")}>
+              {message !== "" ? (
+                <span className="login__error">{message}</span>
+              ) : null}
+              {/* <i onClick={() => history.push("/listAttendance")}>
                 Quên mật khẩu
-              </i>
+              </i> */}
               <div className="form__group-btn">
                 <Button type="Submit" className="login__btn">
                   Đăng nhập

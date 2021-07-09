@@ -5,6 +5,7 @@ import {
   CreateCourse,
   DetailStudent,
   DetailTeacher,
+  HistoryAttendance,
   ListAttendance,
   ListClass,
   ListClassTeaching,
@@ -14,9 +15,12 @@ import {
   ListTeacher,
   Login,
   ScheduleStudentPage,
+  StatisticalClass,
   UpdateAdmin,
   UpdateStudent,
   UpdateTeacher,
+  ListParent,
+  CreateParent,
 } from "../containers";
 import { PrivateRouter } from "./PrivateRouter";
 import { PublicRouter } from "./PublicRouter";
@@ -115,6 +119,30 @@ export const Routers = () => {
           component={<ListClassTeaching />}
           exact={true}
           path="/listclassteaching"
+          isHasSideBar={true}
+        />
+        <PrivateRouter
+          component={<StatisticalClass />}
+          exact={true}
+          path="/statisticalClass"
+          isHasSideBar={true}
+        />
+        <PrivateRouter
+          component={<HistoryAttendance />}
+          exact={true}
+          path="/historyAttendance/:idStudent/:idClass"
+          isHasSideBar={true}
+        />
+        <PrivateRouter
+          component={<ListParent />}
+          exact={true}
+          path="/listparent"
+          isHasSideBar={true}
+        />
+        <PrivateRouter
+          component={<CreateParent />}
+          exact={true}
+          path="/createparent/:idParent?"
           isHasSideBar={true}
         />
       </Switch>

@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EditSvg } from "../../constants/image";
 import { Button, Input, Modal } from "../common";
 import * as Yup from "yup";
@@ -21,6 +21,7 @@ export const CardCourses: React.FC<ICardCourses> = ({
     id: Yup.string().required("Vui lòng nhập mã khóa học"),
     name: Yup.string().required("Vui lòng nhập tên khóa học"),
   });
+
   const [isShowModal, setIsShowModal] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -33,6 +34,12 @@ export const CardCourses: React.FC<ICardCourses> = ({
       handleEdit(values.id, values.name);
     },
   });
+  useEffect(() => {
+    if (isShowModal) {
+      formik.setFieldValue("id", idCourse);
+      formik.setFieldValue("name", nameCourse);
+    }
+  }, [isShowModal]);
   return (
     <div className="card-courses">
       {role === ROLE.ADMIN ? (
@@ -41,14 +48,18 @@ export const CardCourses: React.FC<ICardCourses> = ({
             src={EditSvg}
             alt=""
             className="card-courses__icon"
-            onClick={() => setIsShowModal(true)}
+            onClick={() => {
+              setIsShowModal(true);
+            }}
           />
           <AiTwotoneDelete
             color="#dd1a35"
             size={20}
             className="card-courses__icon-trash"
             onClick={() => {
-              if (showModal) showModal(idCourse);
+              if (showModal) {
+                showModal(idCourse);
+              }
             }}
           />
         </>
@@ -58,9 +69,9 @@ export const CardCourses: React.FC<ICardCourses> = ({
       <div className="card-courses__name card-courses--margin-top">
         {nameCourse}
       </div>
-      <div className="card-courses__number card-courses--margin-top card-courses--bold">
+      {/* <div className="card-courses__number card-courses--margin-top card-courses--bold">
         Số lớp: {numberClass}
-      </div>
+      </div> */}
       <div
         className="card-courses__detail card-courses--margin-top"
         onClick={() => history.push(`/listclass/${idCourse}`)}
@@ -85,6 +96,7 @@ export const CardCourses: React.FC<ICardCourses> = ({
               classNameLabel="card-courses__modal-label"
               error={formik.errors.id}
               classNameInput="card-courses__modal-input"
+              autoComplete="false"
             />
             <Input
               isLabel={true}
@@ -99,6 +111,7 @@ export const CardCourses: React.FC<ICardCourses> = ({
               classNameLabel="card-courses__modal-label"
               error={formik.errors.name}
               classNameInput="card-courses__modal-input"
+              autoComplete="false"
             />
             <div className="card-courses__group-btn">
               <Button width={100} color={Color.Blue} type="submit">
