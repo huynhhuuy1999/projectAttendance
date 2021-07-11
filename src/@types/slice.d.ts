@@ -11,10 +11,10 @@ interface ICourse {
 }
 interface IClass {
   isLoading?: boolean;
-  listClass?: Array;
-  listClassSearch?: Array;
+  listClass?: Array<IResponseClass>;
+  listClassSearch?: Array<IResponseClass>;
   oneClass?: IResponseClass;
-  listClassByTeacher?: Array;
+  listClassByTeacher?: Array<IResponseClass>;
   listClassByCourse?: Array;
 }
 
@@ -53,10 +53,4 @@ interface ICurrentUser {
 
 interface ITimetableStudent {
   clazz: { id?: string };
-}
-
-interface IAttendance {
-  isLoading?: boolean;
-  error?: any;
-  listPhotoAttendance: Array<IResPhotoAttendance>;
 }

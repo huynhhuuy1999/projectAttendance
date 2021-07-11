@@ -65,4 +65,29 @@
       z-index: 3;
     }
   }
+  &__modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    span {
+      font-size: 18px;
+      font-weight: bold;
+      color: #f63e62;
+    }
+  }
+  &__modal-form {
+    width: 100%;
+    margin-top: 10px;
+  }
+  &__modal-label {
+  }
+  &__modal-input {
+    height: 35px;
+  }
+  &__modal-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
 }

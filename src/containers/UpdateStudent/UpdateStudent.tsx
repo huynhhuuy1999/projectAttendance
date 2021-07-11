@@ -1,20 +1,26 @@
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
-import { Banner, Button, Input, NotiSuccess } from "../../components/common";
+import * as Yup from "yup";
+import {
+  Banner,
+  Button,
+  Input,
+  NotiFail,
+  NotiSuccess,
+} from "../../components/common";
+import { Color, ROLE } from "../../constants";
+import { regNumber } from "../../helper";
 import {
   doAddStudent,
   doGetOneStudent,
-  doUpdateStudent,
+  doUpdateUser,
 } from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
 import { useAppDispatch } from "../../redux/store";
-import * as Yup from "yup";
 import "./UpdateStudent.scss";
-import { Color, ROLE } from "../../constants";
-import { HiCheckCircle } from "react-icons/hi";
-import { regNumber } from "../../helper";
 
 export const UpdateStudent = () => {
   const { idStudent } = useParams<{ idStudent: string }>();
@@ -25,6 +31,7 @@ export const UpdateStudent = () => {
   const [changePass, setChangePass] = useState(false);
   const history = useHistory();
   const [isShowModal, setIsShowModal] = useState(false);
+  const [isShowModalFail, setIsShowModalFail] = useState(false);
 
   const validationSchema = Yup.object({
     mssv: Yup.string().required("Vui lòng nhập mssv"),
@@ -56,13 +63,8 @@ export const UpdateStudent = () => {
     validationSchema,
     onSubmit: (values) => {
       if (idStudent !== undefined) {
-        // check changepass to call api
-        if (changePass) {
-        } else {
-        }
-
         dispatch(
-          doUpdateStudent({
+          doUpdateUser({
             id: values.mssv,
             username: values.username,
             fullName: values.fullname,
@@ -87,7 +89,12 @@ export const UpdateStudent = () => {
             password: values.password,
             roles: [{ id: ROLE.STUDENT }],
           })
-        ).then(() => setIsShowModal(true));
+        )
+          .then(unwrapResult)
+          .then(() => setIsShowModal(true))
+          .catch(() => {
+            setIsShowModalFail(true);
+          });
       }
     },
   });
@@ -159,6 +166,7 @@ export const UpdateStudent = () => {
               id="username"
               HTMLFor="username"
               type="text"
+              disable={idStudent ? true : false}
               classNameLabel="formStudent__label"
               error={formik.errors.username}
             />
@@ -245,7 +253,6 @@ export const UpdateStudent = () => {
                 type="checkbox"
                 onChange={() => {
                   setChangePass(!changePass);
-                  console.log(changePass);
                 }}
               />
               <label
@@ -273,6 +280,12 @@ export const UpdateStudent = () => {
           setIsShowModal(false);
           history.push("/liststudent");
         }}
+      />
+      <NotiFail
+        isShow={isShowModalFail}
+        setIsShow={setIsShowModalFail}
+        message="Username đã tồn tại"
+        onClick={() => setIsShowModalFail(false)}
       />
     </div>
   );

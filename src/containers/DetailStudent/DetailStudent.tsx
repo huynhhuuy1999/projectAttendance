@@ -94,7 +94,7 @@ export const DetailStudent = () => {
             <span>0967258543</span>
           </div>
           <div className="detailStudent__group-btn">
-            <Button color={Color.Blue}>Liên hệ phụ huynh</Button>
+            {/* <Button color={Color.Blue}>Liên hệ phụ huynh</Button> */}
             <Button
               color={Color.Blue}
               className="detailStudent__btn--margin-left"

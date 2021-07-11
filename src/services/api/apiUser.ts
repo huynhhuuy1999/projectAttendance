@@ -11,5 +11,9 @@ export const apiUser = {
   deleteUser: (param: IParamUSer) => {
     const url = "/users";
     return axiosClient.delete(url, { data: param });
-  }
+  },
+  putUpdateUser: (param: IParamUpdateUser) => {
+    const url = "/users";
+    return axiosClient.put(url, param);
+  },
 };

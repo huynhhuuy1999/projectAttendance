@@ -1,14 +1,14 @@
+import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import * as Yup from "yup";
 import { Banner, Button, Input, NotiSuccess } from "../../components/common";
 import { Color, ROLE } from "../../constants";
-import * as Yup from "yup";
-import { RootState } from "../../redux/rootReducer";
-import "./UpdateAdmin.scss";
-import { useFormik } from "formik";
-import { useAppDispatch } from "../../redux/store";
-import { doUpdateStudent } from "../../redux/action";
 import { regNumber } from "../../helper";
+import { doUpdateUser } from "../../redux/action";
+import { RootState } from "../../redux/rootReducer";
+import { useAppDispatch } from "../../redux/store";
+import "./UpdateAdmin.scss";
 
 export const UpdateAdmin = () => {
   const infoPerson = useSelector((state: RootState) => state.user.currentUser);
@@ -59,7 +59,7 @@ export const UpdateAdmin = () => {
         phone,
       } = values;
       dispatch(
-        doUpdateStudent({
+        doUpdateUser({
           id: id,
           username,
           fullName: fullname,

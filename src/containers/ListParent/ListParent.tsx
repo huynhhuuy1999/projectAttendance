@@ -13,7 +13,7 @@ import {
   NotiOption,
 } from "../../components/common";
 import { Color } from "../../constants";
-import { doGetListParent } from "../../redux/action";
+import { doDeleteUser, doGetListParent } from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
 import { doSearchListParent } from "../../redux/slice/SliceAPI/parentSlice";
 import { useAppDispatch } from "../../redux/store";
@@ -42,17 +42,17 @@ export const ListParent = () => {
   const [role, setRole] = useState(0);
   const dispatch = useAppDispatch();
 
-  //   const handleDeleteStudent = () => {
-  //     setShowModal(false);
-  //     dispatch(
-  //       doDeleteUser({
-  //         id: idStudent,
-  //       })
-  //     ).then(() => {
-  //       setReload(!reload);
-  //       setIsShowModalSuccess(true);
-  //     });
-  //   };
+  const handleDeleteParent = () => {
+    setShowModal(false);
+    dispatch(
+      doDeleteUser({
+        id: idParent,
+      })
+    ).then(() => {
+      setReload(!reload);
+      setIsShowModalSuccess(true);
+    });
+  };
 
   const changePage = (number: number) => {
     setCurrentPage(number);
@@ -142,9 +142,9 @@ export const ListParent = () => {
         setIsShow={setShowModal}
         btnLeft="Xóa"
         btnRight="Hủy"
-        // onClickBtnLeft={() => {
-        //   handleDeleteStudent();
-        // }}
+        onClickBtnLeft={() => {
+          handleDeleteParent();
+        }}
         onClickBtnRight={() => setShowModal(false)}
         message={`Bạn có chắc chắn muốn xóa phụ huynh ${idParent} không?`}
       />

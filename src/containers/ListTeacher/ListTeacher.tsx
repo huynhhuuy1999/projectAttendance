@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { HiCheckCircle } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { TableTeacher } from "../../components";
@@ -42,14 +41,7 @@ export const ListTeacher = () => {
   const [reload, setReload] = useState(false);
   const [role, setRole] = useState(0);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(doGetListTeacher());
-  }, [reload]);
-  useEffect(() => {
-    if (currentUser.roles) {
-      setRole(currentUser.roles[0].id);
-    }
-  }, [currentUser.roles]);
+
   const changePage = (number: number) => {
     setCurrentPage(number);
   };
@@ -84,6 +76,16 @@ export const ListTeacher = () => {
     }
   };
 
+  useEffect(() => {
+    dispatch(doGetListTeacher());
+  }, [reload]);
+
+  useEffect(() => {
+    if (currentUser.roles) {
+      setRole(currentUser.roles[0].id);
+    }
+  }, [currentUser.roles]);
+
   return (
     <div className="list-teacher">
       <Banner title="Danh sách giảng viên" />
@@ -110,7 +112,7 @@ export const ListTeacher = () => {
             <Button
               marginLeft={10}
               color={Color.Green}
-              onClick={() => history.push("/updateteacher")}
+              // onClick={() => history.push("/updateteacher")}
             >
               Thêm Excel
             </Button>

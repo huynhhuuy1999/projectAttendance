@@ -6,11 +6,13 @@ import {
   Button,
   Dropdown,
   Input,
+  Modal,
   NotiSuccess,
 } from "../../components/common";
 import { Color, ROLE } from "../../constants";
 import {
   doAddClass,
+  doGetCurrentUser,
   doGetListCourse,
   doGetListTeacher,
   doGetOneClass,
@@ -20,7 +22,6 @@ import { RootState } from "../../redux/rootReducer";
 import { useAppDispatch } from "../../redux/store";
 import * as Yup from "yup";
 import "./CreateClass.scss";
-import { HiCheckCircle } from "react-icons/hi";
 import { useHistory, useParams } from "react-router";
 import moment from "moment";
 
@@ -28,7 +29,9 @@ export const CreateClass = () => {
   const dispatch = useAppDispatch();
   const [isShowModal, setIsShowModal] = useState(false);
   const history = useHistory();
+  const [isShowModalAddStudent, setIsShowModalAddStudent] = useState(false);
   const { idClass } = useParams<{ idClass: string }>();
+  const [role, setRole] = useState(0);
   const listCourse = useSelector((state: RootState) => state.course.listCourse);
   const listTeacher = useSelector(
     (state: RootState) => state.teacher.listTeacher
@@ -48,6 +51,24 @@ export const CreateClass = () => {
     numberStudent: Yup.string().required("Vui lòng nhập sỉ số lớp học"),
     idCourse: Yup.string().required("Vui lòng chọn khóa học"),
     idTeacher: Yup.string().required("Vui lòng chọn giáo viên"),
+  });
+  const validationSchema2 = Yup.object({
+    idClazz: Yup.string().required("Vui lòng nhập mã lớp học"),
+  });
+
+  const formik2 = useFormik({
+    initialValues: {
+      idClazz: "dfd",
+    },
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: (values, { setErrors }) => {
+      const { idClazz } = values;
+      if (idClazz === "") {
+        setErrors({ idClazz: "Vui lòng nhập mã lớp học" });
+      }
+      console.log("idClazz", idClazz);
+    },
   });
   const formik = useFormik({
     initialValues: {
@@ -114,7 +135,15 @@ export const CreateClass = () => {
     if (idClass !== undefined) {
       dispatch(doGetOneClass(idClass));
     }
+    if (!user) {
+      dispatch(doGetCurrentUser());
+    }
   }, []);
+  useEffect(() => {
+    if (user.id) {
+      setRole(user.roles[0].id);
+    }
+  }, [user]);
   useEffect(() => {
     if (oneClass && idClass) {
       formik.setFieldValue("idClazz", oneClass.id);
@@ -225,13 +254,28 @@ export const CreateClass = () => {
           </div>
         </div>
         <div className="createclass__group-btn">
-          <Button color={Color.Blue}>
+          <Button color={Color.Blue} type="submit">
             {idClass ? "Cập nhật" : "Thêm lớp học"}
           </Button>
-          {user.roles[0].id === ROLE.ADMIN && idClass ? (
-            <Button marginLeft={10} color={Color.Green}>
-              Thêm sinh viên
-            </Button>
+          {role === ROLE.ADMIN && idClass ? (
+            <>
+              <Button
+                marginLeft={10}
+                color={Color.Yellow}
+                type="button"
+                onClick={() => setIsShowModalAddStudent(true)}
+              >
+                Thêm sinh viên
+              </Button>
+              <Button
+                marginLeft={10}
+                color={Color.Green}
+                type="button"
+                // onClick={() => setIsShowModalAddStudent(true)}
+              >
+                Thêm excel
+              </Button>
+            </>
           ) : null}
         </div>
       </form>
@@ -244,6 +288,48 @@ export const CreateClass = () => {
           history.push("/listclass");
         }}
       />
+      <Modal
+        isShow={isShowModalAddStudent}
+        setIsShow={setIsShowModalAddStudent}
+      >
+        <div className="createclass__modal-content">
+          <span>Thêm sinh viên vào lớp {idClass}</span>
+
+          <form
+            onSubmit={formik2.handleSubmit}
+            className="createclass__modal-form"
+          >
+            <Input
+              isLabel={true}
+              label="Mã sinh viên:"
+              placeholder="Mã sinh viên"
+              onChange={formik2.handleChange}
+              value={formik2.values.idClazz}
+              name="idClazz"
+              id="idClazz"
+              HTMLFor="idClazz"
+              type="text"
+              classNameLabel="createclass__modal-label"
+              error={formik2.errors.idClazz}
+              classNameInput="createclass__modal-input"
+              autoComplete="false"
+            />
+            <div className="createclass__modal-btn">
+              <Button type="submit" color={Color.Blue}>
+                Thêm
+              </Button>
+              <Button
+                type="button"
+                color={Color.Yellow}
+                onClick={() => setIsShowModalAddStudent(false)}
+                marginLeft={10}
+              >
+                Hủy
+              </Button>
+            </div>
+          </form>
+        </div>
+      </Modal>
     </div>
   );
 };

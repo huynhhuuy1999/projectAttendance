@@ -14,7 +14,6 @@ export const Header: React.FC<IHeader> = ({ sidebar, openSideBar, isOpen }) => {
   };
   const history = useHistory();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
-  console.log("currentUser", currentUser);
   return (
     <div className="header">
       {sidebar === false ? (

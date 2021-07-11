@@ -1,0 +1,23 @@
+.DetailParent {
+  &__content {
+    width: 50%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 18px 30px;
+    margin: 20px auto;
+    justify-content: space-between;
+    border: 2px solid #009999;
+    border-radius: 30px;
+    padding: 20px;
+    span {
+      font-size: 16px;
+      &.bold {
+        font-weight: bold;
+      }
+    }
+  }
+  &__group-btn {
+    display: flex;
+    justify-content: center;
+  }
+}

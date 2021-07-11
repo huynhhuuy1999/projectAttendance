@@ -32,11 +32,9 @@ export const TableStudent: React.FC<ITableStudent> = ({
     )
       .then(unwrapResult)
       .then((res) => {
-        console.log(res.payload);
         setIsShowModalSuccess(true);
       })
       .catch((err) => {
-        console.log("jhe");
         setIsShowModalFail(true);
       });
   };

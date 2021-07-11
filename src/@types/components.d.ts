@@ -65,9 +65,9 @@ interface ICardCourses {
   idCourse?: string | number;
   nameCourse?: string;
   numberClass?: number | string;
-  handleEdit?: any;
   role?: number;
   showModal?: (idCourse: any) => void;
+  showModalEdit?: (idCourse: any, nameCourse: any) => void;
 }
 interface ICardClass {
   nameTeacher?: string;
@@ -78,6 +78,7 @@ interface ICardClass {
   endTime?: string;
   room?: string;
   role?: number;
+  viewListStudent?: boolean;
   showModal?: (idClass: any) => void;
 }
 interface INumberRow {
@@ -85,7 +86,7 @@ interface INumberRow {
 }
 interface IPagination {
   postPerPage?: any;
-  totalPost: number;
+  totalPost: any;
   changePage?: any;
   currentPage?: number;
 }

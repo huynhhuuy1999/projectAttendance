@@ -1,31 +1,34 @@
+import { unwrapResult } from "@reduxjs/toolkit";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { CardClass } from "../../components";
 import { Banner, Search } from "../../components/common";
-import { doGetListClassByTeacher } from "../../redux/action";
+import { doGetListClass, doGetListClassByTeacher } from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import "./ListClassTeaching.scss";
 export const ListClassTeaching = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const listClass = useSelector(
     (state: RootState) => state.clazz.listClassByTeacher
   );
+  const listClassAll = useAppSelector((state) => state.clazz.listClass);
   const history = useHistory();
   const dispatch = useAppDispatch();
   const [isShowModalSuccess, setIsShowModalSucces] = useState(false);
   const [reload, setReload] = useState(false);
-  // const listYear = [
-  //   { label: "2019-2020", value: 1 },
-  //   { label: "2020-2021", value: 2 },
-  // ];
+
   useEffect(() => {
     if (currentUser) {
-      dispatch(doGetListClassByTeacher(currentUser.id));
+      console.log("currentUser.username", currentUser.username);
+      if (listClassAll?.length === 0) {
+        dispatch(doGetListClass());
+      }
+      dispatch(doGetListClassByTeacher(currentUser.username));
     }
-  }, [reload]);
+  }, [reload, currentUser]);
   return (
     <div className="listclassteaching">
       <Banner title="Danh sách lớp học đang dạy" />
@@ -36,7 +39,7 @@ export const ListClassTeaching = () => {
         />
       </div>
       <div className="listclassteaching__list">
-        {listClass.map((item: IResponseListClass, index: number) => {
+        {listClass?.map((item: IResponseListClass, index: number) => {
           return (
             <div className="listclassteaching__item">
               <CardClass
@@ -44,10 +47,11 @@ export const ListClassTeaching = () => {
                 numberStudent={item.numberStudent}
                 nameClass={item.course?.name}
                 nameTeacher={item.teacher?.fullName}
-                room="P.B.04"
+                // room="P.B.04"
                 startTime={moment(item.startDate).format("DD/MM/YYYY")}
                 endTime={moment(item.endDate).format("DD/MM/YYYY")}
                 key={index}
+                viewListStudent={true}
                 // role={role}
               />
             </div>

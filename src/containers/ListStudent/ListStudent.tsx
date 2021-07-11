@@ -1,16 +1,16 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { useParams } from "react-router-dom";
 import { TableStudent } from "../../components";
 import {
   Banner,
   Button,
+  NotiOption,
+  NotiSuccess,
   NumberRow,
   Pagination,
-  NotiSuccess,
   Search,
-  NotiOption,
 } from "../../components/common";
 import { Color, ROLE } from "../../constants";
 import {
@@ -24,10 +24,13 @@ import { useAppDispatch } from "../../redux/store";
 import "./ListStudent.scss";
 
 export const ListStudent = () => {
+  const { idClass } = useParams<{ idClass: string }>();
   const [postPerPage, setPostPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [idStudent, setIdStudent] = useState("");
+  const [isShowModalSuccessAddTimetable, setIsShowModalSuccessAddTimetabe] =
+    useState(false);
   const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
   const [reload, setReload] = useState(false);
   const history = useHistory();
@@ -63,7 +66,7 @@ export const ListStudent = () => {
     const formData = new FormData();
     formData.append("file", e.target.files[0], e.target.files[0].name);
     dispatch(doAddTimetable(formData)).then(() => {
-      // console.log("ok");
+      setIsShowModalSuccessAddTimetabe(true);
     });
   };
 
@@ -156,7 +159,10 @@ export const ListStudent = () => {
           }}
           idClass="ACCT3603.L12"
           isAttendance={
-            role === ROLE.ADMIN || role === ROLE.TEACHER ? true : false
+            (role === ROLE.ADMIN && idClass) ||
+            (role === ROLE.TEACHER && idClass)
+              ? true
+              : false
           }
         />
       </div>
@@ -186,6 +192,13 @@ export const ListStudent = () => {
         setIsShow={setIsShowModalSuccess}
         message="Xóa sinh viên thành công"
         onClick={() => setIsShowModalSuccess(false)}
+      />
+
+      <NotiSuccess
+        isShow={isShowModalSuccessAddTimetable}
+        setIsShow={setIsShowModalSuccessAddTimetabe}
+        message="Thêm thời khóa biểu thành công"
+        onClick={() => setIsShowModalSuccessAddTimetabe(false)}
       />
     </div>
   );

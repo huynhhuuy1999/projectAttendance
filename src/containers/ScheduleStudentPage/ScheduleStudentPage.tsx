@@ -3,7 +3,7 @@ import { useState } from "react";
 import { number, string } from "yup/lib/locale";
 import { ScheduleStudent } from "../../components";
 import { Banner, Button, Dropdown } from "../../components/common";
-import { Color } from "../../constants";
+import { Color, ROLE } from "../../constants";
 import { doGetTimetableStudent } from "../../redux/action";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import "./ScheduleStudentPage.scss";
@@ -27,16 +27,28 @@ export const ScheduleStudentPage = () => {
   };
 
   useEffect(() => {
-    dispatch(
-      doGetTimetableStudent({
-        userId: user.id,
-        year: year,
-        semester: semester,
-      })
-    );
+    if (user) {
+      if (user.roles[0].id === ROLE.STUDENT) {
+        dispatch(
+          doGetTimetableStudent({
+            userId: user.id,
+            year: year,
+            semester: semester,
+          })
+        );
+      }
+      if (user.roles[0].id === ROLE.PARENT) {
+        dispatch(
+          doGetTimetableStudent({
+            userId: "17521284",
+            year: year,
+            semester: semester,
+          })
+        );
+      }
+    }
   }, [user]);
 
-  // console.log(timetableStudent);
   // useEffect(() => {
   //   if(timetableStudent){
   //     let newArrTimeTable = [];
@@ -90,7 +102,7 @@ export const ScheduleStudentPage = () => {
             data={listSemester}
             className="schedule-student-ctn__dropdown"
             onChange={(value: any) => setSemester(value.id)}
-            defaultValue={{ id: 1, name: "Học kì 1" }}
+            defaultValue={{ id: 2, name: "Học kì 2" }}
           />
         </div>
         <div className="schedule-student-ctn__year">
@@ -112,7 +124,7 @@ export const ScheduleStudentPage = () => {
         </Button>
       </div>
       <div className="schedule-student-ctn__schedule">
-        <ScheduleStudent data={timetableStudent} />
+        <ScheduleStudent data={timetableStudent} idStudent={user.id} />
       </div>
     </div>
   );

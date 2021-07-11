@@ -28,7 +28,7 @@ export const Input: React.FC<IInput> = ({
       )}
       <input
         id={id}
-        autoComplete={autoComplete}
+        autoComplete={autoComplete || "off"}
         type={type}
         value={value}
         name={name}

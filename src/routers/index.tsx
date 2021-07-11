@@ -21,6 +21,7 @@ import {
   UpdateTeacher,
   ListParent,
   CreateParent,
+  DetailParent,
 } from "../containers";
 import { PrivateRouter } from "./PrivateRouter";
 import { PublicRouter } from "./PublicRouter";
@@ -46,7 +47,7 @@ export const Routers = () => {
         <PrivateRouter
           component={<ListStudent />}
           exact={true}
-          path="/liststudent"
+          path="/liststudent/:idClass?"
           isHasSideBar={true}
         />
         <PrivateRouter
@@ -143,6 +144,12 @@ export const Routers = () => {
           component={<CreateParent />}
           exact={true}
           path="/createparent/:idParent?"
+          isHasSideBar={true}
+        />
+        <PrivateRouter
+          component={<DetailParent />}
+          exact={true}
+          path="/detailparent/:idParent"
           isHasSideBar={true}
         />
       </Switch>

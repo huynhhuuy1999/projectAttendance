@@ -8,15 +8,14 @@ export const SidebarData = {
       path: "/listcourses",
       cName: "sidebar__item",
     },
-
-    {
-      title: "Giáo viên",
-      path: "/listteacher",
-      cName: "sidebar__item",
-    },
     {
       title: "Lớp học",
       path: "/listclass",
+      cName: "sidebar__item",
+    },
+    {
+      title: "Giáo viên",
+      path: "/listteacher",
       cName: "sidebar__item",
     },
     {
@@ -44,11 +43,6 @@ export const SidebarData = {
     {
       title: "Thời khóa biểu",
       path: "/schedulestudent",
-      cName: "sidebar__item",
-    },
-    {
-      title: "Phụ huynh",
-      path: "/listparent",
       cName: "sidebar__item",
     },
   ],

@@ -18,3 +18,4 @@ export * from "./StatisticalClass/StatisticalClass";
 export * from "./HistoryAttendance/HistoryAttendance";
 export * from "./ListParent/ListParent";
 export * from "./CreateParent/CreateParent";
+export * from "./DetailParent/DetailParent";

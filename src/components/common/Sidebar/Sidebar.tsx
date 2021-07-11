@@ -7,14 +7,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/rootReducer/index.js";
 export const SideBar: React.FC<ISideBar> = ({ isOpen, openSideBar }) => {
   const [categoryAccount, setCategoryAccount] = useState("");
-  // const history = useHistory();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
-  // console.log("currentUser", currentUser);
+
   useEffect(() => {
     if (currentUser.roles) {
       setCategoryAccount(currentUser.roles[0].name);
     }
   }, [currentUser.roles]);
+
   const Role = () => {
     let x = [];
     if (categoryAccount === "") return "";

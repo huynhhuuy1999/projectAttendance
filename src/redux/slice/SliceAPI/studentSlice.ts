@@ -5,7 +5,6 @@ import {
   doGetListStudent,
   doGetOneStudent,
   doGetTimetableStudent,
-  doUpdateStudent,
 } from "../../action/studentAction";
 
 const initialState = {
@@ -66,16 +65,6 @@ const slice = createSlice({
       }
     );
     builder.addCase(doGetOneStudent.rejected, (state, action) => {
-      state.isLoading = false;
-    });
-    //put update student
-    builder.addCase(doUpdateStudent.pending, (state, action) => {
-      state.isLoading = true;
-    });
-    builder.addCase(doUpdateStudent.fulfilled, (state, action) => {
-      state.isLoading = false;
-    });
-    builder.addCase(doUpdateStudent.rejected, (state, action) => {
       state.isLoading = false;
     });
     //post add student

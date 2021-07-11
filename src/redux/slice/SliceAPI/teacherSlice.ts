@@ -3,7 +3,6 @@ import {
   doAddTeacher,
   doGetListTeacher,
   doGetOneTeacher,
-  doUpdateTeacher,
 } from "../../action/teacherAction";
 
 const initialState = {
@@ -50,16 +49,6 @@ const slice = createSlice({
       }
     );
     builder.addCase(doGetOneTeacher.rejected, (state, action) => {
-      state.isLoading = false;
-    });
-    //put update teacher
-    builder.addCase(doUpdateTeacher.pending, (state, action) => {
-      state.isLoading = true;
-    });
-    builder.addCase(doUpdateTeacher.fulfilled, (state, action) => {
-      state.isLoading = false;
-    });
-    builder.addCase(doUpdateTeacher.rejected, (state, action) => {
       state.isLoading = false;
     });
     //post add teacher

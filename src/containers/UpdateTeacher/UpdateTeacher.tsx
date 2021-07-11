@@ -2,19 +2,18 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
-import { Banner, Button, Input, NotiSuccess } from "../../components/common";
-import { RootState } from "../../redux/rootReducer";
-import { useAppDispatch } from "../../redux/store";
 import * as Yup from "yup";
-import "./UpdateTeacher.scss";
+import { Banner, Button, Input, NotiSuccess } from "../../components/common";
+import { Color, ROLE } from "../../constants";
+import { regNumber } from "../../helper";
 import {
   doAddTeacher,
   doGetOneTeacher,
-  doUpdateTeacher,
+  doUpdateUser,
 } from "../../redux/action";
-import { Color, ROLE } from "../../constants";
-import { HiCheckCircle } from "react-icons/hi";
-import { regNumber } from "../../helper";
+import { RootState } from "../../redux/rootReducer";
+import { useAppDispatch } from "../../redux/store";
+import "./UpdateTeacher.scss";
 
 export const UpdateTeacher = () => {
   const { idTeacher } = useParams<{ idTeacher: string }>();
@@ -57,7 +56,7 @@ export const UpdateTeacher = () => {
     onSubmit: (values) => {
       if (idTeacher !== undefined) {
         dispatch(
-          doUpdateTeacher({
+          doUpdateUser({
             id: values.mssv,
             username: values.username,
             fullName: values.fullname,
@@ -240,7 +239,6 @@ export const UpdateTeacher = () => {
                 type="checkbox"
                 onChange={() => {
                   setChangePass(!changePass);
-                  console.log(changePass);
                 }}
               />
               <label

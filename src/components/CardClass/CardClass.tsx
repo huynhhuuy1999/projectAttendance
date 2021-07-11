@@ -14,6 +14,7 @@ export const CardClass: React.FC<ICardClass> = ({
   nameTeacher,
   role,
   showModal,
+  viewListStudent,
 }) => {
   const history = useHistory();
   return (
@@ -44,6 +45,11 @@ export const CardClass: React.FC<ICardClass> = ({
       <span>{room}</span>
       <span>BĐ:{startTime}</span>
       <span>KT:{endTime}</span>
+      {viewListStudent ? (
+        <span style={{ cursor: "pointer", color: "#009999" }}>
+          Xem chi tiết
+        </span>
+      ) : null}
     </div>
   );
 };

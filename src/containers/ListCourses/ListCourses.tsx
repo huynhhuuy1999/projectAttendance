@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import * as Yup from "yup";
 import { CardCourses } from "../../components";
 import {
   Banner,
@@ -9,6 +10,8 @@ import {
   NotiSuccess,
   NotiOption,
   Pagination,
+  Modal,
+  Input,
 } from "../../components/common";
 import {
   doAddCourseExcel,
@@ -21,8 +24,14 @@ import { useAppDispatch } from "../../redux/store";
 import "./ListCourses.scss";
 import { Color, ROLE } from "../../constants";
 import { doSearchListCourse } from "../../redux/slice";
+import { useFormik } from "formik";
 
 export const ListCourses = () => {
+  const validationSchema = Yup.object({
+    id: Yup.string().required("Vui lòng nhập mã khóa học"),
+    name: Yup.string().required("Vui lòng nhập tên khóa học"),
+  });
+
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const listCourse = useSelector((state: RootState) => state.course.listCourse);
   const listCourseSearch = useSelector(
@@ -35,10 +44,14 @@ export const ListCourses = () => {
   const [reload, setReload] = useState(false);
   const dispatch = useAppDispatch();
   const [isShowModal, setIsShowModal] = useState(false);
+  const [isShowModalEdit, setIsShowModalEdit] = useState(false);
+  const [nameCourse, setNameCourse] = useState("");
   const [showModalAddExcel, setShowModalAddExcel] = useState(false);
   const [isShowModalOption, setIsShowModalOption] = useState(false);
   const [idCourse, setIdCourse] = useState("");
   const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
+  const [isShowModalSuccessUpdate, setIsShowModalSuccessUpdate] =
+    useState(false);
 
   const endOfIndexCurrentPage = postPerPage * currentPage;
   const firstOfIndexCurrentPage = endOfIndexCurrentPage - postPerPage;
@@ -47,18 +60,32 @@ export const ListCourses = () => {
     endOfIndexCurrentPage
   );
 
+  const formik = useFormik({
+    initialValues: {
+      id: "",
+      name: "",
+    },
+    validateOnChange: false,
+    validateOnBlur: false,
+    validationSchema,
+    onSubmit: (values) => {
+      setIsShowModal(false);
+      dispatch(doUpdateCourse({ id: values.id, name: values.name }))
+        .then(() => {
+          setReload(!reload);
+          setIsShowModalEdit(false);
+        })
+        .then((res) => {
+          setIsShowModalSuccessUpdate(true);
+        });
+    },
+  });
+
   const handleDeleteCourse = (id: string) => {
     dispatch(doDeleteCourse({ id: id })).then(() => {
       setIsShowModalSuccess(true);
       setReload(!reload);
     });
-  };
-
-  const handleEdit = (id: number, name: string) => {
-    dispatch(doUpdateCourse({ id: id, name: name })).then(() => {
-      setReload(!reload);
-    });
-    setIsShowModal(true);
   };
   const handleAddExcelCourse = (e: any) => {
     const formData = new FormData();
@@ -90,16 +117,31 @@ export const ListCourses = () => {
   };
 
   useEffect(() => {
+    if (currentUser.id) {
+      if (currentUser.roles[0].id === ROLE.PARENT) {
+        history.push("/schedulestudent");
+      }
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
     if (!showModalAddExcel) setReload(!reload);
   }, [showModalAddExcel]);
 
   useEffect(() => {
-    console.log("ok");
-    dispatch(doGetListCourse()).then((res) => console.log(res.payload));
+    dispatch(doGetListCourse()).then((res) => {});
   }, [reload]);
+
   useEffect(() => {
     if (currentUser.roles) setRole(currentUser.roles[0].id);
   }, [currentUser.roles]);
+
+  useEffect(() => {
+    if (isShowModalEdit) {
+      formik.setFieldValue("id", idCourse);
+      formik.setFieldValue("name", nameCourse);
+    }
+  }, [isShowModalEdit]);
   return (
     <div className="listcourses">
       <Banner title="Danh sách khóa học" />
@@ -148,10 +190,14 @@ export const ListCourses = () => {
                 nameCourse={item.name}
                 // numberClass={3}
                 key={index}
-                handleEdit={(id: number, name: string) => handleEdit(id, name)}
                 showModal={(idCourse) => {
                   setIsShowModalOption(true);
                   setIdCourse(idCourse);
+                }}
+                showModalEdit={(idCourse, nameCourse) => {
+                  setIsShowModalEdit(true);
+                  setIdCourse(idCourse);
+                  setNameCourse(nameCourse);
                 }}
               />
             </div>
@@ -202,6 +248,67 @@ export const ListCourses = () => {
           setIsShowModalSuccess(false);
         }}
       />
+      <NotiSuccess
+        isShow={isShowModalSuccessUpdate}
+        setIsShow={setIsShowModalSuccessUpdate}
+        message="Cập nhật khóa học thành công"
+        onClick={() => {
+          setIsShowModalSuccessUpdate(false);
+        }}
+      />
+      <Modal isShow={isShowModalEdit} setIsShow={setIsShowModalEdit}>
+        <div className="listcourses__modal-content">
+          <span className="bold pink">Cập nhật khóa học</span>
+          <span className="margintop">{nameCourse}</span>
+          <form onSubmit={formik.handleSubmit} className="listcourses__form">
+            <Input
+              isLabel={true}
+              label="Mã khóa học:"
+              placeholder="Mã khóa học"
+              onChange={formik.handleChange}
+              value={formik.values.id}
+              name="id"
+              id="id"
+              HTMLFor="id"
+              type="text"
+              classNameLabel="listcourses__modal-label"
+              error={formik.errors.id}
+              classNameInput="listcourses__modal-input"
+              autoComplete="false"
+            />
+            <Input
+              isLabel={true}
+              label="Tên khóa học:"
+              placeholder="Tên khóa học"
+              onChange={formik.handleChange}
+              value={formik.values.name}
+              name="name"
+              id="name"
+              HTMLFor="name"
+              type="text"
+              classNameLabel="listcourses__modal-label"
+              error={formik.errors.name}
+              classNameInput="listcourses__modal-input"
+              autoComplete="false"
+            />
+            <div className="listcourses__group-btn">
+              <Button width={100} color={Color.Blue} type="submit">
+                Cập nhật
+              </Button>
+              <Button
+                width={100}
+                className="listcourses__btn-cancel"
+                color={Color.Yellow}
+                marginLeft={20}
+                onClick={() => setIsShowModalEdit(false)}
+                type="button"
+              >
+                Hủy
+              </Button>
+            </div>
+          </form>
+        </div>
+      </Modal>
     </div>
   );
 };

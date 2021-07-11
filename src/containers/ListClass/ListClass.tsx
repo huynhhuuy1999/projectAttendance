@@ -1,4 +1,3 @@
-import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,11 +7,10 @@ import { CardClass } from "../../components";
 import {
   Banner,
   Button,
-  Dropdown,
-  Search,
-  NotiSuccess,
   NotiOption,
+  NotiSuccess,
   Pagination,
+  Search,
 } from "../../components/common";
 import { Color, ROLE } from "../../constants";
 import {
@@ -23,7 +21,7 @@ import {
 } from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
 import { doSearchListClass } from "../../redux/slice";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { useAppDispatch } from "../../redux/store";
 import "./ListClass.scss";
 export const ListClass = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
@@ -67,12 +65,16 @@ export const ListClass = () => {
   };
 
   const handleSearch = (value: string) => {
-    // console.log("value", value);
-    if (value === "") {
+    if (value === "" && !idCourse) {
       dispatch(doGetListClass());
       return;
-    } else {
-      let newListClass = listClass.filter((item: any) => {
+    }
+    if (value === "" && idCourse) {
+      dispatch(doGetListClassByCourse(idCourse));
+      return;
+    }
+    if (value !== "") {
+      let newListClass = listClass?.filter((item: any) => {
         return (
           String(item.id)?.search(value) !== -1 ||
           String(item.course.id).search(value) !== -1 ||
@@ -80,8 +82,8 @@ export const ListClass = () => {
         );
       });
       dispatch(doSearchListClass(newListClass));
-      setCurrentPage(1);
     }
+    setCurrentPage(1);
   };
 
   const changePage = (number: number) => {
@@ -103,7 +105,13 @@ export const ListClass = () => {
   }, [currentUser]);
   return (
     <div className="listclass">
-      <Banner title="Danh sách lớp học" />
+      <Banner
+        title={
+          idCourse
+            ? `Danh sách lớp học của khóa ${idCourse}`
+            : "Danh sách lớp học"
+        }
+      />
       <div className="listclass__header">
         <Search
           placeholder="Nhập khóa học"
@@ -134,7 +142,7 @@ export const ListClass = () => {
               onChange={(e) => handleAddExcelClass(e)}
             />
           </>
-        ) : role === ROLE.TEACHER ? (
+        ) : role === ROLE.TEACHER && !idCourse ? (
           <Button
             className="listcourses__btn-add"
             color={Color.Green}
@@ -145,7 +153,7 @@ export const ListClass = () => {
         ) : null}
       </div>
       <div className="listclass__list">
-        {currenPost.map((item: IResponseListClass, index: number) => {
+        {currenPost?.map((item: IResponseListClass, index: number) => {
           return (
             <div className="listclass__item">
               <CardClass
@@ -153,7 +161,7 @@ export const ListClass = () => {
                 numberStudent={item.numberStudent}
                 nameClass={item.course?.name}
                 nameTeacher={item.teacher?.fullName}
-                room="P.B.04"
+                // room="P.B.04"
                 startTime={moment(item.startDate).format("DD/MM/YYYY")}
                 endTime={moment(item.endDate).format("DD/MM/YYYY")}
                 key={index}
@@ -162,6 +170,7 @@ export const ListClass = () => {
                   setIsShowModalOption(true);
                   setIdClass(idClass);
                 }}
+                viewListStudent={role === ROLE.ADMIN ? true : false}
               />
             </div>
           );
@@ -170,7 +179,7 @@ export const ListClass = () => {
       <div className="list-student__pagination">
         <Pagination
           postPerPage={postPerPage}
-          totalPost={listClassSearch.length}
+          totalPost={listClassSearch?.length}
           changePage={changePage}
           currentPage={currentPage}
         />

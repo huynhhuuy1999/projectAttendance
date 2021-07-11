@@ -87,10 +87,19 @@ const slice = createSlice({
     builder.addCase(doGetListClassByTeacher.pending, (state, action) => {
       state.isLoading = true;
     });
-    builder.addCase(doGetListClassByTeacher.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.listClassByTeacher = action.payload;
-    });
+    builder.addCase(
+      doGetListClassByTeacher.fulfilled,
+      (state, action: PayloadAction<Array<string>>) => {
+        state.isLoading = false;
+        let listIdClass = action.payload;
+        let listClass = state.listClass?.filter((item) => {
+          for (let i = 0; i < listIdClass.length; i++) {
+            if (item.id === listIdClass[i]) return item.id === listIdClass[i];
+          }
+        });
+        state.listClassByTeacher = listClass;
+      }
+    );
     builder.addCase(doGetListClassByTeacher.rejected, (state, action) => {
       state.isLoading = false;
     });
@@ -111,6 +120,8 @@ const slice = createSlice({
     builder.addCase(doGetListClassByCourse.fulfilled, (state, action) => {
       state.isLoading = false;
       state.listClass = action.payload;
+      state.listClassSearch = action.payload;
+      // state.listClassByTeacher = listClass;
     });
     builder.addCase(doGetListClassByCourse.rejected, (state, action) => {
       state.isLoading = false;

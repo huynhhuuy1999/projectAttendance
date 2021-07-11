@@ -46,4 +46,38 @@
     color: #fff;
     cursor: pointer;
   }
+  &__modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 390px;
+    min-height: 282px;
+    span {
+      &.bold {
+        font-weight: bold;
+      }
+      &.pink {
+        color: #f63e62;
+      }
+      &.margintop {
+        margin-top: 10px;
+      }
+    }
+  }
+  &__modal-label {
+    text-align: start;
+    margin-top: 12px;
+  }
+  &__modal-input {
+    font-weight: 500;
+  }
+  &__form {
+    width: 100%;
+  }
+  &__group-btn {
+    display: flex;
+    margin-top: 10px;
+    justify-content: center;
+  }
 }

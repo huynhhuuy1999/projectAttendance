@@ -104,3 +104,12 @@ interface IResPhotoAttendance {
   image?: string;
   createAt?: string;
 }
+
+interface IResInfoAttandance {
+  id?: string | number;
+  time?: string;
+  status?: number;
+  student?: ICurrentUser;
+  photos?: IResPhotoAttendance;
+  clazz?: IResponseClass;
+}

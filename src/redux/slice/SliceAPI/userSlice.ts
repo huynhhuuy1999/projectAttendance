@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { doDeleteUser, doGetCurrentUser, doLogin } from "../../action";
+import {
+  doDeleteUser,
+  doGetCurrentUser,
+  doLogin,
+  doUpdateUser,
+} from "../../action";
 
 const initialState = {
   isLoading: false,
@@ -40,6 +45,16 @@ const slice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(doDeleteUser.rejected, (state, action) => {
+      state.isLoading = false;
+    });
+    //update user
+    builder.addCase(doUpdateUser.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(doUpdateUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(doUpdateUser.rejected, (state, action) => {
       state.isLoading = false;
     });
   },

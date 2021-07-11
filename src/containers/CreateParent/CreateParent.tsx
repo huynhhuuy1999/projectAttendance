@@ -3,25 +3,18 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { Banner, Button, Input, NotiSuccess } from "../../components/common";
-import {
-  doAddStudent,
-  doGetOneStudent,
-  doUpdateStudent,
-} from "../../redux/action";
+import { doAddParent, doGetOneParent, doUpdateUser } from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
 import { useAppDispatch } from "../../redux/store";
 import * as Yup from "yup";
 import "./CreateParent.scss";
 import { Color, ROLE } from "../../constants";
-import { HiCheckCircle } from "react-icons/hi";
 import { regNumber } from "../../helper";
 
 export const CreateParent = () => {
   const { idParent } = useParams<{ idParent: string }>();
   const dispatch = useAppDispatch();
-  const infoParent = useSelector(
-    (state: RootState) => state.student.oneStudent
-  );
+  const infoParent = useSelector((state: RootState) => state.parent.oneParent);
   const [changePass, setChangePass] = useState(false);
   const history = useHistory();
   const [isShowModal, setIsShowModal] = useState(false);
@@ -56,62 +49,67 @@ export const CreateParent = () => {
         // check changepass to call api
         if (changePass) {
         } else {
+          values.password = "";
         }
-
-        // dispatch(
-        //   doUpdateStudent({
-        //     id: values.mssv,
-        //     username: values.username,
-        //     fullName: values.fullname,
-        //     birthday: values.birthday,
-        //     phone: values.phone,
-        //     email: values.email,
-        //     address: values.address,
-        //     password: values.password,
-        //     // roles: [{ id: 4, name: "ROLE_STUDENT" }],
-        //   })
-        // ).then(() => setIsShowModal(true));
+        dispatch(
+          doUpdateUser({
+            id: values.mssv,
+            username: values.username,
+            fullName: values.fullname,
+            birthday: values.birthday,
+            phone: values.phone,
+            email: values.email,
+            address: values.address,
+            password: values.password,
+            // roles: [{ id: 4, name: "ROLE_STUDENT" }],
+          })
+        ).then(() => setIsShowModal(true));
       } else {
-        // dispatch(
-        //   doAddStudent({
-        //     id: values.mssv,
-        //     username: values.username,
-        //     fullName: values.fullname,
-        //     birthday: values.birthday,
-        //     phone: values.phone,
-        //     email: values.email,
-        //     address: values.address,
-        //     password: values.password,
-        //     roles: [{ id: ROLE.STUDENT }],
-        //   })
-        // ).then(() => setIsShowModal(true));
+        dispatch(
+          doAddParent({
+            id: values.mssv,
+            username: values.username,
+            fullName: values.fullname,
+            birthday: values.birthday,
+            phone: values.phone,
+            email: values.email,
+            address: values.address,
+            password: values.password,
+            roles: [{ id: ROLE.PARENT }],
+          })
+        ).then(() => setIsShowModal(true));
       }
     },
   });
 
   useEffect(() => {
-    // if (idStudent) {
-    //   dispatch(doGetOneStudent(idStudent));
-    // } else {
-    //   setChangePass(true);
-    // }
+    if (idParent) {
+      dispatch(doGetOneParent(idParent));
+    } else {
+      setChangePass(true);
+    }
   }, []);
-  //   useEffect(() => {
-  //     if (infoStudent && idStudent) {
-  //       formik.setFieldValue("mssv", infoStudent.id);
-  //       formik.setFieldValue("username", infoStudent.username);
-  //       formik.setFieldValue("fullname", infoStudent.fullName);
-  //       formik.setFieldValue("birthday", infoStudent.birthday);
-  //       formik.setFieldValue("phone", infoStudent.phone);
-  //       formik.setFieldValue("email", infoStudent.email);
-  //       formik.setFieldValue("address", infoStudent.address);
-  //     }
-  //   }, [infoStudent]);
+  useEffect(() => {
+    if (infoParent && idParent) {
+      formik.setFieldValue("mssv", infoParent.id);
+      formik.setFieldValue("username", infoParent.username);
+      formik.setFieldValue("fullname", infoParent.fullName);
+      formik.setFieldValue("birthday", infoParent.birthday);
+      formik.setFieldValue("phone", infoParent.phone);
+      formik.setFieldValue("email", infoParent.email);
+      formik.setFieldValue("address", infoParent.address);
+      // formik.setFieldValue("idStudent", infoParent.);
+    }
+  }, [infoParent]);
 
   return (
     <div className="update-user">
       <Banner
-        title={idParent ? "Cập nhật thông tin phụ huynh" : "Thêm phụ huynh"}
+        title={
+          idParent
+            ? `Cập nhật thông tin phụ huynh ${idParent}`
+            : "Thêm phụ huynh"
+        }
       />
       <form className="formParent" onSubmit={formik.handleSubmit}>
         <div className="formParent__cover">
@@ -258,7 +256,6 @@ export const CreateParent = () => {
                 type="checkbox"
                 onChange={() => {
                   setChangePass(!changePass);
-                  console.log(changePass);
                 }}
               />
               <label
