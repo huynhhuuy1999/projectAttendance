@@ -52,7 +52,7 @@ export const TableStudent: React.FC<ITableStudent> = ({
             <th>Họ tên</th>
             <th>Ngày sinh</th>
             <th>Số điện thoại</th>
-            <th>Số ngày vắng</th>
+            {/* <th>Số ngày vắng</th> */}
             <th>Chi tiết</th>
             <th>Xóa</th>
             {isAttendance ? <th>Điểm danh</th> : null}
@@ -66,7 +66,7 @@ export const TableStudent: React.FC<ITableStudent> = ({
                 <td>{item.fullName}</td>
                 <td>{moment(item.birthday).format("DD/MM/YYYY")}</td>
                 <td>{item.phone}</td>
-                <td>2</td>
+                {/* <td>2</td> */}
                 <td
                   style={{ cursor: "pointer" }}
                   onClick={() => history.push(`/detailstudent/${item.id}`)}
