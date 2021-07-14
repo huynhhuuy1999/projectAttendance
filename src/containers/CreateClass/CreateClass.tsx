@@ -257,7 +257,7 @@ export const CreateClass = () => {
           <Button color={Color.Blue} type="submit">
             {idClass ? "Cập nhật" : "Thêm lớp học"}
           </Button>
-          {role === ROLE.ADMIN && idClass ? (
+          {/* {role === ROLE.ADMIN && idClass ? (
             <>
               <Button
                 marginLeft={10}
@@ -276,7 +276,7 @@ export const CreateClass = () => {
                 Thêm excel
               </Button>
             </>
-          ) : null}
+          ) : null} */}
         </div>
       </form>
       <NotiSuccess
