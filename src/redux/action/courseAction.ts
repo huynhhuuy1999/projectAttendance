@@ -40,3 +40,11 @@ export const doDeleteCourse = createAsyncThunk(
     return result.data;
   }
 );
+
+export const doExportExcelCourse = createAsyncThunk(
+  "course@get/exportExcelCourse",
+  async () => {
+    const result = await apiCourse.exportExcelCourse();
+    return result.data;
+  }
+);

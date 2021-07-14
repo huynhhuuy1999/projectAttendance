@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/rootReducer";
 import { logout } from "../../../helper";
 import { ImageAvatar } from "../../../constants/image";
+import { ROLE } from "../../../constants";
 export const Header: React.FC<IHeader> = ({ sidebar, openSideBar, isOpen }) => {
   const handleShowSideBar = () => {
     openSideBar();
@@ -48,7 +49,18 @@ export const Header: React.FC<IHeader> = ({ sidebar, openSideBar, isOpen }) => {
         <div className="header__avatar-content">
           <div className="header__avatar-option">
             <a
-              onClick={() => history.push("/updateadmin")}
+              onClick={() => {
+                if (currentUser.id) {
+                  if (
+                    currentUser.roles[0].id === ROLE.PARENT ||
+                    currentUser.roles[0].id === ROLE.STUDENT
+                  ) {
+                    history.push("/informationPerson");
+                  } else {
+                    history.push("/updateadmin");
+                  }
+                }
+              }}
               style={{ cursor: "pointer" }}
             >
               Thông tin

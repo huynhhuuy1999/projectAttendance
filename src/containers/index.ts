@@ -19,3 +19,5 @@ export * from "./HistoryAttendance/HistoryAttendance";
 export * from "./ListParent/ListParent";
 export * from "./CreateParent/CreateParent";
 export * from "./DetailParent/DetailParent";
+export * from "./InformationPerson/InformationPerson";
+export * from "./ListAttendanceClass/ListAttendanceClass";

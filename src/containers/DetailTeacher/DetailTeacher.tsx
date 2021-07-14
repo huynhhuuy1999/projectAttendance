@@ -46,9 +46,9 @@ export const DetailTeacher = () => {
     <div className="detailTeacher">
       <Banner title="Chi tiết giảng viên" />
       <div className="detailTeacher__content">
-        <div className="detailTeacher__avatar">
+        {/* <div className="detailTeacher__avatar">
           <ImageUploadInput avatar={TestAvatar} onChange={imageOnChange} />
-        </div>
+        </div> */}
         <div className="detailTeacher__infor-right">
           <div className="detailTeacher__info">
             <span className="detailTeacher__label">Mã giáo viên:</span>

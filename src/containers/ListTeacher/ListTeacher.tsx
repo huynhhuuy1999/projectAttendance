@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { useParams } from "react-router-dom";
 import { TableTeacher } from "../../components";
 import {
   Banner,
@@ -10,6 +11,7 @@ import {
   Search,
   NotiSuccess,
   NotiOption,
+  Loader,
 } from "../../components/common";
 import { Color } from "../../constants";
 import { doDeleteUser, doGetListTeacher } from "../../redux/action";
@@ -22,6 +24,7 @@ export const ListTeacher = () => {
   const [postPerPage, setPostPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const history = useHistory();
+  const { idClass } = useParams<{ idClass: string }>();
   const listTeacher = useSelector(
     (state: RootState) => state.teacher.listTeacher
   );
@@ -37,6 +40,7 @@ export const ListTeacher = () => {
   );
   const [showModal, setShowModal] = useState(false);
   const [idTeacher, setIdTeacher] = useState("");
+  const [loader, setLoader] = useState(false);
   const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
   const [reload, setReload] = useState(false);
   const [role, setRole] = useState(0);
@@ -77,7 +81,8 @@ export const ListTeacher = () => {
   };
 
   useEffect(() => {
-    dispatch(doGetListTeacher());
+    setLoader(true);
+    dispatch(doGetListTeacher()).then(() => setLoader(false));
   }, [reload]);
 
   useEffect(() => {
@@ -121,23 +126,30 @@ export const ListTeacher = () => {
           <></>
         )}
       </div>
-      <div className="list-teacher__table">
-        <TableTeacher
-          data={currenPost}
-          showModal={(id) => {
-            setShowModal(true);
-            setIdTeacher(id);
-          }}
-        />
-      </div>
-      <div className="list-teacher__pagination">
-        <Pagination
-          postPerPage={postPerPage}
-          totalPost={listTeacherSearch.length}
-          changePage={changePage}
-          currentPage={currentPage}
-        />
-      </div>
+      {loader ? (
+        <Loader color={Color.Blue} />
+      ) : (
+        <>
+          <div className="list-teacher__table">
+            <TableTeacher
+              data={currenPost}
+              showModal={(id) => {
+                setShowModal(true);
+                setIdTeacher(id);
+              }}
+            />
+          </div>
+          <div className="list-teacher__pagination">
+            <Pagination
+              postPerPage={postPerPage}
+              totalPost={listTeacherSearch.length}
+              changePage={changePage}
+              currentPage={currentPage}
+            />
+          </div>
+        </>
+      )}
+
       <NotiOption
         isShow={showModal}
         setIsShow={setShowModal}

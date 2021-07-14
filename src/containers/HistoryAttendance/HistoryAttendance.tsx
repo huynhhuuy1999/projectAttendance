@@ -13,6 +13,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { doGetInfoAttendanceOneStudentInClass } from "../../redux/action/attendanceAction";
 import { ROLE } from "../../constants";
+import moment from "moment";
 
 export const HistoryAttendance = () => {
   const { idStudent, idClass } =
@@ -20,7 +21,9 @@ export const HistoryAttendance = () => {
   const [showModal, setShowModal] = useState(false);
   const [postPerPage, setPostPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [date, setDate] = useState("");
+  const [date, setDate]: any = useState("");
+  const [time, setTime]: any = useState("");
+  const [photoURL, setPhotoURL]: any = useState("");
 
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector((state) => state.user.currentUser);
@@ -64,7 +67,7 @@ export const HistoryAttendance = () => {
   }, []);
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser.id) {
       if (currentUser.roles[0].id === ROLE.PARENT) {
         dispatch(doGetInfoAttendanceOneStudentInClass("17521284"));
       } else {
@@ -72,6 +75,10 @@ export const HistoryAttendance = () => {
       }
     }
   }, [classId, currentUser]);
+
+  // useEffect(()=>{
+  //   if(list)
+  // },[listSearchAttandance])
 
   return (
     <div className="HistoryAttendance">
@@ -101,7 +108,17 @@ export const HistoryAttendance = () => {
                   <td>{item.date}</td>
                   <td>{item.time}</td>
                   <td>
-                    <BsImages cursor="pointer" color="red" fontSize={17} />
+                    <BsImages
+                      cursor="pointer"
+                      color="red"
+                      fontSize={17}
+                      onClick={() => {
+                        setPhotoURL(item.photoURL);
+                        setShowModal(true);
+                        setDate(item.date);
+                        setTime(item.time);
+                      }}
+                    />
                   </td>
                 </tr>
               );
@@ -123,8 +140,10 @@ export const HistoryAttendance = () => {
         setIsShow={setShowModal}
       >
         <div className="HistoryAttendance__content-modal">
-          <span>Thời gian: {date}</span>
-          <img src={Test} alt="" />
+          <span>
+            Thời gian: {date} {time}
+          </span>
+          <img src={photoURL} alt="" />
         </div>
       </Modal>
     </div>

@@ -1,3 +1,4 @@
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
@@ -6,6 +7,9 @@ import { TableStudent } from "../../components";
 import {
   Banner,
   Button,
+  Loader,
+  LoaderModal,
+  NotiFail,
   NotiOption,
   NotiSuccess,
   NumberRow,
@@ -17,6 +21,7 @@ import {
   doAddTimetable,
   doDeleteUser,
   doGetListStudent,
+  doGetListStudentByClass,
 } from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
 import { doSearchListStudent } from "../../redux/slice";
@@ -28,13 +33,19 @@ export const ListStudent = () => {
   const [postPerPage, setPostPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loaderModal, setLoaderModal] = useState(false);
   const [idStudent, setIdStudent] = useState("");
+  const [role, setRole] = useState(0);
   const [isShowModalSuccessAddTimetable, setIsShowModalSuccessAddTimetabe] =
     useState(false);
   const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
+  const [isShowModalFailAddTimetable, setIsShowModalFailAddTimetabe] =
+    useState(false);
   const [reload, setReload] = useState(false);
-  const history = useHistory();
 
+  const history = useHistory();
+  const dispatch = useAppDispatch();
   const listStudent = useSelector(
     (state: RootState) => state.student.listStudent
   );
@@ -48,8 +59,6 @@ export const ListStudent = () => {
     firstOfIndexCurrentPage,
     endOfIndexCurrentPage
   );
-  const [role, setRole] = useState(0);
-  const dispatch = useAppDispatch();
 
   const handleDeleteStudent = () => {
     setShowModal(false);
@@ -63,11 +72,19 @@ export const ListStudent = () => {
     });
   };
   const handleAddTimetable = (e: any) => {
+    setLoaderModal(true);
     const formData = new FormData();
     formData.append("file", e.target.files[0], e.target.files[0].name);
-    dispatch(doAddTimetable(formData)).then(() => {
-      setIsShowModalSuccessAddTimetabe(true);
-    });
+    dispatch(doAddTimetable(formData))
+      .then(unwrapResult)
+      .then(() => {
+        setLoaderModal(false);
+      })
+      .then(() => setIsShowModalSuccessAddTimetabe(true))
+      .catch((err) => {
+        setLoaderModal(false);
+        setIsShowModalFailAddTimetabe(true);
+      });
   };
 
   const changePage = (number: number) => {
@@ -93,7 +110,10 @@ export const ListStudent = () => {
   };
 
   useEffect(() => {
-    dispatch(doGetListStudent());
+    setLoading(true);
+    if (idClass) {
+      dispatch(doGetListStudentByClass(idClass)).then(() => setLoading(false));
+    } else dispatch(doGetListStudent()).then((res) => setLoading(false));
   }, [reload]);
   useEffect(() => {
     if (currentUser.roles) {
@@ -103,7 +123,13 @@ export const ListStudent = () => {
 
   return (
     <div className="list-student">
-      <Banner title="Danh sách sinh viên" />
+      <Banner
+        title={
+          idClass
+            ? `Danh sách sinh viên của lớp ${idClass}`
+            : `Danh sách sinh viên`
+        }
+      />
       <div className="list-student__header">
         <div className="list-student__number-row">
           <NumberRow changeNumber={changeNumber} />
@@ -116,13 +142,16 @@ export const ListStudent = () => {
         </div>
         {role === ROLE.ADMIN ? (
           <>
-            <Button
-              color={Color.Yellow}
-              marginLeft={10}
-              onClick={() => history.push("/updatestudent")}
-            >
-              Thêm sinh viên
-            </Button>
+            {idClass ? null : (
+              <Button
+                color={Color.Yellow}
+                marginLeft={10}
+                onClick={() => history.push("/updatestudent")}
+              >
+                Thêm sinh viên
+              </Button>
+            )}
+
             <Button
               color={Color.Green}
               marginLeft={10}
@@ -149,32 +178,47 @@ export const ListStudent = () => {
         ) : (
           <></>
         )}
+        {(role === ROLE.ADMIN || role === ROLE.TEACHER) && idClass ? (
+          <Button
+            color={Color.Red}
+            marginLeft={10}
+            onClick={() => history.push(`/ListAttendanceClass/${idClass}`)}
+          >
+            Xem lịch sử điểm danh
+          </Button>
+        ) : null}
       </div>
-      <div className="list-student__table">
-        <TableStudent
-          data={currenPost}
-          showModal={(id) => {
-            setShowModal(true);
-            setIdStudent(id);
-          }}
-          idClass="ACCT3603.L12"
-          isAttendance={
-            (role === ROLE.ADMIN && idClass) ||
-            (role === ROLE.TEACHER && idClass)
-              ? true
-              : false
-          }
-        />
-      </div>
-      <div className="list-student__pagination">
-        <Pagination
-          postPerPage={postPerPage}
-          totalPost={listStudentSearch.length}
-          changePage={changePage}
-          currentPage={currentPage}
-        />
-      </div>
-
+      {loading ? (
+        <Loader color={Color.Blue} />
+      ) : (
+        <>
+          <div className="list-student__table">
+            <TableStudent
+              data={currenPost}
+              showModal={(id) => {
+                setShowModal(true);
+                setIdStudent(id);
+              }}
+              idClass="ACCT3603.L12"
+              isAttendance={
+                (role === ROLE.ADMIN && idClass) ||
+                (role === ROLE.TEACHER && idClass)
+                  ? true
+                  : false
+              }
+            />
+          </div>
+          <div className="list-student__pagination">
+            <Pagination
+              postPerPage={postPerPage}
+              totalPost={listStudentSearch.length}
+              changePage={changePage}
+              currentPage={currentPage}
+            />
+          </div>
+        </>
+      )}
+      <LoaderModal color={Color.Blue} isShow={loaderModal} />
       <NotiOption
         isShow={showModal}
         setIsShow={setShowModal}
@@ -199,6 +243,12 @@ export const ListStudent = () => {
         setIsShow={setIsShowModalSuccessAddTimetabe}
         message="Thêm thời khóa biểu thành công"
         onClick={() => setIsShowModalSuccessAddTimetabe(false)}
+      />
+      <NotiFail
+        isShow={isShowModalFailAddTimetable}
+        setIsShow={setIsShowModalFailAddTimetabe}
+        message="Thêm thời khóa biểu thất bại"
+        onClick={() => setIsShowModalFailAddTimetabe(false)}
       />
     </div>
   );

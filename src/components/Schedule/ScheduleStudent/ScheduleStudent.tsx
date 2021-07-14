@@ -3,15 +3,42 @@ import React from "react";
 import { Color, ROLE } from "../../../constants";
 import "./ScheduleStudent.scss";
 import { IoClose } from "react-icons/io5";
-import { useAppSelector } from "../../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { useHistory } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import { doDeleteStudentFromClass } from "../../../redux/action";
 
 export const ScheduleStudent: React.FC<IScheduleStudent> = ({
   data,
   idStudent,
+  loading,
 }) => {
   const user = useAppSelector((state) => state.user.currentUser);
+  const [idClass, setIdClass]: any = useState("");
+  const [idTimeTable, setIdTimetable]: any = useState(0);
   const history = useHistory();
+  const dispatch = useAppDispatch();
+
+  const delStudentFromClass = () => {
+    dispatch(
+      doDeleteStudentFromClass({
+        id: idTimeTable,
+        clazz: {
+          id: idClass,
+        },
+      })
+    ).then(() => {
+      loading();
+    });
+  };
+
+  useEffect(() => {
+    if (idClass !== "" && idTimeTable !== 0) {
+      delStudentFromClass();
+    }
+  }, [idClass, idTimeTable]);
+
   const listRender = () => {
     let contentTable = [];
     for (let lesson = 1; lesson <= 10; lesson++) {
@@ -41,6 +68,10 @@ export const ScheduleStudent: React.FC<IScheduleStudent> = ({
                           fontSize={15}
                           color="red"
                           className="schedule-student__icon-close"
+                          onClick={() => {
+                            setIdClass(itemm.clazz?.id);
+                            setIdTimetable(item.id);
+                          }}
                         />
                       ) : null}
                       <span className="bold">{itemm.clazz?.id}</span>
@@ -86,6 +117,7 @@ export const ScheduleStudent: React.FC<IScheduleStudent> = ({
     }
     return contentTable;
   };
+
   return (
     <div className="schedule-student">
       <table className="schedule-student__table">

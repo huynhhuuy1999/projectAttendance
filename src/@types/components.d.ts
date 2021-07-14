@@ -125,6 +125,7 @@ interface ISibarLayout {}
 interface IScheduleStudent {
   data?: Array<IResponseTimetableStudent>;
   idStudent?: string;
+  loading?: any;
 }
 interface IPrivateRouter {
   component?: any;
@@ -172,4 +173,17 @@ interface IPieChart {
   data?: any;
   className?: string;
   title?: string;
+}
+
+interface ILoader {
+  className?: string;
+  color?: string;
+  marginTop?: number;
+  height?: number;
+  isSmall?: boolean;
+}
+
+interface ILoaderModal {
+  isShow?: boolean;
+  color?: string;
 }

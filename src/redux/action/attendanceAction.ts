@@ -34,3 +34,21 @@ export const doGetInfoAttendanceOneStudentInClass = createAsyncThunk(
     return result.data;
   }
 );
+
+export const doGetInfoAttendanceInClass = createAsyncThunk(
+  "attendance@get/InfoAttendanceInClass",
+  async (idClass: string) => {
+    const result = await apiAttendance.getInfoAttendanceInClass(idClass);
+    return result.data;
+  }
+);
+
+export const doGetReportListAttendanceInSemester = createAsyncThunk(
+  "attendance@get/ReportListAttendanceInSemester",
+  async (classID: string) => {
+    const result = await apiAttendance.getReportListAttendanceInSemester(
+      classID
+    );
+    return result.data;
+  }
+);

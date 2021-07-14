@@ -73,6 +73,7 @@ interface IResponseStudent {
   fullName?: string;
   birthday?: string;
   password?: string;
+  parentId?: string;
 }
 
 interface IResponseParent {
@@ -96,6 +97,7 @@ interface IResTeacher {
   birthday?: string;
   password?: string;
   address?: string;
+  parentId?: string;
 }
 
 interface IResPhotoAttendance {
@@ -112,4 +114,5 @@ interface IResInfoAttandance {
   student?: ICurrentUser;
   photos?: IResPhotoAttendance;
   clazz?: IResponseClass;
+  photoUrl?: string;
 }

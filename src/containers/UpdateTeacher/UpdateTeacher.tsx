@@ -1,9 +1,16 @@
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import * as Yup from "yup";
-import { Banner, Button, Input, NotiSuccess } from "../../components/common";
+import {
+  Banner,
+  Button,
+  Input,
+  NotiFail,
+  NotiSuccess,
+} from "../../components/common";
 import { Color, ROLE } from "../../constants";
 import { regNumber } from "../../helper";
 import {
@@ -20,6 +27,8 @@ export const UpdateTeacher = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const [isShowModal, setIsShowModal] = useState(false);
+  const [isShowModalFail, setIsShowModalFail] = useState(false);
+
   const infoTeacher = useSelector(
     (state: RootState) => state.teacher.oneTeacher
   );
@@ -81,7 +90,10 @@ export const UpdateTeacher = () => {
             password: values.password,
             roles: [{ id: ROLE.TEACHER }],
           })
-        ).then(() => setIsShowModal(true));
+        )
+          .then(unwrapResult)
+          .then(() => setIsShowModal(true))
+          .catch((err) => setIsShowModalFail(true));
       }
     },
   });
@@ -266,6 +278,12 @@ export const UpdateTeacher = () => {
           setIsShowModal(false);
           history.push("/listteacher");
         }}
+      />
+      <NotiFail
+        isShow={isShowModalFail}
+        setIsShow={setIsShowModalFail}
+        message="Username đã tồn tại"
+        onClick={() => setIsShowModalFail(false)}
       />
     </div>
   );

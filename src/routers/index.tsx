@@ -22,6 +22,8 @@ import {
   ListParent,
   CreateParent,
   DetailParent,
+  InformationPerson,
+  ListAttendanceClass,
 } from "../containers";
 import { PrivateRouter } from "./PrivateRouter";
 import { PublicRouter } from "./PublicRouter";
@@ -125,7 +127,7 @@ export const Routers = () => {
         <PrivateRouter
           component={<StatisticalClass />}
           exact={true}
-          path="/statisticalClass"
+          path="/statisticalClass/:idClass"
           isHasSideBar={true}
         />
         <PrivateRouter
@@ -150,6 +152,18 @@ export const Routers = () => {
           component={<DetailParent />}
           exact={true}
           path="/detailparent/:idParent"
+          isHasSideBar={true}
+        />
+        <PrivateRouter
+          component={<InformationPerson />}
+          exact={true}
+          path="/informationPerson"
+          isHasSideBar={true}
+        />
+        <PrivateRouter
+          component={<ListAttendanceClass />}
+          exact={true}
+          path="/ListAttendanceClass/:idClass"
           isHasSideBar={true}
         />
       </Switch>

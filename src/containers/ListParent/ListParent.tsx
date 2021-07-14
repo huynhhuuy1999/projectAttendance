@@ -11,6 +11,7 @@ import {
   NotiSuccess,
   Search,
   NotiOption,
+  Loader,
 } from "../../components/common";
 import { Color } from "../../constants";
 import { doDeleteUser, doGetListParent } from "../../redux/action";
@@ -25,6 +26,7 @@ export const ListParent = () => {
   const [showModal, setShowModal] = useState(false);
   const [idParent, setIdParent] = useState("");
   const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [reload, setReload] = useState(false);
   const history = useHistory();
 
@@ -77,7 +79,8 @@ export const ListParent = () => {
   };
 
   useEffect(() => {
-    dispatch(doGetListParent());
+    setLoader(true);
+    dispatch(doGetListParent()).then(() => setLoader(false));
   }, [reload]);
   useEffect(() => {
     if (currentUser.roles) {
@@ -119,23 +122,29 @@ export const ListParent = () => {
           <></>
         )}
       </div>
-      <div className="list-parent__table">
-        <TableParent
-          data={currenPost}
-          showModal={(id) => {
-            setShowModal(true);
-            setIdParent(id);
-          }}
-        />
-      </div>
-      <div className="list-parent__pagination">
-        <Pagination
-          postPerPage={postPerPage}
-          totalPost={listParentSearch.length}
-          changePage={changePage}
-          currentPage={currentPage}
-        />
-      </div>
+      {loader ? (
+        <Loader color={Color.Blue} />
+      ) : (
+        <>
+          <div className="list-parent__table">
+            <TableParent
+              data={currenPost}
+              showModal={(id) => {
+                setShowModal(true);
+                setIdParent(id);
+              }}
+            />
+          </div>
+          <div className="list-parent__pagination">
+            <Pagination
+              postPerPage={postPerPage}
+              totalPost={listParentSearch.length}
+              changePage={changePage}
+              currentPage={currentPage}
+            />
+          </div>
+        </>
+      )}
 
       <NotiOption
         isShow={showModal}

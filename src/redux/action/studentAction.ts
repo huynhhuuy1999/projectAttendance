@@ -40,3 +40,19 @@ export const doAddTimetable = createAsyncThunk(
     return result.data;
   }
 );
+
+export const doGetListStudentByClass = createAsyncThunk(
+  "student@get/listStudentByClass",
+  async (params: any) => {
+    const result = await apiStudent.getListStudentByClass(params);
+    return result.data;
+  }
+);
+
+export const doDeleteStudentFromClass = createAsyncThunk(
+  "student@del/studentFromClass",
+  async (params: IParamDelStudentFromClass) => {
+    const result = await apiStudent.deleteStudentFromClass(params);
+    return result.data;
+  }
+);

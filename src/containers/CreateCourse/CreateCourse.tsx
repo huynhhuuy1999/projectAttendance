@@ -1,8 +1,15 @@
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { HiCheckCircle } from "react-icons/hi";
 import { useHistory } from "react-router";
-import { Banner, Button, Input, NotiSuccess } from "../../components/common";
+import {
+  Banner,
+  Button,
+  Input,
+  NotiFail,
+  NotiSuccess,
+} from "../../components/common";
 import { Color } from "../../constants";
 import { doAddCourse } from "../../redux/action";
 import { useAppDispatch } from "../../redux/store";
@@ -13,6 +20,7 @@ export const CreateCourse = () => {
   const [errorName, setErrorName] = useState("");
   const dispatch = useAppDispatch();
   const [noti, setNoti] = useState(false);
+  const [isShowModalFail, setIsShowModalFail] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
   const history = useHistory();
   const formik = useFormik({
@@ -36,7 +44,10 @@ export const CreateCourse = () => {
           id: values.id,
           name: values.name,
         })
-      ).then(() => setIsShowModal(true));
+      )
+        .then(unwrapResult)
+        .then(() => setIsShowModal(true))
+        .catch((err) => setIsShowModalFail(true));
     },
   });
 
@@ -79,6 +90,12 @@ export const CreateCourse = () => {
             setIsShowModal(false);
             history.push("/listcourses");
           }}
+        />
+        <NotiFail
+          isShow={isShowModalFail}
+          setIsShow={setIsShowModalFail}
+          message="Đã tồn tại mã khóa học"
+          onClick={() => setIsShowModalFail(false)}
         />
       </form>
     </div>

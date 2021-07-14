@@ -1,11 +1,29 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { doGetReportListAttendanceInSemester } from "../../action/attendanceAction";
 import {
   doAddStudent,
   doAddTimetable,
+  doDeleteStudentFromClass,
   doGetListStudent,
+  doGetListStudentByClass,
   doGetOneStudent,
   doGetTimetableStudent,
 } from "../../action/studentAction";
+
+type IStudent = {
+  isLoading?: boolean;
+  timeTableStudent?: Array<IResponseTimetableStudent>;
+  listStudent: Array<ICurrentUser>;
+  listStudentSearch: Array<ICurrentUser>;
+  oneStudent: ICurrentUser;
+  infoParent: ICurrentUser;
+  report: {
+    clazzId?: string;
+    students?: Array<any>;
+    present?: number;
+    absent?: number;
+  };
+};
 
 const initialState = {
   isLoading: false,
@@ -13,6 +31,8 @@ const initialState = {
   listStudent: [],
   listStudentSearch: [],
   oneStudent: { id: "", roles: [{ id: 0, name: "xxx" }] },
+  infoParent: { id: "", roles: [{ id: 0, name: "xxx" }] },
+  report: {},
 } as IStudent;
 
 const slice = createSlice({
@@ -53,6 +73,21 @@ const slice = createSlice({
     builder.addCase(doGetListStudent.rejected, (state, action) => {
       state.isLoading = false;
     });
+    //get list student by class
+    builder.addCase(doGetListStudentByClass.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(
+      doGetListStudentByClass.fulfilled,
+      (state, action: PayloadAction<Array<IResponseStudent>>) => {
+        state.isLoading = false;
+        state.listStudent = action.payload;
+        state.listStudentSearch = action.payload;
+      }
+    );
+    builder.addCase(doGetListStudentByClass.rejected, (state, action) => {
+      state.isLoading = false;
+    });
     //get one student
     builder.addCase(doGetOneStudent.pending, (state, action) => {
       state.isLoading = true;
@@ -87,6 +122,36 @@ const slice = createSlice({
     builder.addCase(doAddTimetable.rejected, (state, action) => {
       state.isLoading = false;
     });
+    //delete student from class
+    builder.addCase(doDeleteStudentFromClass.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(doDeleteStudentFromClass.fulfilled, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(doDeleteStudentFromClass.rejected, (state, action) => {
+      state.isLoading = false;
+    });
+    // get report
+    builder.addCase(
+      doGetReportListAttendanceInSemester.pending,
+      (state, action) => {
+        state.isLoading = true;
+      }
+    );
+    builder.addCase(
+      doGetReportListAttendanceInSemester.fulfilled,
+      (state, action) => {
+        state.isLoading = false;
+        state.report = action.payload;
+      }
+    );
+    builder.addCase(
+      doGetReportListAttendanceInSemester.rejected,
+      (state, action) => {
+        state.isLoading = false;
+      }
+    );
   },
 });
 const { reducer: studentReducer, actions } = slice;

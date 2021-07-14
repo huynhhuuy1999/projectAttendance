@@ -5,9 +5,10 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 import "./TableStudent.scss";
 import { useAppDispatch } from "../../../redux/store";
 import { doAttendanceStudent } from "../../../redux/action/attendanceAction";
-import { Modal, NotiFail, NotiSuccess } from "../../common";
+import { LoaderModal, Modal, NotiFail, NotiSuccess } from "../../common";
 import { useState } from "react";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { Color } from "../../../constants";
 
 export const TableStudent: React.FC<ITableStudent> = ({
   data,
@@ -17,9 +18,11 @@ export const TableStudent: React.FC<ITableStudent> = ({
 }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const [loaderModal, setLoadModal] = useState(false);
   const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
   const [isShowModalFail, setIsShowModalFail] = useState(false);
   const handleAttendance = (idStudent: string) => {
+    setLoadModal(true);
     dispatch(
       doAttendanceStudent({
         student: {
@@ -32,9 +35,11 @@ export const TableStudent: React.FC<ITableStudent> = ({
     )
       .then(unwrapResult)
       .then((res) => {
+        setLoadModal(false);
         setIsShowModalSuccess(true);
       })
       .catch((err) => {
+        setLoadModal(false);
         setIsShowModalFail(true);
       });
   };
@@ -89,6 +94,7 @@ export const TableStudent: React.FC<ITableStudent> = ({
           })}
         </tbody>
       </table>
+      <LoaderModal color={Color.Blue} isShow={loaderModal} />
       <NotiSuccess
         isShow={isShowModalSuccess}
         setIsShow={setIsShowModalSuccess}

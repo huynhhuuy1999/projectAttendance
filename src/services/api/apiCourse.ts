@@ -21,4 +21,8 @@ export const apiCourse = {
     const url = "/courses";
     return axiosClient.delete(url, { data: params });
   },
+  exportExcelCourse: () => {
+    const url = `/excel/export/courses`;
+    return axiosClient.get(url);
+  },
 };

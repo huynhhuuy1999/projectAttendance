@@ -3,6 +3,7 @@ import {
   doAddCourse,
   doAddCourseExcel,
   doDeleteCourse,
+  doExportExcelCourse,
   doGetListCourse,
   doUpdateCourse,
 } from "../../action";
@@ -72,6 +73,16 @@ const slice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(doDeleteCourse.rejected, (state, action) => {
+      state.isLoading = false;
+    });
+    // export excel course
+    builder.addCase(doExportExcelCourse.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(doExportExcelCourse.fulfilled, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(doExportExcelCourse.rejected, (state, action) => {
       state.isLoading = false;
     });
   },

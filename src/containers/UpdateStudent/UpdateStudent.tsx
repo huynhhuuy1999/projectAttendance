@@ -93,6 +93,7 @@ export const UpdateStudent = () => {
           .then(unwrapResult)
           .then(() => setIsShowModal(true))
           .catch(() => {
+            console.log("vo day");
             setIsShowModalFail(true);
           });
       }

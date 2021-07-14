@@ -5,7 +5,11 @@ import "./DetailStudent.scss";
 import { Banner, Button, Dropdown } from "../../components/common";
 import { useHistory, useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { doGetOneStudent, doGetTimetableStudent } from "../../redux/action";
+import {
+  doGetOneParent,
+  doGetOneStudent,
+  doGetTimetableStudent,
+} from "../../redux/action";
 import moment from "moment";
 import { Color } from "../../constants";
 import { AvatarY } from "../../constants/image";
@@ -16,10 +20,13 @@ export const DetailStudent = () => {
   };
   const { idStudent } = useParams<{ idStudent: string }>();
   const [year, setYear] = useState(2020);
+  const [reload, setReload] = useState(false);
   const [semester, setSemester] = useState(1);
+  const [flag, setFlag] = useState(0);
   const dispatch = useAppDispatch();
   const history = useHistory();
   const oneStudent = useAppSelector((state) => state.student.oneStudent);
+  const oneParent = useAppSelector((state) => state.parent.oneParent);
   const timetableStudent = useAppSelector(
     (state) => state.student.timeTableStudent
   );
@@ -47,21 +54,40 @@ export const DetailStudent = () => {
       doGetTimetableStudent({
         userId: idStudent,
         year: 2020,
-        semester: 1,
+        semester: 2,
       })
     );
   }, []);
+  useEffect(() => {
+    if (oneStudent.parentId) {
+      dispatch(doGetOneParent(oneStudent.parentId));
+    }
+  }, [oneStudent]);
+  useEffect(() => {
+    if (flag !== 0) {
+      // console.log("hello");
+      handleViewListTimeTable();
+      //   dispatch(
+      //     doGetTimetableStudent({
+      //       userId: idStudent,
+      //       year: year,
+      //       semester: semester,
+      //     })
+      //   );
+    }
+  }, [reload, flag]);
+
   return (
     <div className="detailStudent">
       <Banner title={`Chi tiết sinh viên ${idStudent}`} />
       <div className="detailStudent__content">
-        <div className="detailStudent__avatar">
+        {/* <div className="detailStudent__avatar">
           <ImageUploadInput
             // avatar="https://picsum.photos/200/300"
             avatar={AvatarY}
             onChange={imageOnChange}
           />
-        </div>
+        </div> */}
         <div className="detailStudent__infor-right">
           <div className="detailStudent__info">
             <span className="detailStudent__label">MSSV:</span>
@@ -80,18 +106,14 @@ export const DetailStudent = () => {
             <span className="detailStudent__info-address">
               {oneStudent.address}
             </span>
-            <span className="detailStudent__label">Số buổi vắng:</span>
-            <span className="detailStudent__info-address">2</span>
-            {/* <span className="detailStudent__label">Số buổi trễ:</span>
-            <span>5</span> */}
-            <span className="detailStudent__label">Họ tên bố</span>
-            <span>Huỳnh Bá Đương</span>
-            <span className="detailStudent__label">Số điện thoại bố:</span>
-            <span>0836142297</span>
-            <span className="detailStudent__label">Họ tên mẹ:</span>
-            <span>Nguyễn Thị Hồng Nga</span>
-            <span className="detailStudent__label">Số điện thoại mẹ:</span>
-            <span>0967258543</span>
+            <span className="detailStudent__label">Họ tên phụ huynh:</span>
+            <span>{oneParent.fullName}</span>
+            <span className="detailStudent__label">
+              Số điện thoại phụ huynh:
+            </span>
+            <span>{oneParent.phone}</span>
+            <span className="detailStudent__label">Email phụ huynh:</span>
+            <span>{oneParent.email}</span>
           </div>
           <div className="detailStudent__group-btn">
             {/* <Button color={Color.Blue}>Liên hệ phụ huynh</Button> */}
@@ -122,7 +144,7 @@ export const DetailStudent = () => {
               data={listSemester}
               className="detailStudent__dropdown"
               onChange={(value: any) => setSemester(value.id)}
-              defaultValue={{ id: 1, name: "Học kì 1" }}
+              defaultValue={{ id: 2, name: "Học kì 2" }}
             />
           </div>
           <div className="detailStudent__year">
@@ -145,7 +167,15 @@ export const DetailStudent = () => {
         </div>
       </div>
       <div className="detailStudent__schedule">
-        <ScheduleStudent data={timetableStudent} idStudent={idStudent} />
+        <ScheduleStudent
+          data={timetableStudent}
+          idStudent={idStudent}
+          loading={() => {
+            // console.log("fuck");
+            setReload(!reload);
+            setFlag(1);
+          }}
+        />
       </div>
     </div>
   );

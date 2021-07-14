@@ -18,14 +18,6 @@ interface IClass {
   listClassByCourse?: Array;
 }
 
-interface IStudent {
-  isLoading?: boolean;
-  timeTableStudent?: Array<IResponseTimetableStudent>;
-  listStudent: Array<ICurrentUser>;
-  listStudentSearch: Array<ICurrentUser>;
-  oneStudent: ICurrentUser;
-}
-
 interface ITeacher {
   isLoading?: boolean;
   timeTableTeacher?: Array<IResponseTimetableTeacher>;
@@ -49,6 +41,7 @@ interface ICurrentUser {
   birthday?: string;
   password?: string;
   address?: string;
+  parentId?: string;
 }
 
 interface ITimetableStudent {

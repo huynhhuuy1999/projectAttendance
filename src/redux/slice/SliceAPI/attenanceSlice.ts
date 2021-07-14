@@ -2,8 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import moment from "moment";
 import {
   doAttendanceStudent,
+  doGetInfoAttendanceInClass,
   doGetInfoAttendanceOneStudentInClass,
   doGetPhotoAttendance,
+  doGetReportListAttendanceInSemester,
   doUploadPhotoAttendance,
 } from "../../action/attendanceAction";
 
@@ -14,9 +16,33 @@ type IAttendance = {
   listInfoAttandanceOneStudentInClassSearch: Array<{
     date: String;
     time: String;
+    photoURL?: string;
   }>;
-  listInfoAttandanceOneStudentInClass: Array<{ date: String; time: String }>;
+  listInfoAttandanceOneStudentInClass: Array<{
+    date: String;
+    time: String;
+    photoURL?: string;
+  }>;
   classId?: string;
+  listInfoAttendanceInClass: Array<{
+    clazz?: IResponseClass;
+    id?: number;
+    photoUrl?: string;
+    status?: number;
+    student?: ICurrentUser;
+    time?: string;
+  }>;
+  report: {
+    clazzId: string;
+    students: Array<{
+      absent: number;
+      id: string;
+      name: string;
+      present: number;
+    }>;
+    present: number;
+    absent: number;
+  };
 };
 
 const initialState = {
@@ -26,6 +52,13 @@ const initialState = {
   listInfoAttandanceOneStudentInClass: [],
   classId: "",
   listInfoAttandanceOneStudentInClassSearch: [],
+  listInfoAttendanceInClass: [],
+  report: {
+    clazzId: "",
+    students: [],
+    present: 0,
+    absent: 0,
+  },
 } as IAttendance;
 
 const slice = createSlice({
@@ -97,6 +130,7 @@ const slice = createSlice({
           let convertItem = {
             date,
             time,
+            photoURL: item.photoUrl,
           };
           return convertItem;
         });
@@ -106,6 +140,41 @@ const slice = createSlice({
     );
     builder.addCase(
       doGetInfoAttendanceOneStudentInClass.rejected,
+      (state, action) => {
+        state.isLoading = false;
+        state.error = action.error;
+      }
+    );
+
+    //list attendance in class
+    builder.addCase(doGetInfoAttendanceInClass.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(doGetInfoAttendanceInClass.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.listInfoAttendanceInClass = action.payload;
+    });
+    builder.addCase(doGetInfoAttendanceInClass.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    });
+
+    // get report
+    builder.addCase(
+      doGetReportListAttendanceInSemester.pending,
+      (state, action) => {
+        state.isLoading = true;
+      }
+    );
+    builder.addCase(
+      doGetReportListAttendanceInSemester.fulfilled,
+      (state, action) => {
+        state.isLoading = false;
+        state.report = action.payload;
+      }
+    );
+    builder.addCase(
+      doGetReportListAttendanceInSemester.rejected,
       (state, action) => {
         state.isLoading = false;
         state.error = action.error;

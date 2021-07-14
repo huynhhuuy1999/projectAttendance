@@ -46,7 +46,10 @@ export const CardClass: React.FC<ICardClass> = ({
       <span>BĐ:{startTime}</span>
       <span>KT:{endTime}</span>
       {viewListStudent ? (
-        <span style={{ cursor: "pointer", color: "#009999" }}>
+        <span
+          style={{ cursor: "pointer", color: "#009999" }}
+          onClick={() => history.push(`/liststudent/${idClass}`)}
+        >
           Xem chi tiết
         </span>
       ) : null}

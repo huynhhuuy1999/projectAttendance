@@ -12,10 +12,13 @@ import {
   Pagination,
   Modal,
   Input,
+  Loader,
+  LoaderModal,
 } from "../../components/common";
 import {
   doAddCourseExcel,
   doDeleteCourse,
+  doExportExcelCourse,
   doGetListCourse,
   doUpdateCourse,
 } from "../../redux/action";
@@ -25,6 +28,7 @@ import "./ListCourses.scss";
 import { Color, ROLE } from "../../constants";
 import { doSearchListCourse } from "../../redux/slice";
 import { useFormik } from "formik";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export const ListCourses = () => {
   const validationSchema = Yup.object({
@@ -40,6 +44,7 @@ export const ListCourses = () => {
   const [postPerPage, setPostPerPage] = useState(12);
   const [currentPage, setCurrentPage] = useState(1);
   const [role, setRole] = useState(0);
+  const [loadModal, setLoadModal] = useState(false);
   const history = useHistory();
   const [reload, setReload] = useState(false);
   const dispatch = useAppDispatch();
@@ -49,6 +54,7 @@ export const ListCourses = () => {
   const [showModalAddExcel, setShowModalAddExcel] = useState(false);
   const [isShowModalOption, setIsShowModalOption] = useState(false);
   const [idCourse, setIdCourse] = useState("");
+  const [loading, setLoading] = useState(false);
   const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
   const [isShowModalSuccessUpdate, setIsShowModalSuccessUpdate] =
     useState(false);
@@ -88,12 +94,19 @@ export const ListCourses = () => {
     });
   };
   const handleAddExcelCourse = (e: any) => {
+    setLoadModal(true);
     const formData = new FormData();
     formData.append("file", e.target.files[0], e.target.files[0].name);
-    dispatch(doAddCourseExcel(formData)).then(() => {
-      setShowModalAddExcel(true);
-      setReload(!reload);
-    });
+    dispatch(doAddCourseExcel(formData))
+      .then(unwrapResult)
+      .then(() => {
+        setLoadModal(true);
+        setShowModalAddExcel(true);
+        setReload(!reload);
+      })
+      .catch((err) => {
+        setLoadModal(false);
+      });
   };
 
   const handleSearch = (value: string) => {
@@ -129,7 +142,10 @@ export const ListCourses = () => {
   }, [showModalAddExcel]);
 
   useEffect(() => {
-    dispatch(doGetListCourse()).then((res) => {});
+    setLoading(true);
+    dispatch(doGetListCourse()).then((res) => {
+      setLoading(false);
+    });
   }, [reload]);
 
   useEffect(() => {
@@ -162,6 +178,13 @@ export const ListCourses = () => {
             >
               Thêm khóa học
             </Button>
+            {/* <Button
+              color={Color.Red}
+              marginLeft={10}
+              onClick={() => dispatch(doExportExcelCourse())}
+            >
+              Export Excel
+            </Button> */}
             <label
               htmlFor="course"
               className="listcourses__excel"
@@ -179,40 +202,45 @@ export const ListCourses = () => {
           </>
         ) : null}
       </div>
+      {loading ? (
+        <Loader color={Color.Blue} />
+      ) : (
+        <>
+          <div className="listcourses__list">
+            {currenPost.map((item, index: number) => {
+              return (
+                <div className="listcourses__item">
+                  <CardCourses
+                    role={role}
+                    idCourse={item.id}
+                    nameCourse={item.name}
+                    // numberClass={3}
+                    key={index}
+                    showModal={(idCourse) => {
+                      setIsShowModalOption(true);
+                      setIdCourse(idCourse);
+                    }}
+                    showModalEdit={(idCourse, nameCourse) => {
+                      setIsShowModalEdit(true);
+                      setIdCourse(idCourse);
+                      setNameCourse(nameCourse);
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
 
-      <div className="listcourses__list">
-        {currenPost.map((item, index: number) => {
-          return (
-            <div className="listcourses__item">
-              <CardCourses
-                role={role}
-                idCourse={item.id}
-                nameCourse={item.name}
-                // numberClass={3}
-                key={index}
-                showModal={(idCourse) => {
-                  setIsShowModalOption(true);
-                  setIdCourse(idCourse);
-                }}
-                showModalEdit={(idCourse, nameCourse) => {
-                  setIsShowModalEdit(true);
-                  setIdCourse(idCourse);
-                  setNameCourse(nameCourse);
-                }}
-              />
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="list-student__pagination">
-        <Pagination
-          postPerPage={postPerPage}
-          totalPost={listCourseSearch.length}
-          changePage={changePage}
-          currentPage={currentPage}
-        />
-      </div>
+          <div className="list-student__pagination">
+            <Pagination
+              postPerPage={postPerPage}
+              totalPost={listCourseSearch.length}
+              changePage={changePage}
+              currentPage={currentPage}
+            />
+          </div>
+        </>
+      )}
 
       <NotiSuccess
         isShow={isShowModal}
@@ -256,6 +284,7 @@ export const ListCourses = () => {
           setIsShowModalSuccessUpdate(false);
         }}
       />
+      <LoaderModal isShow={loadModal} color={Color.Blue} />
       <Modal isShow={isShowModalEdit} setIsShow={setIsShowModalEdit}>
         <div className="listcourses__modal-content">
           <span className="bold pink">Cập nhật khóa học</span>

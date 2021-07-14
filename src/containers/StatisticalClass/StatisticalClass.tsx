@@ -9,31 +9,37 @@ import jsPDF from "jspdf";
 import moment from "moment";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { doGetCurrentUser } from "../../redux/action";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { doGetReportListAttendanceInSemester } from "../../redux/action/attendanceAction";
 export const StatisticalClass = () => {
   const currentUser = useAppSelector((state) => state.user.currentUser);
+  const report = useAppSelector((state) => state.attendance.report);
+  console.log("report", report);
   const [percentPresent, setPercentPresent] = useState(0);
   const [percentAbsent, setPercentAbsent] = useState(0);
-  const dispatch = useAppDispatch();
   const [isShowViewPdf, setIsShowViewPdf] = useState(false);
+  const { idClass } = useParams<{ idClass: string }>();
+
+  const dispatch = useAppDispatch();
   const history = useHistory();
-  const dataAPI = {
-    ClazzId: "ENG001",
-    students: [
-      { MSSV: "17521224", name: "Trần Anh Tuân", absent: 3, present: 10 },
-      { MSSV: "17521284", name: "Huỳnh Hữu Ý", absent: 2, present: 10 },
-      { MSSV: "17520973", name: "Lê Trần Duy Sang", absent: 3, present: 10 },
-      { MSSV: "17521286", name: "Lê Thị Như Ý", absent: 1, present: 10 },
-    ],
-    present: 40,
-    absent: 9,
-  };
+
+  // const dataAPI = {
+  //   ClazzId: "ENG001",
+  //   students: [
+  //     { MSSV: "17521224", name: "Trần Anh Tuân", absent: 3, present: 10 },
+  //     { MSSV: "17521284", name: "Huỳnh Hữu Ý", absent: 2, present: 10 },
+  //     { MSSV: "17520973", name: "Lê Trần Duy Sang", absent: 3, present: 10 },
+  //     { MSSV: "17521286", name: "Lê Thị Như Ý", absent: 1, present: 10 },
+  //   ],
+  //   present: 40,
+  //   absent: 9,
+  // };
   const data = {
     labels: ["Vắng", "Đi học"],
     datasets: [
       {
         label: "# of Votes",
-        data: [dataAPI.absent, dataAPI.present],
+        data: [report?.absent, report?.present],
         backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
         borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
         borderWidth: 1,
@@ -49,20 +55,25 @@ export const StatisticalClass = () => {
       pdf.save("Thống kê lớp ABC.pdf");
     });
   };
+
   useEffect(() => {
     if (!currentUser) {
       dispatch(doGetCurrentUser());
     }
     let x =
-      Number(dataAPI.present * 100) / Number(dataAPI.present + dataAPI.absent);
+      Number(report.present * 100) / Number(report.present + report.absent);
     setPercentPresent(Math.round(x));
   }, []);
   useEffect(() => {
     setPercentAbsent(Number(100 - percentPresent));
   }, [percentPresent]);
+  useEffect(() => {
+    dispatch(doGetReportListAttendanceInSemester(idClass));
+  }, []);
+
   return (
     <div className="StatisticalClass">
-      <Banner title="Thống kê tình trạng vắng học của lớp ABC " />
+      <Banner title={`Thống kê tình trạng vắng học của lớp ${idClass}`} />
       <div className="StatisticalClass__content">
         <div className="StatisticalClass__chart">
           <PieChart
@@ -70,10 +81,10 @@ export const StatisticalClass = () => {
             className="StatisticalClass__piechart"
             title="Biểu đồ tình trạng vắng học"
           />
-          <div className="StatisticalClass__contain-percent">
+          {/* <div className="StatisticalClass__contain-percent">
             <span>Đi học: {percentPresent}%</span>
             <span style={{ marginTop: 10 }}>Vắng học: {percentAbsent}%</span>
-          </div>
+          </div> */}
         </div>
         <div className="StatisticalClass__table">
           <p className="StatisticalClass__title-table">
@@ -90,17 +101,17 @@ export const StatisticalClass = () => {
               </tr>
             </thead>
             <tbody>
-              {dataAPI.students.map((item, index) => {
+              {report.students.map((item, index) => {
                 return (
                   <tr>
-                    <td>{item.MSSV}</td>
+                    <td>{item.id}</td>
                     <td>{item.name}</td>
                     <td>{item.absent}</td>
                     <td>{item.present}</td>
                     <td
                       className="StatisticalClass__pointer"
                       onClick={() =>
-                        history.push(`/historyAttendance/${item.MSSV}/${"ABC"}`)
+                        history.push(`/historyAttendance/${item.id}/${idClass}`)
                       }
                     >
                       Xem
@@ -159,10 +170,10 @@ export const StatisticalClass = () => {
                 </tr>
               </thead>
               <tbody>
-                {dataAPI.students.map((item, index) => {
+                {report.students.map((item, index) => {
                   return (
                     <tr>
-                      <td>{item.MSSV}</td>
+                      <td>{item.id}</td>
                       <td>{item.name}</td>
                       <td>{item.absent}</td>
                       <td>{item.present}</td>
@@ -173,17 +184,17 @@ export const StatisticalClass = () => {
                   <td className="StatisticalClass__text-sum" colSpan={2}>
                     Tổng
                   </td>
-                  <td>{dataAPI.absent}</td>
-                  <td>{dataAPI.present}</td>
+                  <td>{report.absent}</td>
+                  <td>{report.present}</td>
                 </tr>
               </tbody>
             </table>
-            <div className="StatisticalClass__total">
+            {/* <div className="StatisticalClass__total">
               <span>Tỉ lệ đi học chiếm: {percentPresent}%</span>
               <span className="StatisticalClass__text--margintop">
                 Tỉ lệ vắng học chiếm: {percentAbsent}%
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
       </Modal>

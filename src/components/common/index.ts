@@ -12,3 +12,5 @@ export * from "./Modal/Modal";
 export * from "./NotiSuccess/NotiSuccess";
 export * from "./NotiOption/NotiOption";
 export * from "./NotiFail/NotiFail";
+export * from "./Loader/Loader";
+export * from "./LoaderModal/LoaderModal";

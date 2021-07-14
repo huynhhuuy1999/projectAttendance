@@ -27,7 +27,7 @@ export const ScheduleStudentPage = () => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user.id) {
       if (user.roles[0].id === ROLE.STUDENT) {
         dispatch(
           doGetTimetableStudent({
@@ -48,39 +48,6 @@ export const ScheduleStudentPage = () => {
       }
     }
   }, [user]);
-
-  // useEffect(() => {
-  //   if(timetableStudent){
-  //     let newArrTimeTable = [];
-  //     timetableStudent.timeTableCourses.map((item:IResponseTimeTableCourses)=>{
-  //       let object = {
-  //         day:item.dayOfWeek,
-  //         content:[]
-  //       }
-  //     })
-  //   }
-  // }, [timetableStudent]);
-
-  // const listTKB = [
-  //   {
-  //     day: 2,
-  //     content: [
-  //       { start: 2, end: 3, subject: "Hệ điều hành" },
-  //       { start: 5, end: 8, subject: "Web" },
-  //     ],
-  //   },
-  //   {
-  //     day: 3,
-  //     content: [
-  //       { start: 1, end: 3, subject: "Hệ điều hành" },
-  //       { start: 7, end: 9, subject: "Web" },
-  //     ],
-  //   },
-  //   {
-  //     day: 7,
-  //     content: [{ start: 4, end: 9, subject: "Web" }],
-  //   },
-  // ];
 
   const listSemester = [
     { name: "Học kì 1", id: 1 },
@@ -124,7 +91,17 @@ export const ScheduleStudentPage = () => {
         </Button>
       </div>
       <div className="schedule-student-ctn__schedule">
-        <ScheduleStudent data={timetableStudent} idStudent={user.id} />
+        <ScheduleStudent
+          data={timetableStudent}
+          // idStudent={user?.roles[0].id === ROLE.PARENT ? "17521284" : user.id}
+          idStudent={
+            user.id
+              ? user.roles[0].id === ROLE.PARENT
+                ? "17521284"
+                : user.id
+              : ""
+          }
+        />
       </div>
     </div>
   );

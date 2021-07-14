@@ -1,3 +1,4 @@
+import { unwrapResult } from "@reduxjs/toolkit";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -7,6 +8,9 @@ import { CardClass } from "../../components";
 import {
   Banner,
   Button,
+  Loader,
+  LoaderModal,
+  NotiFail,
   NotiOption,
   NotiSuccess,
   Pagination,
@@ -36,7 +40,10 @@ export const ListClass = () => {
   );
   const [isShowModalSuccess, setIsShowModalSucces] = useState(false);
   const [isShowModalOption, setIsShowModalOption] = useState(false);
+  const [isShowModalExcelFail, setIsShowModalExcelFail] = useState(false);
   const [reload, setReload] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [loaderModal, setLoaderModal] = useState(false);
   const [idClass, setIdClass] = useState("");
   const { idCourse } = useParams<{ idCourse: string }>();
   const [showModalAddExcel, setShowModalAddExcel] = useState(false);
@@ -56,12 +63,20 @@ export const ListClass = () => {
   };
 
   const handleAddExcelClass = (e: any) => {
+    setLoaderModal(true);
     const formData = new FormData();
     formData.append("file", e.target.files[0], e.target.files[0].name);
-    dispatch(doAddClassExcel(formData)).then(() => {
-      setShowModalAddExcel(true);
-      setReload(!reload);
-    });
+    dispatch(doAddClassExcel(formData))
+      .then(unwrapResult)
+      .then(() => {
+        setLoaderModal(false);
+        setShowModalAddExcel(true);
+        setReload(!reload);
+      })
+      .catch((err) => {
+        setIsShowModalExcelFail(true);
+        setLoaderModal(false);
+      });
   };
 
   const handleSearch = (value: string) => {
@@ -91,12 +106,13 @@ export const ListClass = () => {
   };
 
   useEffect(() => {
+    setLoader(true);
     if (idCourse) {
-      dispatch(doGetListClassByCourse(idCourse));
+      dispatch(doGetListClassByCourse(idCourse)).then(() => setLoader(false));
     } else {
-      dispatch(doGetListClass());
+      dispatch(doGetListClass()).then(() => setLoader(false));
     }
-  }, [reload]);
+  }, [reload, idCourse]);
 
   useEffect(() => {
     if (currentUser.roles) {
@@ -152,38 +168,46 @@ export const ListClass = () => {
           </Button>
         ) : null}
       </div>
-      <div className="listclass__list">
-        {currenPost?.map((item: IResponseListClass, index: number) => {
-          return (
-            <div className="listclass__item">
-              <CardClass
-                idClass={item.id}
-                numberStudent={item.numberStudent}
-                nameClass={item.course?.name}
-                nameTeacher={item.teacher?.fullName}
-                // room="P.B.04"
-                startTime={moment(item.startDate).format("DD/MM/YYYY")}
-                endTime={moment(item.endDate).format("DD/MM/YYYY")}
-                key={index}
-                role={role}
-                showModal={(idClass) => {
-                  setIsShowModalOption(true);
-                  setIdClass(idClass);
-                }}
-                viewListStudent={role === ROLE.ADMIN ? true : false}
-              />
-            </div>
-          );
-        })}
-      </div>
-      <div className="list-student__pagination">
-        <Pagination
-          postPerPage={postPerPage}
-          totalPost={listClassSearch?.length}
-          changePage={changePage}
-          currentPage={currentPage}
-        />
-      </div>
+      {loader ? (
+        <Loader color={Color.Blue} />
+      ) : (
+        <>
+          <div className="listclass__list">
+            {currenPost?.map((item: IResponseListClass, index: number) => {
+              return (
+                <div className="listclass__item">
+                  <CardClass
+                    idClass={item.id}
+                    numberStudent={item.numberStudent}
+                    nameClass={item.course?.name}
+                    nameTeacher={item.teacher?.fullName}
+                    // room="P.B.04"
+                    startTime={moment(item.startDate).format("DD/MM/YYYY")}
+                    endTime={moment(item.endDate).format("DD/MM/YYYY")}
+                    key={index}
+                    role={role}
+                    showModal={(idClass) => {
+                      setIsShowModalOption(true);
+                      setIdClass(idClass);
+                    }}
+                    viewListStudent={role === ROLE.ADMIN ? true : false}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <div className="list-student__pagination">
+            <Pagination
+              postPerPage={postPerPage}
+              totalPost={listClassSearch?.length}
+              changePage={changePage}
+              currentPage={currentPage}
+            />
+          </div>
+        </>
+      )}
+      <LoaderModal isShow={loaderModal} color={Color.Blue} />
+
       <NotiOption
         isShow={isShowModalOption}
         setIsShow={setIsShowModalOption}
@@ -209,6 +233,12 @@ export const ListClass = () => {
         isShow={showModalAddExcel}
         setIsShow={setShowModalAddExcel}
         onClick={() => setShowModalAddExcel(false)}
+      />
+      <NotiFail
+        message="Thêm danh sách thất bại"
+        isShow={isShowModalExcelFail}
+        setIsShow={setIsShowModalExcelFail}
+        onClick={() => setIsShowModalExcelFail(false)}
       />
     </div>
   );

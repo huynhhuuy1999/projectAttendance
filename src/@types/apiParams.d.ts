@@ -76,3 +76,10 @@ interface IParamFile {
   formData?: any;
   id?: string | number;
 }
+
+interface IParamDelStudentFromClass {
+  id?: number;
+  clazz?: {
+    id?: string;
+  };
+}

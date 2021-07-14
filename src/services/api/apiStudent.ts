@@ -23,4 +23,12 @@ export const apiStudent = {
     const url = "/excel/timetables";
     return axiosFile.post(url, params);
   },
+  getListStudentByClass: (idClass: String) => {
+    const url = `/studentclasses/students/${idClass}`;
+    return axiosClient.get(url);
+  },
+  deleteStudentFromClass: (params: IParamDelStudentFromClass) => {
+    const url = `/timetablecourse`;
+    return axiosClient.delete(url, { data: params });
+  },
 };
