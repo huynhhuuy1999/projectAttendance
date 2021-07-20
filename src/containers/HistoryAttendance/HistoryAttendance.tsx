@@ -106,19 +106,21 @@ export const HistoryAttendance = () => {
               return (
                 <tr>
                   <td>{item.date}</td>
-                  <td>{item.time}</td>
+                  <td>{item.status ? item.time : "Vắng"}</td>
                   <td>
-                    <BsImages
-                      cursor="pointer"
-                      color="red"
-                      fontSize={17}
-                      onClick={() => {
-                        setPhotoURL(item.photoURL);
-                        setShowModal(true);
-                        setDate(item.date);
-                        setTime(item.time);
-                      }}
-                    />
+                    {item.status ? (
+                      <BsImages
+                        cursor="pointer"
+                        color="red"
+                        fontSize={17}
+                        onClick={() => {
+                          setPhotoURL(item.photoURL);
+                          setShowModal(true);
+                          setDate(item.date);
+                          setTime(item.time);
+                        }}
+                      />
+                    ) : null}
                   </td>
                 </tr>
               );

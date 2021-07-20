@@ -1,3 +1,4 @@
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
@@ -12,9 +13,14 @@ import {
   NotiSuccess,
   NotiOption,
   Loader,
+  NotiFail,
 } from "../../components/common";
 import { Color } from "../../constants";
-import { doDeleteUser, doGetListTeacher } from "../../redux/action";
+import {
+  doAddExcelUser,
+  doDeleteUser,
+  doGetListTeacher,
+} from "../../redux/action";
 import { RootState } from "../../redux/rootReducer";
 import { doSearchListTeacher } from "../../redux/slice";
 import { useAppDispatch } from "../../redux/store";
@@ -41,6 +47,10 @@ export const ListTeacher = () => {
   const [showModal, setShowModal] = useState(false);
   const [idTeacher, setIdTeacher] = useState("");
   const [loader, setLoader] = useState(false);
+  const [loaderModal, setLoaderModal] = useState(false);
+  const [isShowModalAddExcelSuccess, setIsShowModalAddExcelSuccess] =
+    useState(false);
+  const [isShowModalAddExcelFail, setIsShowModalAddExcelFail] = useState(false);
   const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
   const [reload, setReload] = useState(false);
   const [role, setRole] = useState(0);
@@ -64,6 +74,23 @@ export const ListTeacher = () => {
       setReload(!reload);
       setIsShowModalSuccess(true);
     });
+  };
+
+  const handelAddExcelUser = (e: any) => {
+    setLoaderModal(true);
+    const formData = new FormData();
+    formData.append("file", e.target.files[0], e.target.files[0].name);
+    dispatch(doAddExcelUser(formData))
+      .then(unwrapResult)
+      .then(() => {
+        setReload(!reload);
+        setLoaderModal(false);
+      })
+      .then(() => setIsShowModalAddExcelSuccess(true))
+      .catch((err) => {
+        setLoaderModal(false);
+        setIsShowModalAddExcelFail(true);
+      });
   };
 
   const handleSearch = (value: string) => {
@@ -114,13 +141,28 @@ export const ListTeacher = () => {
             >
               Thêm giảng viên
             </Button>
-            <Button
+            {/* <Button
               marginLeft={10}
               color={Color.Green}
               // onClick={() => history.push("/updateteacher")}
             >
               Thêm Excel
-            </Button>
+            </Button> */}
+
+            <label
+              htmlFor="excelUser"
+              className="list-student__addTimeTable"
+              style={{ backgroundColor: Color.Green }}
+            >
+              Thêm Excel
+            </label>
+            <input
+              type="file"
+              name="excelUser"
+              id="excelUser"
+              style={{ display: "none" }}
+              onChange={(e) => handelAddExcelUser(e)}
+            />
           </>
         ) : (
           <></>
@@ -166,6 +208,19 @@ export const ListTeacher = () => {
         setIsShow={setIsShowModalSuccess}
         message="Xóa giảng viên thành công"
         onClick={() => setIsShowModalSuccess(false)}
+      />
+
+      <NotiFail
+        isShow={isShowModalAddExcelFail}
+        setIsShow={setIsShowModalAddExcelFail}
+        message="Thêm user thất bại"
+        onClick={() => setIsShowModalAddExcelFail(false)}
+      />
+      <NotiSuccess
+        isShow={isShowModalAddExcelSuccess}
+        setIsShow={setIsShowModalAddExcelSuccess}
+        message="Thêm user thành công"
+        onClick={() => setIsShowModalAddExcelSuccess(false)}
       />
     </div>
   );

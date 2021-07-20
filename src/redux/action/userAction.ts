@@ -29,3 +29,11 @@ export const doUpdateUser = createAsyncThunk(
     return result.data;
   }
 );
+
+export const doAddExcelUser = createAsyncThunk(
+  "user/post/addExcelUser",
+  async (params: any) => {
+    const result = await apiUser.addExcelUser(params);
+    return result.data;
+  }
+);

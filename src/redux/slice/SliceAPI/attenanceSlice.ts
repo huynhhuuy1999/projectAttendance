@@ -17,11 +17,13 @@ type IAttendance = {
     date: String;
     time: String;
     photoURL?: string;
+    status?: number;
   }>;
   listInfoAttandanceOneStudentInClass: Array<{
     date: String;
     time: String;
     photoURL?: string;
+    status?: number;
   }>;
   classId?: string;
   listInfoAttendanceInClass: Array<{
@@ -120,6 +122,7 @@ const slice = createSlice({
       doGetInfoAttendanceOneStudentInClass.fulfilled,
       (state, action: PayloadAction<Array<IResInfoAttandance>>) => {
         state.isLoading = false;
+        console.log("action.payload", action.payload);
         let listInfoAttendanceOneStudent = action.payload;
         let listInfo = listInfoAttendanceOneStudent.filter(
           (item) => item.clazz?.id === state.classId
@@ -131,6 +134,7 @@ const slice = createSlice({
             date,
             time,
             photoURL: item.photoUrl,
+            status: item.status,
           };
           return convertItem;
         });

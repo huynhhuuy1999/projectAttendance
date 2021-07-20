@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  doAddExcelUser,
   doDeleteUser,
   doGetCurrentUser,
   doLogin,
@@ -55,6 +56,16 @@ const slice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(doUpdateUser.rejected, (state, action) => {
+      state.isLoading = false;
+    });
+    // post add user excel
+    builder.addCase(doAddExcelUser.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(doAddExcelUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(doAddExcelUser.rejected, (state, action) => {
       state.isLoading = false;
     });
   },

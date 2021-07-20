@@ -14,9 +14,9 @@ import { doGetReportListAttendanceInSemester } from "../../redux/action/attendan
 export const StatisticalClass = () => {
   const currentUser = useAppSelector((state) => state.user.currentUser);
   const report = useAppSelector((state) => state.attendance.report);
-  console.log("report", report);
-  const [percentPresent, setPercentPresent] = useState(0);
-  const [percentAbsent, setPercentAbsent] = useState(0);
+  // console.log("report", report);
+  // const [percentPresent, setPercentPresent] = useState(0);
+  // const [percentAbsent, setPercentAbsent] = useState(0);
   const [isShowViewPdf, setIsShowViewPdf] = useState(false);
   const { idClass } = useParams<{ idClass: string }>();
 
@@ -60,13 +60,7 @@ export const StatisticalClass = () => {
     if (!currentUser) {
       dispatch(doGetCurrentUser());
     }
-    let x =
-      Number(report.present * 100) / Number(report.present + report.absent);
-    setPercentPresent(Math.round(x));
   }, []);
-  useEffect(() => {
-    setPercentAbsent(Number(100 - percentPresent));
-  }, [percentPresent]);
   useEffect(() => {
     dispatch(doGetReportListAttendanceInSemester(idClass));
   }, []);

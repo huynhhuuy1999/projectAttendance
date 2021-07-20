@@ -1,9 +1,9 @@
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import { BsImages } from "react-icons/bs";
 import { useHistory, useParams } from "react-router-dom";
-import { Banner, Button, Search } from "../../components/common";
+import { Banner, Button, Modal, Search } from "../../components/common";
 import { Color } from "../../constants";
 import { doGetInfoAttendanceInClass } from "../../redux/action/attendanceAction";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
@@ -11,8 +11,14 @@ import "./ListAttendanceClass.scss";
 
 export const ListAttendanceClass = () => {
   const { idClass } = useParams<{ idClass: string }>();
+
+  const [showModal, setShowModal] = useState(false);
+  const [time, setTime]: any = useState("");
+  const [photoURL, setPhotoURL]: any = useState("");
+
   const dispatch = useAppDispatch();
   const history = useHistory();
+
   const listAttandenceClass = useAppSelector(
     (state) => state.attendance.listInfoAttendanceInClass
   );
@@ -52,6 +58,7 @@ export const ListAttendanceClass = () => {
           <thead>
             <tr>
               <td>Ngày</td>
+              <td>Họ tên</td>
               <td>Thời gian điểm danh</td>
               <td>Xem ảnh</td>
             </tr>
@@ -61,19 +68,25 @@ export const ListAttendanceClass = () => {
               return (
                 <tr>
                   <td>{moment(item.time).format("DD-MM-YYYY")}</td>
-                  <td>{moment(item.time).format("hh:mm:ss")}</td>
+                  <td>{item.student?.fullName}</td>
                   <td>
-                    <BsImages
-                      cursor="pointer"
-                      color="red"
-                      fontSize={17}
-                      onClick={() => {
-                        // setPhotoURL(item.photoURL);
-                        // setShowModal(true);
-                        // setDate(item.date);
-                        // setTime(item.time);
-                      }}
-                    />
+                    {item.status
+                      ? moment(item.time).format("hh:mm:ss")
+                      : "Vắng"}
+                  </td>
+                  <td>
+                    {item.status ? (
+                      <BsImages
+                        cursor="pointer"
+                        color="red"
+                        fontSize={17}
+                        onClick={() => {
+                          setPhotoURL(item?.photoUrl);
+                          setShowModal(true);
+                          setTime(item.time);
+                        }}
+                      />
+                    ) : null}
                   </td>
                 </tr>
               );
@@ -81,6 +94,18 @@ export const ListAttendanceClass = () => {
           </tbody>
         </table>
       </div>
+      <Modal
+        className="ListAttendanceClass__show-img"
+        isShow={showModal}
+        setIsShow={setShowModal}
+      >
+        <div className="ListAttendanceClass__content-modal">
+          <span>
+            {`Thời gian: ${moment(time).format("DD-MM-YYYY hh:mm:ss")}`}
+          </span>
+          <img src={photoURL} alt="" />
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -18,6 +18,7 @@ import {
 } from "../../components/common";
 import { Color, ROLE } from "../../constants";
 import {
+  doAddExcelUser,
   doAddTimetable,
   doDeleteUser,
   doGetListStudent,
@@ -39,6 +40,9 @@ export const ListStudent = () => {
   const [role, setRole] = useState(0);
   const [isShowModalSuccessAddTimetable, setIsShowModalSuccessAddTimetabe] =
     useState(false);
+  const [isShowModalAddExcelSuccess, setIsShowModalAddExcelSuccess] =
+    useState(false);
+  const [isShowModalAddExcelFail, setIsShowModalAddExcelFail] = useState(false);
   const [isShowModalSuccess, setIsShowModalSuccess] = useState(false);
   const [isShowModalFailAddTimetable, setIsShowModalFailAddTimetabe] =
     useState(false);
@@ -84,6 +88,23 @@ export const ListStudent = () => {
       .catch((err) => {
         setLoaderModal(false);
         setIsShowModalFailAddTimetabe(true);
+      });
+  };
+
+  const handelAddExcelUser = (e: any) => {
+    setLoaderModal(true);
+    const formData = new FormData();
+    formData.append("file", e.target.files[0], e.target.files[0].name);
+    dispatch(doAddExcelUser(formData))
+      .then(unwrapResult)
+      .then(() => {
+        setReload(!reload);
+        setLoaderModal(false);
+      })
+      .then(() => setIsShowModalAddExcelSuccess(true))
+      .catch((err) => {
+        setLoaderModal(false);
+        setIsShowModalAddExcelFail(true);
       });
   };
 
@@ -152,13 +173,28 @@ export const ListStudent = () => {
               </Button>
             )}
 
-            <Button
+            {/* <Button
               color={Color.Green}
               marginLeft={10}
               // onClick={() => history.push("/updatestudent")}
             >
               Thêm Excel
-            </Button>
+            </Button> */}
+            <label
+              htmlFor="excelUser"
+              className="list-student__addTimeTable"
+              style={{ backgroundColor: Color.Green }}
+            >
+              Thêm Excel
+            </label>
+
+            <input
+              type="file"
+              name="excelUser"
+              id="excelUser"
+              style={{ display: "none" }}
+              onChange={(e) => handelAddExcelUser(e)}
+            />
             <label
               htmlFor="timetable"
               className="list-student__addTimeTable"
@@ -249,6 +285,18 @@ export const ListStudent = () => {
         setIsShow={setIsShowModalFailAddTimetabe}
         message="Thêm thời khóa biểu thất bại"
         onClick={() => setIsShowModalFailAddTimetabe(false)}
+      />
+      <NotiFail
+        isShow={isShowModalAddExcelFail}
+        setIsShow={setIsShowModalAddExcelFail}
+        message="Thêm user thất bại"
+        onClick={() => setIsShowModalAddExcelFail(false)}
+      />
+      <NotiSuccess
+        isShow={isShowModalAddExcelSuccess}
+        setIsShow={setIsShowModalAddExcelSuccess}
+        message="Thêm user thành công"
+        onClick={() => setIsShowModalAddExcelSuccess(false)}
       />
     </div>
   );
