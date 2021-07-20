@@ -33,15 +33,15 @@ export const TableStudent: React.FC<ITableStudent> = ({
         },
       })
     )
-      .then(unwrapResult)
+      // .then(unwrapResult)
       .then((res) => {
         setLoadModal(false);
         setIsShowModalSuccess(true);
-      })
-      .catch((err) => {
-        setLoadModal(false);
-        setIsShowModalFail(true);
       });
+    // .catch((err) => {
+    //   setLoadModal(false);
+    //   setIsShowModalFail(true);
+    // });
   };
   return (
     <>
