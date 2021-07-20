@@ -132,6 +132,7 @@ export const ListStudent = () => {
 
   useEffect(() => {
     setLoading(true);
+    console.log("hello");
     if (idClass) {
       dispatch(doGetListStudentByClass(idClass)).then(() => setLoading(false));
     } else dispatch(doGetListStudent()).then((res) => setLoading(false));
@@ -172,14 +173,6 @@ export const ListStudent = () => {
                 Thêm sinh viên
               </Button>
             )}
-
-            {/* <Button
-              color={Color.Green}
-              marginLeft={10}
-              // onClick={() => history.push("/updatestudent")}
-            >
-              Thêm Excel
-            </Button> */}
             <label
               htmlFor="excelUser"
               className="list-student__addTimeTable"
@@ -187,7 +180,6 @@ export const ListStudent = () => {
             >
               Thêm Excel
             </label>
-
             <input
               type="file"
               name="excelUser"
@@ -195,6 +187,7 @@ export const ListStudent = () => {
               style={{ display: "none" }}
               onChange={(e) => handelAddExcelUser(e)}
             />
+
             <label
               htmlFor="timetable"
               className="list-student__addTimeTable"

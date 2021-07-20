@@ -185,6 +185,15 @@ export const ListCourses = () => {
             >
               Export Excel
             </Button> */}
+            {/* <a
+              href="http://localhost:8080/api/excel/export/courses"
+              onClick={() =>
+                window.open(
+                  "http://localhost:8080/api/excel/export/courses",
+                  "__blank"
+                )
+              }
+            ></a> */}
             <label
               htmlFor="course"
               className="listcourses__excel"

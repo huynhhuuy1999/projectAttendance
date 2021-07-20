@@ -40,11 +40,11 @@ export const SidebarData = {
       path: "/listclass",
       cName: "sidebar__item",
     },
-    {
-      title: "Thời khóa biểu",
-      path: "/schedulestudent",
-      cName: "sidebar__item",
-    },
+    // {
+    //   title: "Thời khóa biểu",
+    //   path: "/schedulestudent",
+    //   cName: "sidebar__item",
+    // },
   ],
   student: [
     {
